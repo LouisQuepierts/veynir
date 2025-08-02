@@ -57,11 +57,6 @@ public class DelegatedDataBlock implements DataBlock {
         return this.segment.get(ValueLayout.JAVA_DOUBLE, offset);
     }
 
-    @Override
-    public boolean getBoolean(final long offset) {
-        return this.segment.get(ValueLayout.JAVA_BOOLEAN, offset);
-    }
-
     public void getBatched(final long offset, final MemorySegment segment) {
         segment.copyFrom(this.segment.asSlice(offset, segment.byteSize()));
     }
