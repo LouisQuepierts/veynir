@@ -1,4 +1,4 @@
-package net.quepierts.animata4j.core.struct.data;
+package net.quepierts.animata4j.core.data.block;
 
 import org.jetbrains.annotations.Contract;
 
