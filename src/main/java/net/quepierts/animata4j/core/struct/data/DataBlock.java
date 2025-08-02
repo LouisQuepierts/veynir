@@ -1,5 +1,7 @@
 package net.quepierts.animata4j.core.struct.data;
 
+import org.jetbrains.annotations.Contract;
+
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
 
@@ -8,13 +10,14 @@ public interface DataBlock {
     int DEFAULT_SIZE = 2 << 9;
     int THRESHOLD_USE_SEG = 2 << 5 - 1;
 
-    
-    static MemorySegmentDataBlock create() {
-        return MemorySegmentDataBlock.create();
+    @Contract(value = "-> new", pure = true)
+    static DelegatedDataBlock create() {
+        return DelegatedDataBlock.create();
     }
 
-    static MemorySegmentDataBlock create(long size) {
-        return MemorySegmentDataBlock.create(size);
+    @Contract(value = "_ -> new", pure = true)
+    static DelegatedDataBlock create(long size) {
+        return DelegatedDataBlock.create(size);
     }
 
     void free();
@@ -323,4 +326,6 @@ public interface DataBlock {
         }
         this.put(offset, b);
     }
+
+    long size();
 }
