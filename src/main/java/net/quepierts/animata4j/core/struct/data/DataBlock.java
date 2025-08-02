@@ -36,7 +36,7 @@ public interface DataBlock {
 
     boolean getBoolean(final long offset);
 
-    default boolean getMask(final long offset, final int shift) {
+    default boolean getBoolean(final long offset, final int shift) {
         if (shift < 0 || shift > 7) {
             throw new IllegalArgumentException("Shift must be between 0 and 7");
         }
@@ -168,6 +168,25 @@ public interface DataBlock {
             for (int i = 0; i < length; i++) {
                 doubles[i] = this.getDouble(off);
                 off += size;
+            }
+        }
+    }
+
+    default void get(final long offset, final boolean[] booleans) {
+        final int length = booleans.length;
+        if (length == 0) return;
+
+        final int byteCount = (length + 7) / 8;
+        final byte[] bytes = new byte[byteCount];
+        this.get(offset, bytes);
+
+        for (int i = 0; i < byteCount; i++) {
+            final byte b = bytes[i];
+            for (int j = 0; j < 8; j++) {
+                int index = i * 8 + j;
+                if (index < length) {
+                    booleans[index] = (b & (1 << j)) != 0;
+                }
             }
         }
     }
