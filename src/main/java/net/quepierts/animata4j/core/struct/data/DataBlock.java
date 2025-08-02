@@ -13,7 +13,7 @@ public interface DataBlock {
         return MemorySegmentDataBlock.create();
     }
 
-    static MemorySegmentDataBlock create(int size) {
+    static MemorySegmentDataBlock create(long size) {
         return MemorySegmentDataBlock.create(size);
     }
 
