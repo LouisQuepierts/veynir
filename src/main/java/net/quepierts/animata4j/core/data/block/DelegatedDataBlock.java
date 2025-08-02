@@ -4,6 +4,7 @@ import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
 
+@SuppressWarnings("all")
 public class DelegatedDataBlock implements DataBlock {
     public static DelegatedDataBlock create() {
         return new DelegatedDataBlock(DEFAULT_SIZE);
@@ -13,17 +14,17 @@ public class DelegatedDataBlock implements DataBlock {
         return new DelegatedDataBlock(size);
     }
 
+    private final Arena arena;
     private final MemorySegment segment;
 
     private DelegatedDataBlock(long size) {
-        try (Arena arena = Arena.ofConfined()) {
-            this.segment = arena.allocate(size);
-        }
+        this.arena = Arena.ofShared();
+        this.segment = this.arena.allocate(size);
     }
 
     @Override
     public void free() {
-        this.segment.unload();
+        this.arena.close();
     }
 
     @Override

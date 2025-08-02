@@ -7,8 +7,8 @@ import java.lang.foreign.ValueLayout;
 
 @SuppressWarnings("unused")
 public interface DataBlock {
-    int DEFAULT_SIZE = 2 << 9;
-    int THRESHOLD_USE_SEG = 2 << 5 - 1;
+    long DEFAULT_SIZE = 2 << 9;
+    long THRESHOLD_USE_SEG = 2 << 5 - 1;
 
     @Contract(value = "-> new", pure = true)
     static DelegatedDataBlock create() {
