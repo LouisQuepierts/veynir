@@ -38,7 +38,7 @@ public class DelegatedDataBlock implements DataBlock {
     }
 
     @Override
-    public int getInt(final long offset) {
+    public int getInteger(final long offset) {
         return this.segment.get(ValueLayout.JAVA_INT, offset);
     }
 
@@ -62,7 +62,7 @@ public class DelegatedDataBlock implements DataBlock {
     }
 
     @Override
-    public void getByte(final long offset, final byte[] bytes, final int length) {
+    public void getByte(final long offset, final byte[] bytes, final int arrayOffset, final int length) {
         if (length == 0) return;
 
         if (length == 1) {
@@ -71,17 +71,18 @@ public class DelegatedDataBlock implements DataBlock {
         }
 
         if (length > THRESHOLD_USE_SEG) {
-            this.getBatched(offset, MemorySegment.ofArray(bytes));
+            this.getBatched(offset, MemorySegment.ofArray(bytes).asSlice(arrayOffset));
         } else {
+            final int right = arrayOffset + length;
             long off = offset;
-            for (int i = 0; i < length; i++) {
-                bytes[i] = this.getByte(off++);
+            for (int i = arrayOffset; i < right; i++) {
+                bytes[i] = this.getByte(off);
             }
         }
     }
 
     @Override
-    public void getShort(final long offset, final short[] shorts, final int length) {
+    public void getShort(final long offset, final short[] shorts, final int arrayOffset, final int length) {
         if (length == 0) return;
 
         if (length == 1) {
@@ -90,9 +91,10 @@ public class DelegatedDataBlock implements DataBlock {
         }
 
         if (length > THRESHOLD_USE_SEG) {
-            this.getBatched(offset, MemorySegment.ofArray(shorts));
+            this.getBatched(offset, MemorySegment.ofArray(shorts).asSlice(arrayOffset));
         } else {
             final long size = ValueLayout.JAVA_SHORT.byteSize();
+            final int right = arrayOffset + length;
             long off = offset;
             for (int i = 0; i < length; i++) {
                 shorts[i] = this.getShort(off);
@@ -102,28 +104,29 @@ public class DelegatedDataBlock implements DataBlock {
     }
 
     @Override
-    public void getInt(final long offset, final int[] ints, final int length) {
+    public void getInteger(final long offset, final int[] ints, final int arrayOffset, final int length) {
         if (length == 0) return;
 
         if (length == 1) {
-            ints[0] = this.getInt(offset);
+            ints[0] = this.getInteger(offset);
             return;
         }
 
         if (length > THRESHOLD_USE_SEG) {
-            this.getBatched(offset, MemorySegment.ofArray(ints));
+            this.getBatched(offset, MemorySegment.ofArray(ints).asSlice(arrayOffset));
         } else {
             final long size = ValueLayout.JAVA_INT.byteSize();
+            final int right = arrayOffset + length;
             long off = offset;
             for (int i = 0; i < length; i++) {
-                ints[i] = this.getInt(off);
+                ints[i] = this.getInteger(off);
                 off += size;
             }
         }
     }
 
     @Override
-    public void getLong(final long offset, final long[] longs, final int length) {
+    public void getLong(final long offset, final long[] longs, final int arrayOffset, final int length) {
         if (length == 0) return;
 
         if (length == 1) {
@@ -132,9 +135,10 @@ public class DelegatedDataBlock implements DataBlock {
         }
 
         if (length > THRESHOLD_USE_SEG) {
-            this.getBatched(offset, MemorySegment.ofArray(longs));
+            this.getBatched(offset, MemorySegment.ofArray(longs).asSlice(arrayOffset));
         } else {
             final long size = ValueLayout.JAVA_LONG.byteSize();
+            final int right = arrayOffset + length;
             long off = offset;
             for (int i = 0; i < length; i++) {
                 longs[i] = this.getLong(off);
@@ -144,7 +148,7 @@ public class DelegatedDataBlock implements DataBlock {
     }
 
     @Override
-    public void getFloat(final long offset, final float[] floats, final int length) {
+    public void getFloat(final long offset, final float[] floats, final int arrayOffset, final int length) {
         if (length == 0) return;
 
         if (length == 1) {
@@ -153,11 +157,12 @@ public class DelegatedDataBlock implements DataBlock {
         }
 
         if (length > THRESHOLD_USE_SEG) {
-            this.getBatched(offset, MemorySegment.ofArray(floats));
+            this.getBatched(offset, MemorySegment.ofArray(floats).asSlice(arrayOffset));
         } else {
             final long size = ValueLayout.JAVA_FLOAT.byteSize();
+            final int right = arrayOffset + length;
             long off = offset;
-            for (int i = 0; i < length; i++) {
+            for (int i = arrayOffset; i < right; i++) {
                 floats[i] = this.getFloat(off);
                 off += size;
             }
@@ -165,7 +170,7 @@ public class DelegatedDataBlock implements DataBlock {
     }
 
     @Override
-    public void getDouble(final long offset, final double[] doubles, final int length) {
+    public void getDouble(final long offset, final double[] doubles, final int arrayOffset, final int length) {
         if (length == 0) return;
 
         if (length == 1) {
@@ -177,8 +182,9 @@ public class DelegatedDataBlock implements DataBlock {
             this.getBatched(offset, MemorySegment.ofArray(doubles));
         } else {
             final long size = ValueLayout.JAVA_DOUBLE.byteSize();
+            final int right = arrayOffset + length;
             long off = offset;
-            for (int i = 0; i < length; i++) {
+            for (int i = arrayOffset; i < right; i++) {
                 doubles[i] = this.getDouble(off);
                 off += size;
             }
@@ -196,7 +202,7 @@ public class DelegatedDataBlock implements DataBlock {
     }
 
     @Override
-    public void putInt(final long offset, final int value) {
+    public void putInteger(final long offset, final int value) {
         this.segment.set(ValueLayout.JAVA_INT, offset, value);
     }
 
@@ -216,7 +222,7 @@ public class DelegatedDataBlock implements DataBlock {
     }
 
     @Override
-    public void putByte(final long offset, final byte[] bytes, final int length) {
+    public void putByte(final long offset, final byte[] bytes, final int arrayOffset, final int length) {
         if (length == 0) return;
 
         if (length == 1) {
@@ -225,17 +231,19 @@ public class DelegatedDataBlock implements DataBlock {
         }
 
         if (length > THRESHOLD_USE_SEG) {
-            this.putBatched(offset, MemorySegment.ofArray(bytes));
+            this.putBatched(offset, MemorySegment.ofArray(bytes).asSlice(arrayOffset));
         } else {
+            final int right = arrayOffset + length;
             long off = offset;
-            for (int i = 0; i < length; i++) {
-                this.putByte(off++, bytes[i]);
+            for (int i = arrayOffset; i < right; i++) {
+                this.putByte(off, bytes[i]);
+                off++;
             }
         }
     }
 
     @Override
-    public void putShort(final long offset, final short[] shorts, final int length) {
+    public void putShort(final long offset, final short[] shorts, final int arrayOffset, final int length) {
         if (length == 0) return;
 
         if (length == 1) {
@@ -244,11 +252,12 @@ public class DelegatedDataBlock implements DataBlock {
         }
 
         if (length > THRESHOLD_USE_SEG) {
-            this.putBatched(offset, MemorySegment.ofArray(shorts));
+            this.putBatched(offset, MemorySegment.ofArray(shorts).asSlice(arrayOffset));
         } else {
             final long size = ValueLayout.JAVA_SHORT.byteSize();
+            final int right = arrayOffset + length;
             long off = offset;
-            for (int i = 0; i < length; i++) {
+            for (int i = arrayOffset; i < right; i++) {
                 this.putShort(off, shorts[i]);
                 off += size;
             }
@@ -256,28 +265,29 @@ public class DelegatedDataBlock implements DataBlock {
     }
 
     @Override
-    public void putInt(final long offset, final int[] ints, final int length) {
+    public void putInteger(final long offset, final int[] ints, final int arrayOffset, final int length) {
         if (length == 0) return;
 
         if (length == 1) {
-            this.putInt(offset, ints[0]);
+            this.putInteger(offset, ints[0]);
             return;
         }
 
         if (length > THRESHOLD_USE_SEG) {
-            this.putBatched(offset, MemorySegment.ofArray(ints));
+            this.putBatched(offset, MemorySegment.ofArray(ints).asSlice(arrayOffset));
         } else {
             final long size = ValueLayout.JAVA_INT.byteSize();
+            final int right = arrayOffset + length;
             long off = offset;
-            for (int i = 0; i < length; i++) {
-                this.putInt(off, ints[i]);
+            for (int i = arrayOffset; i < right; i++) {
+                this.putInteger(off, ints[i]);
                 off += size;
             }
         }
     }
 
     @Override
-    public void putLong(final long offset, final long[] longs, final int length) {
+    public void putLong(final long offset, final long[] longs, final int arrayOffset, final int length) {
         if (length == 0) return;
 
         if (length == 1) {
@@ -286,11 +296,12 @@ public class DelegatedDataBlock implements DataBlock {
         }
 
         if (length > THRESHOLD_USE_SEG) {
-            this.putBatched(offset, MemorySegment.ofArray(longs));
+            this.putBatched(offset, MemorySegment.ofArray(longs).asSlice(arrayOffset));
         } else {
             final long size = ValueLayout.JAVA_LONG.byteSize();
+            final int right = arrayOffset + length;
             long off = offset;
-            for (int i = 0; i < length; i++) {
+            for (int i = arrayOffset; i < right; i++) {
                 this.putLong(off, longs[i]);
                 off += size;
             }
@@ -298,7 +309,7 @@ public class DelegatedDataBlock implements DataBlock {
     }
 
     @Override
-    public void putFloat(final long offset, final float[] floats, final int length) {
+    public void putFloat(final long offset, final float[] floats, final int arrayOffset, final int length) {
         if (length == 0) return;
 
         if (length == 1) {
@@ -307,11 +318,12 @@ public class DelegatedDataBlock implements DataBlock {
         }
 
         if (length > THRESHOLD_USE_SEG) {
-            this.putBatched(offset, MemorySegment.ofArray(floats));
+            this.putBatched(offset, MemorySegment.ofArray(floats).asSlice(arrayOffset));
         } else {
             final long size = ValueLayout.JAVA_FLOAT.byteSize();
+            final int right = arrayOffset + length;
             long off = offset;
-            for (int i = 0; i < length; i++) {
+            for (int i = arrayOffset; i < right; i++) {
                 this.putFloat(off, floats[i]);
                 off += size;
             }
@@ -319,7 +331,7 @@ public class DelegatedDataBlock implements DataBlock {
     }
 
     @Override
-    public void putDouble(final long offset, final double[] doubles, final int length) {
+    public void putDouble(final long offset, final double[] doubles, final int arrayOffset, final int length) {
         if (length == 0) return;
 
         if (length == 1) {
@@ -328,11 +340,12 @@ public class DelegatedDataBlock implements DataBlock {
         }
 
         if (length > THRESHOLD_USE_SEG) {
-            this.putBatched(offset, MemorySegment.ofArray(doubles));
+            this.putBatched(offset, MemorySegment.ofArray(doubles).asSlice(arrayOffset));
         } else {
             final long size = ValueLayout.JAVA_DOUBLE.byteSize();
+            final int right = arrayOffset + length;
             long off = offset;
-            for (int i = 0; i < length; i++) {
+            for (int i = arrayOffset; i < right; i++) {
                 this.putDouble(off, doubles[i]);
                 off += size;
             }
