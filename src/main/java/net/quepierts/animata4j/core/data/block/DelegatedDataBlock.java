@@ -62,8 +62,7 @@ public class DelegatedDataBlock implements DataBlock {
     }
 
     @Override
-    public void getByte(final long offset, final byte[] bytes) {
-        final int length = bytes.length;
+    public void getByte(final long offset, final byte[] bytes, final int length) {
         if (length == 0) return;
 
         if (length == 1) {
@@ -82,8 +81,7 @@ public class DelegatedDataBlock implements DataBlock {
     }
 
     @Override
-    public void getShort(final long offset, final short[] shorts) {
-        final int length = shorts.length;
+    public void getShort(final long offset, final short[] shorts, final int length) {
         if (length == 0) return;
 
         if (length == 1) {
@@ -104,8 +102,7 @@ public class DelegatedDataBlock implements DataBlock {
     }
 
     @Override
-    public void getInt(final long offset, final int[] ints) {
-        final int length = ints.length;
+    public void getInt(final long offset, final int[] ints, final int length) {
         if (length == 0) return;
 
         if (length == 1) {
@@ -126,8 +123,7 @@ public class DelegatedDataBlock implements DataBlock {
     }
 
     @Override
-    public void getLong(final long offset, final long[] longs) {
-        final int length = longs.length;
+    public void getLong(final long offset, final long[] longs, final int length) {
         if (length == 0) return;
 
         if (length == 1) {
@@ -148,8 +144,7 @@ public class DelegatedDataBlock implements DataBlock {
     }
 
     @Override
-    public void getFloat(final long offset, final float[] floats) {
-        final int length = floats.length;
+    public void getFloat(final long offset, final float[] floats, final int length) {
         if (length == 0) return;
 
         if (length == 1) {
@@ -170,8 +165,7 @@ public class DelegatedDataBlock implements DataBlock {
     }
 
     @Override
-    public void getDouble(final long offset, final double[] doubles) {
-        final int length = doubles.length;
+    public void getDouble(final long offset, final double[] doubles, final int length) {
         if (length == 0) return;
 
         if (length == 1) {
@@ -222,8 +216,7 @@ public class DelegatedDataBlock implements DataBlock {
     }
 
     @Override
-    public void putByte(final long offset, final byte[] bytes) {
-        final int length = bytes.length;
+    public void putByte(final long offset, final byte[] bytes, final int length) {
         if (length == 0) return;
 
         if (length == 1) {
@@ -242,8 +235,7 @@ public class DelegatedDataBlock implements DataBlock {
     }
 
     @Override
-    public void putShort(final long offset, final short[] shorts) {
-        final int length = shorts.length;
+    public void putShort(final long offset, final short[] shorts, final int length) {
         if (length == 0) return;
 
         if (length == 1) {
@@ -264,8 +256,7 @@ public class DelegatedDataBlock implements DataBlock {
     }
 
     @Override
-    public void putInt(final long offset, final int[] ints) {
-        final int length = ints.length;
+    public void putInt(final long offset, final int[] ints, final int length) {
         if (length == 0) return;
 
         if (length == 1) {
@@ -286,8 +277,7 @@ public class DelegatedDataBlock implements DataBlock {
     }
 
     @Override
-    public void putLong(final long offset, final long[] longs) {
-        final int length = longs.length;
+    public void putLong(final long offset, final long[] longs, final int length) {
         if (length == 0) return;
 
         if (length == 1) {
@@ -308,8 +298,7 @@ public class DelegatedDataBlock implements DataBlock {
     }
 
     @Override
-    public void putFloat(final long offset, final float[] floats) {
-        final int length = floats.length;
+    public void putFloat(final long offset, final float[] floats, final int length) {
         if (length == 0) return;
 
         if (length == 1) {
@@ -330,8 +319,7 @@ public class DelegatedDataBlock implements DataBlock {
     }
 
     @Override
-    public void putDouble(final long offset, final double[] doubles) {
-        final int length = doubles.length;
+    public void putDouble(final long offset, final double[] doubles, final int length) {
         if (length == 0) return;
 
         if (length == 1) {

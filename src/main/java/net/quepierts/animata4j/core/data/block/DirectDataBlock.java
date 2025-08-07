@@ -1,16 +1,10 @@
 package net.quepierts.animata4j.core.data.block;
 
-import sun.misc.Unsafe;
+import net.quepierts.animata4j.core.misc.UnsafeUtil;
+
+import static net.quepierts.animata4j.core.misc.UnsafeUtil.*;
 
 public class DirectDataBlock implements DataBlock {
-    private static final Unsafe UNSAFE = Unsafe.getUnsafe();
-    private static final long BYTE_ARRAY_OFFSET = UNSAFE.arrayBaseOffset(byte[].class);
-    private static final long SHORT_ARRAY_OFFSET = UNSAFE.arrayBaseOffset(short[].class);
-    private static final long INT_ARRAY_OFFSET = UNSAFE.arrayBaseOffset(int[].class);
-    private static final long LONG_ARRAY_OFFSET = UNSAFE.arrayBaseOffset(long[].class);
-    private static final long FLOAT_ARRAY_OFFSET = UNSAFE.arrayBaseOffset(float[].class);
-    private static final long DOUBLE_ARRAY_OFFSET = UNSAFE.arrayBaseOffset(double[].class);
-
     public static DataBlock create() {
         return new DirectDataBlock(DataBlock.DEFAULT_SIZE);
     }
@@ -24,12 +18,12 @@ public class DirectDataBlock implements DataBlock {
 
     private DirectDataBlock(long size) {
         this.size = size;
-        this.address = UNSAFE.allocateMemory(size);
+        this.address = UnsafeUtil.malloc(size);
     }
 
     @Override
     public void free() {
-        UNSAFE.freeMemory(address);
+        UnsafeUtil.free(this.address);
     }
 
     @Override
@@ -63,68 +57,68 @@ public class DirectDataBlock implements DataBlock {
     }
 
     @Override
-    public void getByte(long offset, byte[] bytes) {
+    public void getByte(final long offset, final byte[] bytes, final int length) {
         UNSAFE.copyMemory(
                 null,
                 this.address + offset,
                 bytes,
                 BYTE_ARRAY_OFFSET,
-                bytes.length
+                length
         );
     }
 
     @Override
-    public void getShort(long offset, short[] shorts) {
+    public void getShort(long offset, short[] shorts, final int length) {
         UNSAFE.copyMemory(
                 null,
                 this.address + offset,
                 shorts,
                 SHORT_ARRAY_OFFSET,
-                (long) shorts.length * Short.BYTES
+                (long) length * Short.BYTES
         );
     }
 
     @Override
-    public void getInt(long offset, int[] ints) {
+    public void getInt(long offset, int[] ints, final int length) {
         UNSAFE.copyMemory(
                 null,
                 this.address + offset,
                 ints,
                 INT_ARRAY_OFFSET,
-                (long) ints.length * Integer.BYTES
+                (long) length * Integer.BYTES
         );
     }
 
     @Override
-    public void getLong(long offset, long[] longs) {
+    public void getLong(long offset, long[] longs, final int length) {
         UNSAFE.copyMemory(
                 null,
                 this.address + offset,
                 longs,
                 LONG_ARRAY_OFFSET,
-                (long) longs.length * Long.BYTES
+                (long) length * Long.BYTES
         );
     }
 
     @Override
-    public void getFloat(long offset, float[] floats) {
+    public void getFloat(long offset, float[] floats, final int length) {
         UNSAFE.copyMemory(
                 null,
                 this.address + offset,
                 floats,
                 FLOAT_ARRAY_OFFSET,
-                (long) floats.length * Float.BYTES
+                (long) length * Float.BYTES
         );
     }
 
     @Override
-    public void getDouble(long offset, double[] doubles) {
+    public void getDouble(long offset, double[] doubles, final int length) {
         UNSAFE.copyMemory(
                 null,
                 this.address + offset,
                 doubles,
                 DOUBLE_ARRAY_OFFSET,
-                (long) doubles.length * Double.BYTES
+                (long) length * Double.BYTES
         );
     }
 
@@ -159,73 +153,97 @@ public class DirectDataBlock implements DataBlock {
     }
 
     @Override
-    public void putByte(long offset, byte[] bytes) {
+    public void putByte(long offset, byte[] bytes, final int length) {
         UNSAFE.copyMemory(
                 bytes,
                 BYTE_ARRAY_OFFSET,
                 null,
                 this.address + offset,
-                bytes.length
+                length
         );
     }
 
     @Override
-    public void putShort(long offset, short[] shorts) {
+    public void putShort(long offset, short[] shorts, final int length) {
         UNSAFE.copyMemory(
                 shorts,
                 SHORT_ARRAY_OFFSET,
                 null,
                 this.address + offset,
-                (long) shorts.length * Short.BYTES
+                (long) length * Short.BYTES
         );
     }
 
     @Override
-    public void putInt(long offset, int[] ints) {
+    public void putInt(long offset, int[] ints, final int length) {
         UNSAFE.copyMemory(
                 ints,
                 INT_ARRAY_OFFSET,
                 null,
                 this.address + offset,
-                (long) ints.length * Integer.BYTES
+                (long) length * Integer.BYTES
         );
     }
 
     @Override
-    public void putLong(long offset, long[] longs) {
+    public void putLong(long offset, long[] longs, final int length) {
         UNSAFE.copyMemory(
                 longs,
                 LONG_ARRAY_OFFSET,
                 null,
                 this.address + offset,
-                (long) longs.length * Long.BYTES
+                (long) length * Long.BYTES
         );
     }
 
     @Override
-    public void putFloat(long offset, float[] floats) {
+    public void putFloat(long offset, float[] floats, final int length) {
         UNSAFE.copyMemory(
                 floats,
                 FLOAT_ARRAY_OFFSET,
                 null,
                 this.address + offset,
-                (long) floats.length * Float.BYTES
+                (long) length * Float.BYTES
         );
     }
 
     @Override
-    public void putDouble(long offset, double[] doubles) {
+    public void putDouble(long offset, double[] doubles, final int length) {
         UNSAFE.copyMemory(
                 doubles,
                 DOUBLE_ARRAY_OFFSET,
                 null,
                 this.address + offset,
-                (long) doubles.length * Double.BYTES
+                (long) length * Double.BYTES
         );
     }
 
     @Override
     public long size() {
         return this.size;
+    }
+
+    @Override
+    public String toString() {
+        // print memory by 16 bytes / line
+        StringBuilder builder = new StringBuilder("Memory in address [")
+                .append(this.address)
+                .append("]:\n");
+
+        final byte[] buffer = new byte[16];
+        for (int i = 0; i < this.size; i += 16) {
+            int length = (int) Math.min(16, this.size - i);
+            this.getByte(i, buffer, length);
+
+            for (int j = 0; j < length; j++) {
+                builder.append(String.format("%02X ", buffer[j]));
+            }
+
+            if (length == 16) {
+                builder.append('\n');
+            }
+        }
+
+        return builder.toString();
     }
 }
