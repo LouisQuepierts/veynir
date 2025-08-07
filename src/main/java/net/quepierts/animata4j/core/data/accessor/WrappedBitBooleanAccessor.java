@@ -1,10 +1,10 @@
-package net.quepierts.animata4j.core.data.block.accessor;
+package net.quepierts.animata4j.core.data.accessor;
 
 import lombok.RequiredArgsConstructor;
 import net.quepierts.animata4j.core.data.block.DataBlock;
 
 @RequiredArgsConstructor
-public class BitBooleanAccessor {
+public class WrappedBitBooleanAccessor {
     private final DataBlock delegate;
 
     public boolean getBitBoolean(final long offset, final int shift) {
