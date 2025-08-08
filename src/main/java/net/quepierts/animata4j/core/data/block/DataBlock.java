@@ -4,9 +4,7 @@ import net.quepierts.animata4j.core.data.accessor.*;
 import org.jetbrains.annotations.Contract;
 
 @SuppressWarnings("unused")
-public interface DataBlock extends AutoCloseable,
-        ByteAccessor, ShortAccessor, IntegerAccessor, LongAccessor,
-        FloatAccessor, DoubleAccessor {
+public interface DataBlock extends AutoCloseable, StandardMemoryAccessor {
     long DEFAULT_SIZE = 2 << 9;
     long THRESHOLD_USE_SEG = 2 << 5 - 1;
 
