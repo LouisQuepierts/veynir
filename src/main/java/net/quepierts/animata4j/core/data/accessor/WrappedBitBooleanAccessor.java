@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import net.quepierts.animata4j.core.data.block.DataBlock;
 
 @RequiredArgsConstructor
-public class WrappedBitBooleanAccessor {
+public class WrappedBitBooleanAccessor implements BitBooleanAccessor {
     private final DataBlock delegate;
 
     public boolean getBitBoolean(final long offset, final int shift) {
@@ -12,8 +12,7 @@ public class WrappedBitBooleanAccessor {
         return (b & (1 << shift)) != 0;
     }
 
-    public void getBitBoolean(final long offset, final boolean[] booleans) {
-        final int length = booleans.length;
+    public void getBitBoolean(final long offset, final boolean[] booleans, final int arrayOffset, final int length) {
         if (length == 0) {
             return;
         }
@@ -24,13 +23,14 @@ public class WrappedBitBooleanAccessor {
         }
 
         final int size = (length + 7) / 8;
+        final int right = arrayOffset + length;
         final byte[] bytes = new byte[size];
         this.delegate.getByte(offset, bytes);
 
-        int j = 0;
+        int j = arrayOffset;
         for (int i = 0; i < size; i++) {
             byte b = bytes[i];
-            while (j < length) {
+            while (j < right) {
                 booleans[j] = (b & 1) != 0;
                 j++;
                 b >>= 1;
@@ -48,8 +48,7 @@ public class WrappedBitBooleanAccessor {
         this.delegate.putByte(offset, b);
     }
 
-    public void putBitBoolean(final long offset, final boolean[] booleans) {
-        final int length = booleans.length;
+    public void putBitBoolean(final long offset, final boolean[] booleans, final int arrayOffset, final int length) {
         if (length == 0) return;
 
         if (length == 1) {
@@ -60,7 +59,7 @@ public class WrappedBitBooleanAccessor {
         final byte[] bytes = new byte[length];
 
         for (int i = 0; i < length; i++) {
-            if (booleans[i]) {
+            if (booleans[i + arrayOffset]) {
                 bytes[i / 8] |= (byte) (1 << (i % 8));
             }
         }

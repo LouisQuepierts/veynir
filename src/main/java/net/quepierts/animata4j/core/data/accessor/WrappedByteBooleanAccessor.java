@@ -4,15 +4,14 @@ import lombok.RequiredArgsConstructor;
 import net.quepierts.animata4j.core.data.block.DataBlock;
 
 @RequiredArgsConstructor
-public class WrappedByteBooleanAccessor {
+public class WrappedByteBooleanAccessor implements ByteBooleanAccessor {
     private final DataBlock delegate;
 
     public boolean getByteBoolean(long offset) {
         return this.delegate.getByte(offset) != 0;
     }
 
-    public void getByteBoolean(final long offset, final boolean[] booleans) {
-        final int length = booleans.length;
+    public void getByteBoolean(final long offset, final boolean[] booleans, final int arrayOffset, final int length) {
         if (length == 0) return;
 
         if (length == 1) {
@@ -21,9 +20,9 @@ public class WrappedByteBooleanAccessor {
         }
 
         final byte[] bytes = new byte[length];
-        this.delegate.getByte(offset, bytes);
+        this.delegate.getByte(offset, bytes, 0, length);
         for (int i = 0; i < length; i++) {
-            booleans[i] = bytes[i] != 0;
+            booleans[i + arrayOffset] = bytes[i] != 0;
         }
     }
 
@@ -31,8 +30,7 @@ public class WrappedByteBooleanAccessor {
         this.delegate.putByte(offset, (byte) (value ? 1 : 0));
     }
 
-    public void putByteBoolean(final long offset, final boolean[] booleans) {
-        final int length = booleans.length;
+    public void putByteBoolean(final long offset, final boolean[] booleans, final int arrayOffset, final int length) {
         if (length == 0) return;
 
         if (length == 1) {
@@ -42,8 +40,8 @@ public class WrappedByteBooleanAccessor {
 
         byte[] bytes = new byte[length];
         for (int i = 0; i < length; i++) {
-            bytes[i] = (byte) (booleans[i] ? 1 : 0);
+            bytes[i] = (byte) (booleans[i + arrayOffset] ? 1 : 0);
         }
-        this.delegate.putByte(offset, bytes);
+        this.delegate.putByte(offset, bytes, 0, length);
     }
 }
