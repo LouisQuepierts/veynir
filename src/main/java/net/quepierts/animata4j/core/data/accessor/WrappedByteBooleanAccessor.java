@@ -1,11 +1,10 @@
 package net.quepierts.animata4j.core.data.accessor;
 
 import lombok.RequiredArgsConstructor;
-import net.quepierts.animata4j.core.data.block.DataBlock;
 
 @RequiredArgsConstructor
 public class WrappedByteBooleanAccessor implements ByteBooleanAccessor {
-    private final DataBlock delegate;
+    private final ByteAccessor delegate;
 
     public boolean getByteBoolean(long offset) {
         return this.delegate.getByte(offset) != 0;
