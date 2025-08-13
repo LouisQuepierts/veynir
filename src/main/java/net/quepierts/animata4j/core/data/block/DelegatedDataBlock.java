@@ -1,5 +1,7 @@
 package net.quepierts.animata4j.core.data.block;
 
+import lombok.Getter;
+
 import java.lang.foreign.Arena;
 import java.lang.foreign.MemorySegment;
 import java.lang.foreign.ValueLayout;
@@ -15,16 +17,20 @@ public class DelegatedDataBlock implements DataBlock {
     }
 
     private final Arena arena;
-    private final MemorySegment segment;
+    private MemorySegment segment;
+
+    @Getter
+    private boolean freed = false;
 
     private DelegatedDataBlock(long size) {
-        this.arena = Arena.ofShared();
+        this.arena = Arena.ofAuto();
         this.segment = this.arena.allocate(size);
     }
 
     @Override
     public void free() {
         this.arena.close();
+        this.freed = true;
     }
 
     @Override
@@ -360,5 +366,13 @@ public class DelegatedDataBlock implements DataBlock {
     @Override
     public long size() {
         return this.segment.byteSize();
+    }
+
+    @Override
+    public void expand(long size) {
+        final long newSize = this.segment.byteSize() + size;
+        final MemorySegment newSegment = this.arena.allocate(newSize);
+        newSegment.asSlice(0, this.segment.byteSize()).copyFrom(this.segment);
+        this.segment = newSegment;
     }
 }

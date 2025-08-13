@@ -22,8 +22,16 @@ public interface DataBlock extends AutoCloseable, StandardMemoryAccessor {
 
     long size();
 
+    void expand(long size);
+
+    boolean isFreed();
+
     @Override
     default void close() {
         this.free();
+    }
+
+    default DataBlock slice(long offset) {
+        return new SlicedDataBlock(this, offset);
     }
 }

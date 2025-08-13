@@ -1,9 +1,11 @@
 package net.quepierts.animata4j.core.data.block;
 
+import lombok.Getter;
 import net.quepierts.animata4j.core.misc.UnsafeUtil;
 
 import static net.quepierts.animata4j.core.misc.UnsafeUtil.*;
 
+@Getter
 public class DirectDataBlock implements DataBlock {
     public static DataBlock create() {
         return new DirectDataBlock(DataBlock.DEFAULT_SIZE);
@@ -13,17 +15,24 @@ public class DirectDataBlock implements DataBlock {
         return new DirectDataBlock(size);
     }
 
-    private final long size;
-    private final long address;
+    private long size;
+    private long address;
+    private boolean freed = false;
 
     private DirectDataBlock(long size) {
         this.size = size;
         this.address = UnsafeUtil.malloc(size);
     }
 
+    private DirectDataBlock(long size, long address) {
+        this.size = size;
+        this.address = address;
+    }
+
     @Override
     public void free() {
         UnsafeUtil.free(this.address);
+        this.freed = true;
     }
 
     @Override
@@ -221,6 +230,17 @@ public class DirectDataBlock implements DataBlock {
     @Override
     public long size() {
         return this.size;
+    }
+
+    @Override
+    public void expand(long size) {
+        final long newSize = this.size + size;
+        final long newAddress = UNSAFE.allocateMemory(newSize);
+        UNSAFE.copyMemory(this.address, newAddress, this.size);
+        UNSAFE.setMemory(newAddress + this.size, size, (byte) 0);
+        UNSAFE.freeMemory(this.address);
+        this.address = newAddress;
+        this.size = newSize;
     }
 
     @Override
