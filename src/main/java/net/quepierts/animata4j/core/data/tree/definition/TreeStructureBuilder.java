@@ -48,8 +48,6 @@ public final class TreeStructureBuilder implements TreeStructureDefinition.Build
         this.editStack.top().children.add(node);
         this.editStack.push(node);
         this.last = node;
-
-        System.out.println("begin: " + path);
         return this;
     }
 
@@ -81,8 +79,6 @@ public final class TreeStructureBuilder implements TreeStructureDefinition.Build
         this.path2node.put(path, node);
         current.children.add(node);
         this.last = node;
-
-        System.out.println("add: " + path);
         return this;
     }
 
@@ -107,7 +103,6 @@ public final class TreeStructureBuilder implements TreeStructureDefinition.Build
         if (this.editStack.top() == this.root) {
             throw new IllegalStateException("Cannot end root node");
         }
-        System.out.println("end: " + this.editStack.top().path());
         this.last = this.editStack.pop();
         return this;
     }
