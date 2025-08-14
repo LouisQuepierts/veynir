@@ -168,11 +168,12 @@ public final class TreeStructureBuilder implements TreeStructureDefinition.Build
             childIndices[i] = count == 0 ? TreeStructureDefinition.encodeLeafNode(index) : index;
         }
 
-        final TreeStructureDefinition definition = new TreeStructureDefinition(
+        final TreeStructureDefinition definition = TreeStructureDefinition.of(
                 mutableNodes.stream()
                         .map(node -> node.name)
                         .toArray(String[]::new),
-                childIndices
+                childIndices,
+                this.optimize
         );
 
         return new Result(definition, data);

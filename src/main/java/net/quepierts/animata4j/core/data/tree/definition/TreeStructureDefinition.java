@@ -1,5 +1,6 @@
 package net.quepierts.animata4j.core.data.tree.definition;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -7,7 +8,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.function.BiFunction;
 
 @SuppressWarnings("unused")
-@RequiredArgsConstructor
+@RequiredArgsConstructor(staticName = "of")
 public class TreeStructureDefinition {
     @Contract(value = "_ -> new", pure = true)
     public static Builder builder(@NotNull final String root) {
@@ -19,6 +20,9 @@ public class TreeStructureDefinition {
     // if the highest bit of the index is 1, then this node has children
     // or else, this node is a leaf node
     private final int[] childIndices;
+
+    @Getter
+    private final boolean optimized;
 
     @Contract(value = "_ -> _", pure = true)
     public int getChildCount(int index) {
