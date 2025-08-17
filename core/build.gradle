@@ -2,7 +2,7 @@ plugins {
     id 'java'
 }
 
-group = 'net.quepierts.animata4j'
+group = 'net.quepierts.animata4j.core'
 version = '1.0-SNAPSHOT'
 
 repositories {
