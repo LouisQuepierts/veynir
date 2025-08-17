@@ -1,9 +1,17 @@
 plugins {
     id 'java'
+    id 'idea'
 }
 
 group = 'net.quepierts.animata4j.core'
 version = '1.0-SNAPSHOT'
+
+idea {
+    module {
+        sourceDirs += file('src/generated')
+        generatedSourceDirs += file('src/generated')
+    }
+}
 
 repositories {
     mavenCentral()
@@ -26,8 +34,26 @@ dependencies {
 
     compileOnly group: 'org.projectlombok', name: 'lombok', version: lombok_version
     annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombok_version
+
+    compileOnly project(':codegen')
 }
 
 test {
     useJUnitPlatform()
+}
+
+tasks.named('compileJava') {
+    exclude '**/_TEMPLATE_*.java'
+}
+
+tasks.register('codegen', JavaExec) {
+    group = 'build'
+    description = 'Generate code for Animata4j core'
+    classpath = project(':codegen').sourceSets.main.runtimeClasspath
+    mainClass = 'net.quepierts.animata4j.codegen.CodegenMain'
+
+    args = ["--src", "${projectDir}/src/main/java", "--dst", "${projectDir}/src/generated/java"]
+    doFirst {
+        delete("${projectDir}/src/generated/java")
+    }
 }
