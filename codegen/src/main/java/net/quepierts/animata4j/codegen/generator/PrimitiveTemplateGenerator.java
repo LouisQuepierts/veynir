@@ -3,17 +3,20 @@ package net.quepierts.animata4j.codegen.generator;
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.Node;
-import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.FieldDeclaration;
 import com.github.javaparser.ast.body.MethodDeclaration;
 import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.AnnotationExpr;
-import com.github.javaparser.ast.expr.SimpleName;
 import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
+import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
+import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
+import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
+import com.github.javaparser.ast.type.Type;
 import com.google.auto.service.AutoService;
 import net.quepierts.animata4j.codegen.PlaceholderReplacer;
 import net.quepierts.animata4j.codegen.annotation.PrimitiveTemplate;
+import net.quepierts.animata4j.codegen.JavaParserHelper;
 
 import javax.annotation.processing.SupportedAnnotationTypes;
 import java.nio.file.Path;
@@ -73,31 +76,34 @@ public class PrimitiveTemplateGenerator extends Generator {
         this.replaceTypeAnnotation(cu.findAll(FieldDeclaration.class), replacements);
 
         for (MethodDeclaration method : cu.findAll(MethodDeclaration.class)) {
-            Optional<AnnotationExpr> retAnnotation = method.getAnnotationByName(ANNO_TYPE_TEMPLATE);
-            if (retAnnotation.isPresent()) {
-                AnnotationExpr retTypeAnnotation = retAnnotation.get();
-                method.remove(retTypeAnnotation);
-                final String template = this.getTypeTemplate(retTypeAnnotation);
-                method.setType(PlaceholderReplacer.replace(template, replacements));
-            }
+            this.replaceType(method, replacements);
 
             for (Parameter parameter : method.findAll(Parameter.class)) {
-                Optional<AnnotationExpr> optionalAnnotationExpr = parameter.getAnnotationByName(ANNO_TYPE_TEMPLATE);
-                if (optionalAnnotationExpr.isPresent()) {
-                    final AnnotationExpr paramTypeAnnotation = optionalAnnotationExpr.get();
-                    parameter.remove(paramTypeAnnotation);
-                    String template = this.getTypeTemplate(paramTypeAnnotation);
-
-                    if (parameter.getType().isArrayType()) {
-                        template += "[]";
-                    }
-
-                    parameter.setType(PlaceholderReplacer.replace(template, replacements));
-                }
+                this.replaceType(parameter, replacements);
             }
         }
 
         this.write(cu, target, replacements);
+    }
+
+    private <T extends Node & NodeWithType<? extends Node, Type> & NodeWithAnnotations<? extends Node>> void replaceType(
+            final T node,
+            final Map<String, String> replacements
+    ) {
+        final AnnotationExpr annotation = JavaParserHelper.getAndRemoveAnnotation(node, ANNO_TYPE_TEMPLATE);
+        final Type type = node.getType();
+
+        if (type.isClassOrInterfaceType() && type.toString().equals("type")) {
+            final String typename = replacements.get("type");
+            node.setType(typename);
+        } else if (type.isArrayType() && type.toString().startsWith("type")){
+            final String typename = replacements.get("type") + "[]";
+            node.setType(typename);
+        } else if (annotation != null) {
+            final String template = JavaParserHelper.TypeTemplate.get(annotation);
+            final String typename = PlaceholderReplacer.replace(template, replacements);
+            node.setType(type.isArrayType() ? typename + "[]" : typename);
+        }
     }
 
     private void replaceTypeAnnotation(
