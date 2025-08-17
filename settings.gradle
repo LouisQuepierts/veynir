@@ -1,2 +1,3 @@
 rootProject.name = 'animata4j'
+include 'core'
 
