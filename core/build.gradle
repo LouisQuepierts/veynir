@@ -8,8 +8,26 @@ version = '1.0-SNAPSHOT'
 
 idea {
     module {
-        sourceDirs += file('src/generated')
-        generatedSourceDirs += file('src/generated')
+        generatedSourceDirs += file('src/generated/java')
+    }
+}
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src/generated/java'
+        }
+        resources {
+            srcDir 'src/generated/resources'
+        }
+    }
+    test {
+        java {
+            srcDir 'src/generated/java'
+        }
+        resources {
+            srcDir 'src/generated/resources'
+        }
     }
 }
 
