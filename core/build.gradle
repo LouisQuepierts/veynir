@@ -75,3 +75,7 @@ tasks.register('codegen', JavaExec) {
         delete("${projectDir}/src/generated/java")
     }
 }
+
+tasks.named('build') {
+    dependsOn('codegen')
+}
