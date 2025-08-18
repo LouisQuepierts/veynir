@@ -1,4 +1,4 @@
-package net.quepierts.animata4j.codegen.annotation;
+package net.quepierts.codegen.annotations;
 
 public @interface TypeTemplate {
     String value() default "";

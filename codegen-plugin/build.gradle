@@ -1,0 +1,40 @@
+plugins {
+    id 'java-gradle-plugin'
+}
+
+group = 'net.quepierts.codegen.plugin'
+version = 'dev'
+
+gradlePlugin {
+    plugins {
+        create("animataCodegenPlugin") {
+            id = "animata-codegen"
+            implementationClass = "net.quepierts.codegen.plugin.CodegenPlugin"
+        }
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    compileOnly group: 'org.projectlombok', name: 'lombok', version: lombok_version
+    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombok_version
+
+    implementation group: 'com.google.guava', name: 'guava', version: guava_version
+    implementation group: 'com.google.code.gson', name: 'gson', version: gson_version
+
+    implementation group: 'org.jetbrains', name: 'annotations', version: annotations_version
+
+    implementation group : 'com.github.javaparser', name: 'javaparser-core', version: javaparser_version;
+
+    implementation gradleApi();
+    implementation localGroovy();
+
+    compileOnly group : 'com.google.auto.service', name: 'auto-service-annotations', version: autoservice_version;
+    annotationProcessor group : 'com.google.auto.service', name: 'auto-service', version: autoservice_version;
+}

@@ -1,4 +1,4 @@
-package net.quepierts.animata4j.codegen;
+package net.quepierts.codegen.plugin;
 
 import org.jetbrains.annotations.NotNull;
 

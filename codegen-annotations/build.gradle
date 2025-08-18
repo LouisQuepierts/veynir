@@ -1,0 +1,6 @@
+plugins {
+    id 'java'
+}
+
+group = 'net.quepierts.codegen.annotations'
+version = 'dev'

@@ -1,10 +1,9 @@
-package net.quepierts.animata4j.codegen;
+package net.quepierts.codegen.plugin;
 
 import com.github.javaparser.ast.Node;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
 import com.github.javaparser.ast.type.ArrayType;
-import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.Nullable;

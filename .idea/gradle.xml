@@ -4,11 +4,23 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
+        <compositeConfiguration>
+          <compositeBuild compositeDefinitionSource="SCRIPT">
+            <builds>
+              <build path="$PROJECT_DIR$/codegen-plugin" name="codegen-plugin">
+                <projects>
+                  <project path="$PROJECT_DIR$/codegen-plugin" />
+                </projects>
+              </build>
+            </builds>
+          </compositeBuild>
+        </compositeConfiguration>
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/codegen" />
+            <option value="$PROJECT_DIR$/codegen-annotations" />
+            <option value="$PROJECT_DIR$/codegen-plugin" />
             <option value="$PROJECT_DIR$/core" />
           </set>
         </option>

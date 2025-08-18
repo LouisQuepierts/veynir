@@ -1,4 +1,4 @@
-package net.quepierts.animata4j.codegen.generator;
+package net.quepierts.codegen.plugin.generator;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
@@ -9,14 +9,13 @@ import com.github.javaparser.ast.body.Parameter;
 import com.github.javaparser.ast.expr.AnnotationExpr;
 import com.github.javaparser.ast.expr.SingleMemberAnnotationExpr;
 import com.github.javaparser.ast.nodeTypes.NodeWithAnnotations;
-import com.github.javaparser.ast.nodeTypes.NodeWithSimpleName;
 import com.github.javaparser.ast.nodeTypes.NodeWithType;
 import com.github.javaparser.ast.type.ClassOrInterfaceType;
 import com.github.javaparser.ast.type.Type;
 import com.google.auto.service.AutoService;
-import net.quepierts.animata4j.codegen.PlaceholderReplacer;
-import net.quepierts.animata4j.codegen.annotation.PrimitiveTemplate;
-import net.quepierts.animata4j.codegen.JavaParserHelper;
+import net.quepierts.codegen.plugin.PlaceholderReplacer;
+import net.quepierts.codegen.plugin.PrimitiveType;
+import net.quepierts.codegen.plugin.JavaParserHelper;
 
 import javax.annotation.processing.SupportedAnnotationTypes;
 import java.nio.file.Path;
@@ -32,13 +31,13 @@ public class PrimitiveTemplateGenerator extends Generator {
 
     @Override
     public void generate(CompilationUnit source, AnnotationExpr annotation, Path destination, Path relativePath) {
-        final PrimitiveTemplate.Type[] types = this.getTypes(annotation);
+        final PrimitiveType[] types = this.getTypes(annotation);
 
         // _TEMPLATE_$Type$Class => $Type$Class
         final String string = relativePath.getFileName().toString().substring(10);
         final Path destinationPath = destination.resolve(relativePath.subpath(0, relativePath.getNameCount() - 1));
 
-        for (PrimitiveTemplate.Type type : types) {
+        for (PrimitiveType type : types) {
             final String className = string.replace("$Type$", type.getClassName());
 
             // target path = destination + (relative path).replaceLast(className)
@@ -56,7 +55,7 @@ public class PrimitiveTemplateGenerator extends Generator {
     private void generate(
             CompilationUnit cu,
             Path target,
-            PrimitiveTemplate.Type type
+            PrimitiveType type
     ) {
         final Map<String, String> replacements = Map.of(
                 "Type", type.getClassName(),
@@ -142,15 +141,15 @@ public class PrimitiveTemplateGenerator extends Generator {
                 : "$type$";
     }
 
-    private PrimitiveTemplate.Type[] getTypes(AnnotationExpr template) {
+    private PrimitiveType[] getTypes(AnnotationExpr template) {
         if (template.isSingleMemberAnnotationExpr()) {
             SingleMemberAnnotationExpr single = template.asSingleMemberAnnotationExpr();
             return single.getMemberValue().asArrayInitializerExpr().getValues().stream()
                     .map(value -> value.asStringLiteralExpr().asString())
-                    .map(PrimitiveTemplate.Type::valueOf)
-                    .toArray(PrimitiveTemplate.Type[]::new);
+                    .map(PrimitiveType::valueOf)
+                    .toArray(PrimitiveType[]::new);
         }
 
-        return PrimitiveTemplate.Type.values();
+        return PrimitiveType.values();
     }
 }

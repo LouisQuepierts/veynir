@@ -1,11 +1,10 @@
-package net.quepierts.animata4j.codegen.generator;
+package net.quepierts.codegen.plugin.generator;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.expr.AnnotationExpr;
-import net.quepierts.animata4j.codegen.PlaceholderReplacer;
+import net.quepierts.codegen.plugin.PlaceholderReplacer;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;

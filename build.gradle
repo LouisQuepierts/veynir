@@ -1,12 +1,38 @@
 plugins {
-    id 'java'
+    id 'base'
 }
 
-group = 'net.quepierts.animata4j'
-version = '1.0-SNAPSHOT'
+allprojects {
+    repositories {
+        mavenCentral()
+    }
+}
 
-repositories {
-    mavenCentral()
+subprojects {
+    plugins.withId('java') {
+        dependencies {
+            testImplementation platform('org.junit:junit-bom:5.10.0')
+            testImplementation 'org.junit.jupiter:junit-jupiter'
+
+            compileOnly group: 'org.projectlombok', name: 'lombok', version: lombok_version
+            annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombok_version
+
+            implementation group: 'com.google.guava', name: 'guava', version: guava_version
+            implementation group: 'com.google.code.gson', name: 'gson', version: gson_version
+
+            implementation group: 'org.jetbrains', name: 'annotations', version: annotations_version
+        }
+
+        test {
+            useJUnitPlatform()
+        }
+
+        java {
+            toolchain {
+                languageVersion.set(JavaLanguageVersion.of(11))
+            }
+        }
+    }
 }
 
 tasks.named('build') {

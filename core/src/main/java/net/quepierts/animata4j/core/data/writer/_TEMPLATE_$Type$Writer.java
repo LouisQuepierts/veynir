@@ -1,7 +1,7 @@
 package net.quepierts.animata4j.core.data.writer;
 
-import net.quepierts.animata4j.codegen.annotation.PrimitiveTemplate;
-import net.quepierts.animata4j.codegen.types.type;
+import net.quepierts.codegen.annotations.PrimitiveTemplate;
+import net.quepierts.codegen.annotations.types.type;
 
 @PrimitiveTemplate
 @SuppressWarnings("unused")

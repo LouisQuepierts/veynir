@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'idea'
+    id 'animata-codegen'
 }
 
 group = 'net.quepierts.animata4j.core'
@@ -31,51 +32,32 @@ sourceSets {
     }
 }
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-
-    implementation group: 'com.google.guava', name: 'guava', version: guava_version
-    implementation group: 'com.google.code.gson', name: 'gson', version: gson_version
-
     implementation group: 'it.unimi.dsi', name: 'fastutil', version: fastutil_version
     implementation group: 'org.joml', name: 'joml', version: joml_version
-
-    implementation group: 'org.jetbrains', name: 'annotations', version: annotations_version
 
     implementation group: 'org.slf4j', name: 'slf4j-api', version: slf4j_api_version
     implementation group: 'org.slf4j', name: 'slf4j-simple', version: slf4j_simple_version
 
-    compileOnly group: 'org.projectlombok', name: 'lombok', version: lombok_version
-    annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombok_version
-
-    compileOnly project(':codegen')
+    compileOnly project(':codegen-annotations')
 }
 
-test {
-    useJUnitPlatform()
-}
-
-tasks.named('compileJava') {
-    exclude '**/_TEMPLATE_*.java'
-}
-
-tasks.register('codegen', JavaExec) {
-    group = 'build'
-    description = 'Generate code for Animata4j core'
-    classpath = project(':codegen').sourceSets.main.runtimeClasspath
-    mainClass = 'net.quepierts.animata4j.codegen.CodegenMain'
-
-    args = ["--src", "${projectDir}/src/main/java", "--dst", "${projectDir}/src/generated/java"]
-    doFirst {
-        delete("${projectDir}/src/generated/java")
-    }
-}
-
-tasks.named('build') {
-    dependsOn('codegen')
-}
+//tasks.named('compileJava') {
+//    exclude '**/_TEMPLATE_*.java'
+//}
+//
+//tasks.register('codegen', JavaExec) {
+//    group = 'build'
+//    description = 'Generate code for Animata4j core'
+//    classpath = project(':codegen').sourceSets.main.runtimeClasspath
+//    mainClass = 'net.quepierts.animata4j.codegen.CodegenMain'
+//
+//    args = ["--src", "${projectDir}/src/main/java", "--dst", "${projectDir}/src/generated/java"]
+//    doFirst {
+//        delete("${projectDir}/src/generated/java")
+//    }
+//}
+//
+//tasks.named('build') {
+//    dependsOn('codegen')
+//}

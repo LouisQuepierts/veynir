@@ -1,6 +1,6 @@
 package net.quepierts.animata4j.core.data.accessor;
 
-import net.quepierts.animata4j.codegen.annotation.PrimitiveTemplate;
+import net.quepierts.codegen.annotations.PrimitiveTemplate;
 import net.quepierts.animata4j.core.data.reader._TEMPLATE_$Type$Reader;
 import net.quepierts.animata4j.core.data.writer._TEMPLATE_$Type$Writer;
 

@@ -1,4 +1,4 @@
-package net.quepierts.animata4j.codegen.generator;
+package net.quepierts.codegen.plugin.generator;
 
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;

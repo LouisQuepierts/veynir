@@ -5,68 +5,52 @@ import lombok.Getter;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * An interface for resolving paths to values using tokens.
+ * Implementations can resolve a path string or token array to a value of type T.
+ *
+ * @param <T> the type of value that can be resolved
+ */
+@SuppressWarnings("unused")
 public interface PathResolvable<T> {
-
-    @Contract(value = "_, _ -> new", pure = true)
-    static <T> Result<T> resolve(
-            @NotNull final PathResolvable<T> resolvable,
-            @NotNull final String[] tokens
-    ) {
-        final int length = tokens.length;
-
-        int current = resolvable.rootIndex();
-        int last = current;
-
-        int i = 0;
-        while (i < length && resolvable.isUniqueName(tokens[i])) {
-            last = current;
-            current = resolvable.getUniqueIndex(tokens[i]);
-            i ++;
-        }
-
-        for (; i < length; i++) {
-            last = current;
-            current = resolvable.findChild(current, tokens[i]);
-            if (current == -1) {
-                break;
-            }
-        }
-
-        return Result.of(
-                i == length,
-                i,
-                i == length ? resolvable.getValue(current) : resolvable.getValue(last)
-        );
-    }
-
+    /**
+     * Resolves a path represented by an array of tokens to a value.
+     *
+     * @param tokens the array of tokens representing the path
+     * @return a Result object containing the resolution outcome
+     */
     @Contract(value = "_ -> new", pure = true)
-    default Result<T> resolve(@NotNull final String path) {
-        return resolve(this, path.split("\\."));
-    }
+    @NotNull Result<T> resolve(@NotNull final String[] tokens);
 
+    /**
+     * Resolves a dot-separated path string to a value by splitting it into tokens.
+     *
+     * @param path the dot-separated path string
+     * @return a Result object containing the resolution outcome
+     */
     @Contract(value = "_ -> new", pure = true)
-    default Result<T> resolve(@NotNull final String[] tokens) {
-        return resolve(this, tokens);
+    default @NotNull Result<T> resolve(@NotNull final String path) {
+        return this.resolve(this.tokenize(path));
     }
 
-    @Contract(pure = true)
-    int rootIndex();
+    /**
+     * Splits a dot-separated path string into an array of tokens.
+     *
+     * @param path the dot-separated path string
+     * @return an array of tokens
+     */
+    @Contract(value = "_ -> new", pure = true)
+    default @NotNull String[] tokenize(@NotNull final String path) {
+        return path.split("\\.");
+    }
 
-    @Contract(pure = true)
-    int findChild(final int index, @NotNull final String child);
-
-    @Contract(pure = true)
-    boolean isUniqueName(@NotNull final String name);
-
-    @Contract(pure = true)
-    int getUniqueIndex(@NotNull final String name);
-
-    @Contract(pure = true)
-    String getName(final int index);
-
-    @Contract(pure = true)
-    T getValue(final int index);
-
+    /**
+     * A result class that encapsulates the outcome of a path resolution operation.
+     * It contains a boolean flag indicating whether the resolution was successful,
+     * an index indicating the last resolved token, and the resolved value.
+     *
+     * @param <T> the type of value that was resolved
+     */
     @Getter
     @AllArgsConstructor(staticName = "of")
     class Result<T> {

@@ -1,4 +1,7 @@
+pluginManagement {
+    includeBuild("codegen-plugin")
+}
+
 rootProject.name = 'animata4j'
-include 'core'
-include 'codegen'
+include('core', 'codegen-annotations')
 

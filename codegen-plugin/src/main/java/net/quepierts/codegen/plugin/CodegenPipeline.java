@@ -1,8 +1,8 @@
-package net.quepierts.animata4j.codegen;
+package net.quepierts.codegen.plugin;
 
 import com.github.javaparser.StaticJavaParser;
 import com.github.javaparser.ast.CompilationUnit;
-import net.quepierts.animata4j.codegen.generator.GeneratorManager;
+import net.quepierts.codegen.plugin.generator.GeneratorManager;
 
 import java.io.File;
 import java.io.FileNotFoundException;
