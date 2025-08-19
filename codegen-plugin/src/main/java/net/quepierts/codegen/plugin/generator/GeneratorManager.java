@@ -38,7 +38,7 @@ public class GeneratorManager {
     public void apply(final CompilationUnit unit, Path relativePath) {
         unit.getImports().removeIf(importDecl -> {
             final String name = importDecl.getNameAsString();
-            return name.startsWith("net.quepierts.animata4j.codegen");
+            return name.startsWith("net.quepierts.codegen");
         });
 
         Optional<ClassOrInterfaceDeclaration> first = unit.findFirst(ClassOrInterfaceDeclaration.class);
