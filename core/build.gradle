@@ -7,31 +7,6 @@ plugins {
 group = 'net.quepierts.animata4j.core'
 version = '1.0-SNAPSHOT'
 
-idea {
-    module {
-        generatedSourceDirs += file('src/generated/java')
-    }
-}
-
-sourceSets {
-    main {
-        java {
-            srcDir 'src/generated/java'
-        }
-        resources {
-            srcDir 'src/generated/resources'
-        }
-    }
-    test {
-        java {
-            srcDir 'src/generated/java'
-        }
-        resources {
-            srcDir 'src/generated/resources'
-        }
-    }
-}
-
 dependencies {
     implementation group: 'it.unimi.dsi', name: 'fastutil', version: fastutil_version
     implementation group: 'org.joml', name: 'joml', version: joml_version
