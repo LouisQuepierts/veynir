@@ -12,14 +12,13 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public enum AnimataDataType {
     BYTE(1, true, "byte"),
+    BOOLEAN(1, false, "boolean"),
     SHORT(2, true, "short"),
     INT(4, true, "int"),
-    LONG(8, true, "long"),
     FLOAT(4, true, "float"),
+    LONG(8, true, "long"),
     DOUBLE(8, true, "double"),
-    BOOLEAN(1, false, "boolean"),
-    STRUCT(0, false, "struct"),
-    AUTO(0, false, "auto")
+    STRUCT(0, false, "struct")
     ;
 
     private static final Pattern NAME_PATTERN = Pattern.compile("[a-zA-Z$_][a-zA-Z\\d$_]*(\\.[a-zA-Z$_][a-zA-Z\\d$_]*)*");
