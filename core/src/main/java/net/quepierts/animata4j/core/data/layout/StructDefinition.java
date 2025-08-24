@@ -1,13 +1,11 @@
 package net.quepierts.animata4j.core.data.layout;
 
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 @Getter
@@ -15,6 +13,7 @@ import java.util.Set;
 public final class StructDefinition {
     private final String name;
     private final FieldDefinition[] fields;
+    private final boolean optimize;
 
     public static Builder builder(String name) {
         if (!AnimataDataType.isAvailableStructName(name)) {
@@ -30,6 +29,7 @@ public final class StructDefinition {
         private final List<FieldDefinition> fields = Lists.newArrayList();
 
         private boolean emptyCheck = false;
+        private boolean optimize = false;
 
         private Builder(String name) {
             this.name = name;
@@ -40,6 +40,11 @@ public final class StructDefinition {
                 throw new IllegalArgumentException("Duplicate field name: " + field.getName());
             }
             this.fields.add(field);
+            return this;
+        }
+
+        public Builder optimize() {
+            this.optimize = true;
             return this;
         }
 
@@ -54,7 +59,7 @@ public final class StructDefinition {
             }
 
             FieldDefinition[] fields = this.fields.toArray(FieldDefinition[]::new);
-            return new StructDefinition(name, fields);
+            return new StructDefinition(this.name, fields, this.optimize);
         }
     }
 

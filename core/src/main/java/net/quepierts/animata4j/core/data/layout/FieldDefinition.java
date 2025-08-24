@@ -3,6 +3,7 @@ package net.quepierts.animata4j.core.data.layout;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.Nullable;
 
 @Getter
 public final class FieldDefinition {
@@ -28,6 +29,10 @@ public final class FieldDefinition {
         this.primaryType = primaryType;
         this.type = type;
         this.name = name;
+    }
+
+    public boolean isSameType(@Nullable final FieldDefinition other) {
+        return other != null && this.type.equals(other.type);
     }
 
     @Override
