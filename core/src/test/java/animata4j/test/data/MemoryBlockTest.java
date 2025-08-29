@@ -1,17 +1,17 @@
 package animata4j.test.data;
 
-import net.quepierts.animata4j.core.data.block.DataBlock;
+import net.quepierts.animata4j.core.data.block.MemoryBlock;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-public class DataBlockTest {
+public class MemoryBlockTest {
     @Test
     public void test_createDefault() {
         // create new data block
-        DataBlock block = DataBlock.create();
+        MemoryBlock block = MemoryBlock.create();
 
         // check size
-        Assertions.assertEquals(DataBlock.DEFAULT_SIZE, block.size());
+        Assertions.assertEquals(MemoryBlock.DEFAULT_SIZE, block.size());
 
         // check getter and setter
         block.putByte(0, (byte) 0x01);

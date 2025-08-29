@@ -3,8 +3,8 @@ package net.quepierts.animata4j.core.data.block;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public final class SlicedDataBlock implements DataBlock {
-    private final DataBlock delegate;
+public final class SlicedMemoryBlock implements MemoryBlock {
+    private final MemoryBlock delegate;
     private final long offset;
 
     @Override
@@ -148,7 +148,7 @@ public final class SlicedDataBlock implements DataBlock {
     }
 
     @Override
-    public DataBlock slice(long offset) {
-        return new SlicedDataBlock(this.delegate, this.offset + offset);
+    public MemoryBlock slice(long offset) {
+        return new SlicedMemoryBlock(this.delegate, this.offset + offset);
     }
 }

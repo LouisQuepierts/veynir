@@ -4,18 +4,18 @@ import net.quepierts.animata4j.core.data.accessor.*;
 import org.jetbrains.annotations.Contract;
 
 @SuppressWarnings("unused")
-public interface DataBlock extends AutoCloseable, StandardMemoryAccessor {
+public interface MemoryBlock extends AutoCloseable, StandardMemoryAccessor {
     long DEFAULT_SIZE = 2 << 9;
     long THRESHOLD_USE_SEG = 2 << 5 - 1;
 
     @Contract(value = "-> new", pure = true)
-    static DataBlock create() {
-        return DirectDataBlock.create();
+    static MemoryBlock create() {
+        return DirectMemoryBlock.create();
     }
 
     @Contract(value = "_ -> new", pure = true)
-    static DataBlock create(long size) {
-        return DirectDataBlock.create(size);
+    static MemoryBlock create(long size) {
+        return DirectMemoryBlock.create(size);
     }
 
     void free();
@@ -31,7 +31,7 @@ public interface DataBlock extends AutoCloseable, StandardMemoryAccessor {
         this.free();
     }
 
-    default DataBlock slice(long offset) {
-        return new SlicedDataBlock(this, offset);
+    default MemoryBlock slice(long offset) {
+        return new SlicedMemoryBlock(this, offset);
     }
 }

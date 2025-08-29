@@ -2,29 +2,31 @@ package net.quepierts.animata4j.core.data.block;
 
 import lombok.Getter;
 import net.quepierts.animata4j.core.misc.UnsafeUtil;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import static net.quepierts.animata4j.core.misc.UnsafeUtil.*;
 
 @Getter
-public class DirectDataBlock implements DataBlock {
-    public static DataBlock create() {
-        return new DirectDataBlock(DataBlock.DEFAULT_SIZE);
+public class DirectMemoryBlock implements MemoryBlock {
+    public static MemoryBlock create() {
+        return new DirectMemoryBlock(MemoryBlock.DEFAULT_SIZE);
     }
 
-    public static DataBlock create(long size) {
-        return new DirectDataBlock(size);
+    public static MemoryBlock create(long size) {
+        return new DirectMemoryBlock(size);
     }
 
     private long size;
     private long address;
     private boolean freed = false;
 
-    private DirectDataBlock(long size) {
+    private DirectMemoryBlock(long size) {
         this.size = size;
         this.address = UnsafeUtil.malloc(size);
     }
 
-    private DirectDataBlock(long size, long address) {
+    private DirectMemoryBlock(long size, long address) {
         this.size = size;
         this.address = address;
     }
@@ -265,5 +267,49 @@ public class DirectDataBlock implements DataBlock {
         }
 
         return builder.toString();
+    }
+
+    @Override
+    public MemoryBlock slice(long offset) {
+        if (offset >= this.size) {
+            throw new IndexOutOfBoundsException("Offset " + offset + " is out of bounds");
+        }
+        return new Sliced(
+                this.size - offset,
+                this.address + offset,
+                this
+        );
+    }
+
+    private static class Sliced extends DirectMemoryBlock {
+        private final @NotNull DirectMemoryBlock parent;
+
+        private Sliced(long size, long address, @NotNull DirectMemoryBlock parent) {
+            super(size, address);
+            this.parent = parent;
+        }
+
+        @Override
+        public void free() {
+
+        }
+
+        @Override
+        public boolean isFreed() {
+            return this.parent.isFreed();
+        }
+
+        @Override
+        @Contract(value = "_ -> new", pure = true)
+        public MemoryBlock slice(long offset) {
+            if (offset >= this.getSize()) {
+                throw new IndexOutOfBoundsException("Offset " + offset + " is out of bounds");
+            }
+            return new Sliced(
+                    this.getSize() - offset,
+                    this.getAddress() + offset,
+                    this.parent
+            );
+        }
     }
 }

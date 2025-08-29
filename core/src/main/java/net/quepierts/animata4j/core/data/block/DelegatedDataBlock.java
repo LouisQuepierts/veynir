@@ -1,3 +1,4 @@
+/*
 package net.quepierts.animata4j.core.data.block;
 
 import lombok.Getter;
@@ -376,3 +377,4 @@ public class DelegatedDataBlock implements DataBlock {
         this.segment = newSegment;
     }
 }
+*/
