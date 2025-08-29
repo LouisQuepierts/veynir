@@ -17,6 +17,7 @@ import java.util.List;
 public abstract class Lexer {
 
     private final String source;
+    private final int start;
     private final int end;
 
     private int col;
@@ -25,6 +26,7 @@ public abstract class Lexer {
 
     protected Lexer(@NotNull String source) {
         this.source = source;
+        this.start = 0;
         this.end = source.length();
         this.pos = 0;
     }
@@ -35,6 +37,7 @@ public abstract class Lexer {
             final int length
     ) {
         this.source = source;
+        this.start = pos.getPos();
         this.end = pos.getPos() + length;
         this.pos = pos.getPos();
         this.col = pos.getCol();
@@ -115,7 +118,7 @@ public abstract class Lexer {
                 .append(lineContent).append("\n");
 
         int offset = this.pos - lineStart;
-        for (int i = 0; i < offset; i ++) {
+        for (int i = 1; i < offset; i ++) {
             builder.append(" ");
         }
         builder.append("^");
@@ -136,6 +139,12 @@ public abstract class Lexer {
             this.advance();
         }
         return this.source.substring(start, this.pos);
+    }
+
+    protected String source() {
+        return this.start == 0 || this.end == this.source.length() ?
+                this.source :
+                this.source.substring(this.start, this.end);
     }
 
     protected <T extends Lexer> T sublexer(

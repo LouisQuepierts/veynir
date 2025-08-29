@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public abstract class Token {
+    private final String value;
     private final SourceSpan span;
 
     public abstract TypeIdentifier<? extends Token> getType();

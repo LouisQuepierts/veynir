@@ -7,9 +7,10 @@ import net.quepierts.animata4j.core.dsl.TypeIdentifier;
 import org.jetbrains.annotations.NotNull;
 
 public final class EOFToken extends Token {
+    public static final String VALUE = "<EOF>";
 
     EOFToken(@NotNull SourceSpan span) {
-        super(span);
+        super(VALUE, span);
     }
 
     public static EOFToken of(@NotNull SourcePos pos) {

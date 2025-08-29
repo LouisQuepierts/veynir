@@ -8,31 +8,28 @@ import org.jetbrains.annotations.NotNull;
 
 public abstract class ExpressionToken extends Token {
 
-    private ExpressionToken(SourceSpan span) {
-        super(span);
+    private ExpressionToken(String value, SourceSpan span) {
+        super(value, span);
     }
 
-    public static @NotNull ExpressionToken number(SourceSpan span, String value) {
-        return new Number(span, value);
+    public static @NotNull ExpressionToken number(String value, SourceSpan span) {
+        return new Number(value, span);
     }
 
-    public static @NotNull ExpressionToken word(SourceSpan span, String value) {
-        return new Word(span, value);
+    public static @NotNull ExpressionToken identifier(String value, SourceSpan span) {
+        return new Word(value, span);
     }
 
-    public static @NotNull ExpressionToken symbol(SourceSpan span, char value) {
-        return new Symbol(span, Symbol.map(value));
+    public static @NotNull ExpressionToken symbol(char opr, SourceSpan span) {
+        return new Symbol(String.valueOf(opr), span, Symbol.map(opr));
     }
 
-    @Getter
     public static final class Number extends ExpressionToken {
 
         public static final TypeIdentifier<Number> TYPE = TokenTypes.NUMBER;
-        private final String value;
 
-        public Number(SourceSpan span, String value) {
-            super(span);
-            this.value = value;
+        public Number(String value, SourceSpan span) {
+            super(value, span);
         }
 
         @Override
@@ -41,15 +38,12 @@ public abstract class ExpressionToken extends Token {
         }
     }
 
-    @Getter
     public static final class Word extends ExpressionToken {
 
         public static final TypeIdentifier<Word> TYPE = TokenTypes.WORD;
-        private final String value;
 
-        public Word(SourceSpan span, String value) {
-            super(span);
-            this.value = value;
+        public Word(String value, SourceSpan span) {
+            super(value, span);
         }
 
         @Override
@@ -63,8 +57,8 @@ public abstract class ExpressionToken extends Token {
 
         private final TypeIdentifier<Symbol> type;
 
-        private Symbol(SourceSpan span, TypeIdentifier<Symbol> type) {
-            super(span);
+        private Symbol(String value, SourceSpan span, TypeIdentifier<Symbol> type) {
+            super(value, span);
             this.type = type;
         }
 

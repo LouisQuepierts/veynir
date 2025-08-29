@@ -10,36 +10,38 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 public abstract class PathToken extends Token {
 
-    private PathToken(@NotNull SourceSpan span) {
-        super(span);
+    private PathToken(
+            @NotNull String value,
+            @NotNull SourceSpan span
+    ) {
+        super(value, span);
     }
 
     public static PathToken simple(
-            @NotNull SourceSpan span,
-            @NotNull String word
+            @NotNull String value,
+            @NotNull SourceSpan span
     ) {
-        return new Simple(span, word);
+        return new Simple(value, span);
     }
 
     public static PathToken subscript(
+            @NotNull String value,
             @NotNull SourceSpan span,
             @NotNull ExpressionNode expr
     ) {
-        return new Subscript(span, expr);
+        return new Subscript(value, span, expr);
     }
 
     @Getter
     public static final class Simple extends PathToken {
 
         public static final TypeIdentifier<Simple> TYPE = TokenTypes.SIMPLE;
-        private final @NotNull String text;
 
         private Simple(
-                @NotNull SourceSpan span,
-                @NotNull String text
+                @NotNull String value,
+                @NotNull SourceSpan span
         ) {
-            super(span);
-            this.text = text;
+            super(value, span);
         }
 
         @Override
@@ -55,10 +57,11 @@ public abstract class PathToken extends Token {
         private final @NotNull ExpressionNode expr;
 
         private Subscript(
+                @NotNull String value,
                 @NotNull SourceSpan span,
                 @NotNull ExpressionNode expr
         ) {
-            super(span);
+            super(value, span);
             this.expr = expr;
         }
 

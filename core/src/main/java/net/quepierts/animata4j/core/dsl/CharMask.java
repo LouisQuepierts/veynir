@@ -17,7 +17,7 @@ public class CharMask {
     private static final int MAX_MASK_SIZE = 2;
 
     public static CharMask compile(String mask) {
-        final long[] bits = new long[MAX_MASK_SIZE];
+        final long[] bits = {0, 0};
 
         short charCount = 0;
         char min = 128;
@@ -29,8 +29,8 @@ public class CharMask {
                 throw new IllegalArgumentException("CharMask only supports ASCII characters.");
             }
 
-            final long bitMask = 1L << (i % 64);
-            final int idx = i / 64;
+            final long bitMask = 1L << (c % 64);
+            final int idx = c / 64;
             if ((bits[idx] & bitMask) != 1) {
                 bits[idx] |= bitMask;
                 charCount ++;

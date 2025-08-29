@@ -32,16 +32,14 @@ public class PathLexer extends Lexer {
             return this.eof();
         }
 
+        final SourcePos leftPos = this.getSourcePos();
         char c = this.advance();
 
         if (c == DOT) {
-            this.advance();
             return null;
         }
 
-        final SourcePos leftPos = this.getSourcePos();
         if (c == LEFT_BRACKET) {
-            this.advance();
             final int left = this.getPos();
             final int right = this.findCloseBracket();
 
@@ -54,12 +52,16 @@ public class PathLexer extends Lexer {
             final ExpressionParser parser = new ExpressionParser(subLexer);
             final ExpressionNode expr = parser.parse();
 
-            return PathToken.subscript(this.span(leftPos), expr);
+            while (this.getPos() <= right) {
+                this.advance();
+            }
+            final String value = subLexer.source();
+            return PathToken.subscript(value, this.span(leftPos), expr);
         }
 
         if (Lexer.isIdentifierStart(c)) {
-            final String word = this.readWhile(Lexer::isIdentifierPart);
-            return PathToken.simple(this.span(leftPos), word);
+            final String word = c + this.readWhile(Lexer::isIdentifierPart);
+            return PathToken.simple(word, this.span(leftPos));
         }
 
         this.error("Invalid character: " + c);

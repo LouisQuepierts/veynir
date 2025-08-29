@@ -30,21 +30,21 @@ public class ExpressionLexer extends Lexer {
             return this.eof();
         }
 
+        final SourcePos leftPos = this.getSourcePos();
         char c = this.advance();
 
-        final SourcePos leftPos = this.getSourcePos();
         if (SYMBOLS.matches(c)) {
-            return ExpressionToken.symbol(this.span(leftPos), c);
+            return ExpressionToken.symbol(c, this.span(leftPos));
         }
 
         if (Lexer.isDigit(c)) {
-            final String number = this.readWhile(Lexer::isDigit);
-            return ExpressionToken.number(this.span(leftPos), number);
+            final String number = c + this.readWhile(Lexer::isDigit);
+            return ExpressionToken.number(number, this.span(leftPos));
         }
 
         if (Lexer.isIdentifierStart(c)) {
-            final String identifier = this.readWhile(Lexer::isIdentifierPart);
-            return ExpressionToken.word(this.span(leftPos), identifier);
+            final String identifier = c + this.readWhile(Lexer::isIdentifierPart);
+            return ExpressionToken.identifier(identifier, this.span(leftPos));
         }
 
         this.error("Invalid character: " + c);
