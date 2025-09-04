@@ -1,4 +1,4 @@
-package net.quepierts.animata4j.core.dsl;
+package net.quepierts.animata4j.core.dsl.source;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +11,10 @@ public final class SourcePos {
     private final int pos;
 
     public static SourcePos of(int line, int col, int pos) {
+        return new SourcePos(line, col, pos);
+    }
+
+    public SourcePos copy() {
         return new SourcePos(line, col, pos);
     }
 }
