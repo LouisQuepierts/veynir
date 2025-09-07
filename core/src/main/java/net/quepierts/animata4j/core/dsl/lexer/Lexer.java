@@ -3,59 +3,48 @@ package net.quepierts.animata4j.core.dsl.lexer;
 import com.google.common.collect.ImmutableList;
 import lombok.AccessLevel;
 import lombok.Getter;
-import net.quepierts.animata4j.core.dsl.SourcePos;
-import net.quepierts.animata4j.core.dsl.SourceSpan;
-import net.quepierts.animata4j.core.dsl.token.EOFToken;
-import net.quepierts.animata4j.core.dsl.token.Token;
-import net.quepierts.animata4j.core.dsl.token.TokenTypes;
+import lombok.Setter;
+import net.quepierts.animata4j.core.dsl.source.SourcePointer;
+import net.quepierts.animata4j.core.dsl.source.SourcePos;
+import net.quepierts.animata4j.core.dsl.source.SourceProvider;
+import net.quepierts.animata4j.core.dsl.source.SourceSpan;
+import net.quepierts.animata4j.core.dsl.TrieTree;
+import net.quepierts.animata4j.core.dsl.exception.LexerException;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-@Getter(AccessLevel.PROTECTED)
-public abstract class Lexer {
+public abstract class Lexer implements TokenProvider {
 
-    private final String source;
-    private final int start;
-    private final int end;
+    @Getter
+    private final SourceProvider source;
 
-    private int col;
-    private int line;
-    private int pos;
+    @Getter(AccessLevel.PROTECTED)
+    private final SourcePointer pointer;
+
+    @Getter @Setter
+    private boolean keepComment = true;
 
     protected Lexer(@NotNull String source) {
-        this.source = source;
-        this.start = 0;
-        this.end = source.length();
-        this.pos = 0;
+        this.source = SourceProvider.of(source);
+        this.pointer = SourcePointer.of(this.source);
     }
 
-    protected Lexer(
-            final @NotNull String source,
-            final @NotNull SourcePos pos,
-            final int length
-    ) {
-        this.source = source;
-        this.start = pos.getPos();
-        this.end = pos.getPos() + length;
-        this.pos = pos.getPos();
-        this.col = pos.getCol();
-        this.line = pos.getLine();
+    protected Lexer(@NotNull SourceProvider provider) {
+        this.source = provider;
+        this.pointer = SourcePointer.of(this.source);
     }
 
     public abstract @Nullable Token next();
-
-    protected @NotNull RuntimeException createException(String message, int errorPos) {
-        return new RuntimeException(message);
-    }
 
     public List<Token> tokenize() {
         ImmutableList.Builder<Token> builder = ImmutableList.builder();
         while (this.hasNext()) {
             Token token = this.next();
             if (token != null) {
-                if (token.getType() == TokenTypes.EOF) {
+                if (token.is(TokenType.EOF)) {
                     break;
                 }
                 builder.add(token);
@@ -65,7 +54,7 @@ public abstract class Lexer {
     }
 
     public @NotNull SourcePos getSourcePos() {
-        return new SourcePos(this.line, this.col, this.pos);
+        return this.pointer.toSourcePos();
     }
 
     public @NotNull SourceSpan span(@NotNull SourcePos start) {
@@ -73,78 +62,60 @@ public abstract class Lexer {
     }
 
     public boolean hasNext() {
-        return this.pos < this.end;
+        return this.pointer.hasNext();
     }
 
-    protected char peek() {
-        return this.pos < this.end ? this.source.charAt(this.pos) : '\0';
+    @Contract(pure = true)
+    protected final char peek() {
+        return this.pointer.peek();
     }
 
-    protected char advance() {
-        if (this.pos >= this.end) {
-            return '\0';
-        }
-        final char c = this.source.charAt(this.pos++);
-        if (c == '\n') {
-            this.line ++;
-            this.col = 1;
-        } else {
-            this.col ++;
-        }
-        return c;
+    protected final char advance() {
+        return this.pointer.advance();
     }
 
-    protected void skipWhitespace() {
-        while (this.hasNext() && Character.isWhitespace(this.peek())) {
-            this.pos++;
-        }
+    protected final void skipWhitespace() {
+        this.pointer.skipWhitespace();
     }
 
-    protected void error(final @NotNull String message) {
-        int lineStart = this.pos;
-        while (lineStart > 0 && this.source.charAt(lineStart - 1) != '\n') {
-            lineStart --;
-        }
-        int lineEnd = this.pos;
-        while (lineEnd < this.source.length() && this.source.charAt(lineEnd) != '\n') {
-            lineEnd ++;
-        }
-
-        String lineContent = this.source.substring(lineStart, lineEnd);
-
-        StringBuilder builder = new StringBuilder()
-                .append("Error at line ").append(this.line)
-                .append(": ").append(message).append("\n")
-                .append(lineContent).append("\n");
-
-        int offset = this.pos - lineStart;
-        for (int i = 1; i < offset; i ++) {
-            builder.append(" ");
-        }
-        builder.append("^");
-        throw new RuntimeException(builder.toString());
+    protected final void error(
+            final @NotNull String message,
+            final @NotNull SourcePos pos
+    ) {
+        final String line = this.source.getLine(pos.getLine());
+        throw new LexerException(message, pos, line);
     }
 
-    protected String readUntil(char c) {
-        int start = this.pos;
+    protected final void error(final @NotNull String message) {
+        throw new LexerException(message, this.pointer);
+    }
+
+    protected final String readUntil(char c) {
+        StringBuilder builder = new StringBuilder();
+        int start = this.pointer.getPos();
         while (this.hasNext() && this.peek() != c) {
-            this.advance();
+            builder.append(this.advance());
         }
-        return this.source.substring(start, this.pos);
+        return builder.toString();
     }
 
-    protected String readWhile(@NotNull final CharPredicate predicate) {
-        int start = this.pos;
+    protected final String readWhile(@NotNull final CharPredicate predicate) {
+        StringBuilder builder = new StringBuilder();
+        this.readWhile(predicate, builder);
+        return builder.toString();
+    }
+
+    protected final void readWhile(
+            @NotNull final CharPredicate predicate,
+            @NotNull final StringBuilder builder
+    ) {
         while (this.hasNext() && predicate.test(this.peek())) {
-            this.advance();
+            builder.append(this.advance());
         }
-        return this.source.substring(start, this.pos);
     }
 
-    protected String source() {
-        return this.start == 0 || this.end == this.source.length() ?
-                this.source :
-                this.source.substring(this.start, this.end);
+    protected final String source() {
+        return this.source.getSource();
     }
 
     protected <T extends Lexer> T sublexer(
@@ -166,8 +137,89 @@ public abstract class Lexer {
         return Character.isDigit(c);
     }
 
+    protected static boolean isDecimalStart(char c) {
+        return Character.isDigit(c) || c == '.';
+    }
+
+    /* SYMBOLS ::= $(
+        LPAREN | RPAREN |
+        LBRACE | RBRACE |
+        LBRACKET | RBRACKET |
+        SEMICOLON | COMMA | DOT
+        COLON | QUESTION
+       )^
+    */
+    protected static TokenType symbol(char c) {
+        switch (c) {
+            case '(':
+                return TokenType.LPAREN;
+            case ')':
+                return TokenType.RPAREN;
+            case '{':
+                return TokenType.LBRACE;
+            case '}':
+                return TokenType.RBRACE;
+            case '[':
+                return TokenType.LBRACKET;
+            case ']':
+                return TokenType.RBRACKET;
+            case ';':
+                return TokenType.SEMICOLON;
+            case ',':
+                return TokenType.COMMA;
+            case '.':
+                return TokenType.DOT;
+            case ':':
+                return TokenType.COLON;
+            case '?':
+                return TokenType.QUESTION;
+            default:
+                return TokenType.UNDEFINED;
+        }
+    }
+
     protected Token eof() {
-        return EOFToken.of(this.getSourcePos());
+        return Token.eof(this.span(this.getSourcePos()));
+    }
+
+    protected @Nullable Token tryMatch(
+            final @NotNull SourcePos start,
+            final @NotNull TrieTree<TokenType> patterns
+    ) {
+        StringBuilder builder = new StringBuilder();
+
+        TokenType type = TokenType.UNDEFINED;
+        SourcePos pos = start;
+
+        char c = this.advance();
+        builder.append(c);
+        int index = patterns.find(c, 0);
+        while (index != -1) {
+            final TokenType t = patterns.get(index);
+            pos = this.getSourcePos();
+
+            type = t;
+            char peek = this.peek();
+
+            if (LexerHelper.isBlank(peek)) {
+                break;
+            }
+
+            index = patterns.find(peek, index);
+
+            if (index > -1) {
+                builder.append(peek);
+                this.advance();
+            }
+        }
+
+        return type == TokenType.UNDEFINED ?
+                null :
+                new Token(
+                        type,
+                        builder.toString(),
+                        SourceSpan.of(start, pos)
+                );
     }
 
     @FunctionalInterface
@@ -178,7 +230,7 @@ public abstract class Lexer {
     @FunctionalInterface
     protected interface LexerFactory<T extends Lexer> {
         T create(
-                @NotNull String source,
+                @NotNull SourceProvider source,
                 @NotNull SourcePos pos,
                 int length
         );

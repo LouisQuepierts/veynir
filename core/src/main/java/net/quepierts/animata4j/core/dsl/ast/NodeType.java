@@ -1,0 +1,41 @@
+package net.quepierts.animata4j.core.dsl.ast;
+
+public enum NodeType {
+    EXPR_ARRAY_ACCESS,
+    EXPR_MEMBER_ACCESS,
+    EXPR_ASSIGN,
+    EXPR_CONSTRUCT,
+    EXPR_CALL,
+
+    EXPR_IDENTIFIER,
+    EXPR_LITERAL_BOOLEAN,
+    EXPR_LITERAL_DECIMAL,
+    EXPR_LITERAL_INTEGER,
+    EXPR_LITERAL_STRING,
+
+    EXPR_BINARY,
+    EXPR_TERNARY,
+    EXPR_UNARY,
+
+    STMT_BLOCK,
+    STMT_EXPRESSION,
+    STMT_IF,
+    STMT_RETURN,
+    STMT_VARIABLE_DECL,
+    STMT_FOR,
+    STMT_WHILE,
+    STMT_SWITCH,
+    STMT_CASE,
+    STMT_CONTINUE,
+    STMT_BREAK,
+
+    DECL_FUNCTION,
+    DECL_PARAMETER,
+    DECL_STRUCT,
+    DECL_VARIABLE,
+    DECL_VAR_INTERFACE,           // in, out, uniform
+    DECL_BLOCK_INTERFACE,     // in, out, uniform
+
+    COMPILATION_UNIT,
+    CUSTOM  // placeholder
+}

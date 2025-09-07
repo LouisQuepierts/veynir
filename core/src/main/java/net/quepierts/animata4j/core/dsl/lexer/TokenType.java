@@ -4,8 +4,8 @@ import net.quepierts.animata4j.core.dsl.TrieTree;
 
 public enum TokenType {
     IDENTIFIER,
-    LITERAL_NUMBER,
 
+    LITERAL_STRING,
     LITERAL_INTEGER,
     LITERAL_DECIMAL,
     LITERAL_HEX,
@@ -72,12 +72,14 @@ public enum TokenType {
     KEYWORD_BREAK,
     KEYWORD_CONTINUE,
     KEYWORD_RETURN,
-    KEYWORD_VOID,
+    KEYWORD_SWITCH,
     KEYWORD_CONST,
     KEYWORD_UNIFORM,
     KEYWORD_IN,
     KEYWORD_OUT,
+    KEYWORD_INOUT,
     KEYWORD_STRUCT,
+    KEYWORD_LAYOUT,
 
     MACRO_DEF,
     MACRO_UNDEF,
@@ -91,6 +93,11 @@ public enum TokenType {
     MACRO_ELSE,
     MACRO_ENDIF,
     MACRO_LINE,
+
+    COMMENT_CONTENT,
+    COMMENT_LB,     //  /*
+    COMMENT_RB,     //  */
+    COMMENT_LINE,   //  //
 
     // special
     EOF,            // <EOF>
@@ -141,18 +148,20 @@ public enum TokenType {
                 .insert("break", TokenType.KEYWORD_BREAK)
                 .insert("continue", TokenType.KEYWORD_CONTINUE)
                 .insert("return", TokenType.KEYWORD_RETURN)
-                .insert("void", TokenType.KEYWORD_VOID)
+                .insert("switch", TokenType.KEYWORD_SWITCH)
                 .insert("const", TokenType.KEYWORD_CONST)
                 .insert("uniform", TokenType.KEYWORD_UNIFORM)
                 .insert("in", TokenType.KEYWORD_IN)
                 .insert("out", TokenType.KEYWORD_OUT)
+                .insert("inout", TokenType.KEYWORD_INOUT)
                 .insert("struct", TokenType.KEYWORD_STRUCT)
+                .insert("layout", TokenType.KEYWORD_LAYOUT)
 
                 // primitive types
                 .insert("int", TokenType.TYPE_INT)
                 .insert("float", TokenType.TYPE_FLOAT)
                 .insert("bool", TokenType.TYPE_BOOL)
-                .insert("void", TokenType.KEYWORD_VOID)
+                .insert("void", TokenType.TYPE_VOID)
 
                 // boolean literals
                 .insert("true", TokenType.LITERAL_TRUE)
@@ -172,6 +181,10 @@ public enum TokenType {
                 .insert("#endif", TokenType.MACRO_ENDIF)
                 .insert("#line", TokenType.MACRO_LINE)
 
+                // comment
+                .insert("/*", TokenType.COMMENT_LB)
+                .insert("*/", TokenType.COMMENT_RB)
+                .insert("//", TokenType.COMMENT_LINE)
                 .build();
 
         SYMBOLS = new TrieTree.Builder<>(TokenType.UNDEFINED)
