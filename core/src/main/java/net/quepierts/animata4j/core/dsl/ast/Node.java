@@ -1,17 +1,20 @@
 package net.quepierts.animata4j.core.dsl.ast;
 
-import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
-import net.quepierts.animata4j.core.dsl.SourceSpan;
+import lombok.Getter;
+import net.quepierts.animata4j.core.dsl.source.SourceSpan;
 import net.quepierts.animata4j.core.dsl.TypeIdentifier;
 
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 public abstract class Node {
     private final SourceSpan span;
 
-    public abstract TypeIdentifier<? extends Node> getType();
+    protected Node(SourceSpan span) {
+        this.span = span.copy();
+    }
 
-    public boolean is(TypeIdentifier<?> type) {
+    public abstract NodeType getType();
+
+    public boolean is(NodeType type) {
         return this.getType() == type;
     }
 }
