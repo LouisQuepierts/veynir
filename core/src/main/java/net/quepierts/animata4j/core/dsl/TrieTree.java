@@ -48,7 +48,7 @@ public class TrieTree<T> {
         private final MutableNode<T> root = new MutableNode<>('\0');
         private int size = 1;
 
-        public Builder<T> insert(String string, T data) {
+        public Builder<T> put(String string, T data) {
             MutableNode<T> node = root;
             for (char c : string.toCharArray()) {
                 node = node.children.computeIfAbsent(c, k -> {
