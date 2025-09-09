@@ -17,6 +17,8 @@ public enum NodeType {
     EXPR_TERNARY,
     EXPR_UNARY,
 
+    EXPR_EMPTY,
+
     STMT_BLOCK,
     STMT_EXPRESSION,
     STMT_IF,
@@ -28,13 +30,17 @@ public enum NodeType {
     STMT_CASE,
     STMT_CONTINUE,
     STMT_BREAK,
+    STMT_EMPTY,
 
     DECL_FUNCTION,
     DECL_PARAMETER,
     DECL_STRUCT,
+    DECL_MEMBER,
     DECL_VARIABLE,
-    DECL_VAR_INTERFACE,           // in, out, uniform
+    DECL_VAR_INTERFACE,       // in, out, uniform
     DECL_BLOCK_INTERFACE,     // in, out, uniform
+
+    DEF_FUNCTION,
 
     COMPILATION_UNIT,
     CUSTOM  // placeholder

@@ -1,27 +1,28 @@
 package net.quepierts.animata4j.core.dsl.exception;
 
-import lombok.Getter;
 import net.quepierts.animata4j.core.dsl.source.SourcePointer;
 import net.quepierts.animata4j.core.dsl.source.SourcePos;
+import net.quepierts.animata4j.core.dsl.source.SourceProvider;
 import org.jetbrains.annotations.NotNull;
 
-@Getter
-public class LexerException extends RuntimeException {
-    private final SourcePos pos;
-    private final String line;
+public class LexerException extends CompileException {
 
-    public LexerException(@NotNull String message, @NotNull SourcePos pos, String line) {
-        super(LexerException.formatMessage(message, pos, line));
-
-        this.pos = pos;
-        this.line = line;
+    public LexerException(
+            @NotNull String message,
+            @NotNull SourcePos pos,
+            @NotNull SourceProvider source
+    ) {
+        super("Lexer Error", message, pos, source);
     }
 
-    public LexerException(@NotNull String message, SourcePointer pointer) {
-        this(message, pointer.toSourcePos(), pointer.getCurrentLine());
+    public LexerException(
+            @NotNull String message,
+            SourcePointer pointer
+    ) {
+        this(message, pointer.toSourcePos(), pointer.getProvider());
     }
 
-    protected static String formatMessage(@NotNull String message, @NotNull SourcePos pos, String line) {
+    protected static String formatMessage(@NotNull String message, @NotNull SourcePointer pos, String line) {
         int col = pos.getCol();
         return "Lexer Error at line " + pos.getLine() + ", column " + col +
                 ": " + message + "\n" +

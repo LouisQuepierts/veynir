@@ -82,8 +82,7 @@ public abstract class Lexer implements TokenProvider {
             final @NotNull String message,
             final @NotNull SourcePos pos
     ) {
-        final String line = this.source.getLine(pos.getLine());
-        throw new LexerException(message, pos, line);
+        throw new LexerException(message, pos, this.source);
     }
 
     protected final void error(final @NotNull String message) {
@@ -92,7 +91,6 @@ public abstract class Lexer implements TokenProvider {
 
     protected final String readUntil(char c) {
         StringBuilder builder = new StringBuilder();
-        int start = this.pointer.getPos();
         while (this.hasNext() && this.peek() != c) {
             builder.append(this.advance());
         }

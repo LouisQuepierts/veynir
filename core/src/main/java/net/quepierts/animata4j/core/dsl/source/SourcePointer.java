@@ -11,31 +11,29 @@ import org.jetbrains.annotations.NotNull;
 public final class SourcePointer {
     private final SourceProvider provider;
 
-    private int line    = 1;
-    private int col     = 1;
-    private int pos     = 0;
+    private int line    = 0;
+    private int col     = 0;
 
-    public static SourcePointer of(@NotNull SourceProvider provider, int line, int col, int pos) {
-        return new SourcePointer(provider, line, col, pos);
+    public static SourcePointer of(@NotNull SourceProvider provider, int line, int col) {
+        return new SourcePointer(provider, line, col);
     }
 
     public static SourcePointer of(@NotNull SourceProvider provider, @NotNull SourcePos pos) {
         return new SourcePointer(
                 provider,
-                pos.getLine(), pos.getCol(), pos.getPos()
+                pos.getLine(), pos.getCol()
         );
     }
 
     public boolean hasNext() {
-        return this.pos < this.provider.length();
+        return !this.provider.isEof(this.line, this.col);
     }
 
     public char advance() {
-        if (this.pos >= this.provider.length()) {
+        if (this.provider.isEof(this.line, this.col)) {
             return '\0';
         }
 
-        this.pos ++;
         final char c = this.provider.charAt(this.line, this.col);
         if (c == '\n') {
             this.line ++;
@@ -48,7 +46,7 @@ public final class SourcePointer {
 
     @Contract(pure = true)
     public char peek() {
-        return this.pos >= this.provider.length() ? '\0' : this.provider.charAt(this.line, this.col);
+        return this.provider.isEof(this.line, this.col) ? '\0' : this.provider.charAt(this.line, this.col);
     }
 
     public void skipWhitespace() {
@@ -58,14 +56,18 @@ public final class SourcePointer {
     }
 
     public SourcePointer copy() {
-        return new SourcePointer(this.provider, this.line, this.col, this.pos);
+        return new SourcePointer(this.provider, this.line, this.col);
     }
 
     public SourcePos toSourcePos() {
-        return SourcePos.of(this.line, this.col, this.pos);
+        return SourcePos.of(this.line, this.col);
     }
 
     public String getCurrentLine() {
         return this.provider.getLine(this.line);
+    }
+
+    public int getLineNumber() {
+        return this.provider.getLineNumber(this.line);
     }
 }
