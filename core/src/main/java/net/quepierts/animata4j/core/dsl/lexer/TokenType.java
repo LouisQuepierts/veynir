@@ -1,15 +1,18 @@
 package net.quepierts.animata4j.core.dsl.lexer;
 
+import com.google.common.collect.ImmutableMap;
 import net.quepierts.animata4j.core.dsl.TrieTree;
+
+import java.util.Map;
 
 public enum TokenType {
     IDENTIFIER,
 
-    LITERAL_STRING,
     LITERAL_INTEGER,
-    LITERAL_DECIMAL,
     LITERAL_HEX,
     LITERAL_OCT,
+    LITERAL_DECIMAL,
+    LITERAL_STRING,
 
     LITERAL_TRUE,
     LITERAL_FALSE,
@@ -25,22 +28,26 @@ public enum TokenType {
     STAR,           // *
     SLASH,          // /
     PERCENT,        // %
-    PLUS_PLUS,      // ++
-    MINUS_MINUS,    // --
+    AND,            // &
+    OR,             // |
+    XOR,            // ^
+
+    PLUS2,          // ++
+    MINUS2,         // --
     EQUAL,          // =
     PLUS_EQUAL,     // +=
     MINUS_EQUAL,    // -=
     STAR_EQUAL,     // *=
     SLASH_EQUAL,    // /=
     PERCENT_EQUAL,  // %=
+    AND_EQUAL,      // &=
+    OR_EQUAL,       // |=
+    XOR_EQUAL,      // ^=
     LSHIFT,         // <<
     LSHIFT_EQUAL,   // <<=
     RSHIFT,         // >>
     RSHIFT_EQUAL,   // >>=
-    BIT_AND,        // &
-    OR,             // |
-    XOR,            // ^
-    BIT_NOT,        // ~
+    WAVE,           // ~
 
     EQEQ,           // ==
     NOTEQ,          // !=
@@ -48,8 +55,9 @@ public enum TokenType {
     GT,             // >
     LTEQ,           // <=
     GTEQ,           // >=
-    LOGIC_AND,      // &&
-    LOGIC_OR,       // ||
+    AND2,           // &&
+    XOR2,           // ^^
+    OR2,            // ||
     NOT,            // !
 
     // symbols
@@ -80,24 +88,8 @@ public enum TokenType {
     KEYWORD_INOUT,
     KEYWORD_STRUCT,
     KEYWORD_LAYOUT,
-
-    MACRO_DEF,
-    MACRO_UNDEF,
-    MACRO_INCLUDE,
-    MACRO_VERSION,
-    MACRO_PRAGMA,
-    MACRO_IFDEF,
-    MACRO_IFNDEF,
-    MACRO_IF,
-    MACRO_ELIF,
-    MACRO_ELSE,
-    MACRO_ENDIF,
-    MACRO_LINE,
-
-    COMMENT_CONTENT,
-    COMMENT_LB,     //  /*
-    COMMENT_RB,     //  */
-    COMMENT_LINE,   //  //
+    KEYWORD_IMPORT,
+    KEYWORD_PACKAGE,
 
     // special
     EOF,            // <EOF>
@@ -105,100 +97,94 @@ public enum TokenType {
     UNDEFINED;      // <UNDEFINED>
 
     public static final TrieTree<TokenType> OPERATORS;
-    public static final TrieTree<TokenType> KEYWORDS;
     public static final TrieTree<TokenType> SYMBOLS;
+    
+    public static final Map<String, TokenType> KEYWORDS;
 
     static {
         TrieTree.Builder<TokenType> builder = new TrieTree.Builder<>(TokenType.UNDEFINED);
         OPERATORS = builder
-                .insert("+", TokenType.PLUS)
-                .insert("-", TokenType.MINUS)
-                .insert("*", TokenType.STAR)
-                .insert("/", TokenType.SLASH)
-                .insert("%", TokenType.PERCENT)
-                .insert("++", TokenType.PLUS_PLUS)
-                .insert("--", TokenType.MINUS_MINUS)
-                .insert("=", TokenType.EQUAL)
-                .insert("+=", TokenType.PLUS_EQUAL)
-                .insert("-=", TokenType.MINUS_EQUAL)
-                .insert("*=", TokenType.STAR_EQUAL)
-                .insert("/=", TokenType.SLASH_EQUAL)
-                .insert("%=", TokenType.PERCENT_EQUAL)
-                .insert("<<", TokenType.LSHIFT)
-                .insert("<<=", TokenType.LSHIFT_EQUAL)
-                .insert(">>", TokenType.RSHIFT)
-                .insert(">>=", TokenType.RSHIFT_EQUAL)
-                .insert("==", TokenType.EQEQ)
-                .insert("!=", TokenType.NOTEQ)
-                .insert("<", TokenType.LT)
-                .insert(">", TokenType.GT)
-                .insert("<=", TokenType.LTEQ)
-                .insert(">=", TokenType.GTEQ)
-                .insert("&&", TokenType.LOGIC_AND)
-                .insert("||", TokenType.LOGIC_OR)
-                .insert("!", TokenType.NOT)
+                .put("+", TokenType.PLUS)
+                .put("-", TokenType.MINUS)
+                .put("*", TokenType.STAR)
+                .put("/", TokenType.SLASH)
+                .put("%", TokenType.PERCENT)
+                .put("++", TokenType.PLUS2)
+                .put("--", TokenType.MINUS2)
+                .put("=", TokenType.EQUAL)
+                .put("+=", TokenType.PLUS_EQUAL)
+                .put("-=", TokenType.MINUS_EQUAL)
+                .put("*=", TokenType.STAR_EQUAL)
+                .put("/=", TokenType.SLASH_EQUAL)
+                .put("%=", TokenType.PERCENT_EQUAL)
+                .put("&=", TokenType.AND_EQUAL)
+                .put("|=", TokenType.OR_EQUAL)
+                .put("^=", TokenType.XOR_EQUAL)
+                .put("<<", TokenType.LSHIFT)
+                .put("<<=", TokenType.LSHIFT_EQUAL)
+                .put(">>", TokenType.RSHIFT)
+                .put(">>=", TokenType.RSHIFT_EQUAL)
+                .put("==", TokenType.EQEQ)
+                .put("!=", TokenType.NOTEQ)
+                .put("<", TokenType.LT)
+                .put(">", TokenType.GT)
+                .put("<=", TokenType.LTEQ)
+                .put(">=", TokenType.GTEQ)
+                .put("&&", TokenType.AND2)
+                .put("^^", TokenType.XOR2)
+                .put("||", TokenType.OR2)
+                .put("!", TokenType.NOT)
+                .put("&", TokenType.AND)
+                .put("|", TokenType.OR)
+                .put("^", TokenType.XOR)
+                .put("~", TokenType.WAVE)
                 .build();
 
-        KEYWORDS = builder
+        KEYWORDS = ImmutableMap.<String, TokenType>builder()
                 // Keywords
-                .insert("if", TokenType.KEYWORD_IF)
-                .insert("else", TokenType.KEYWORD_ELSE)
-                .insert("for", TokenType.KEYWORD_FOR)
-                .insert("while", TokenType.KEYWORD_WHILE)
-                .insert("break", TokenType.KEYWORD_BREAK)
-                .insert("continue", TokenType.KEYWORD_CONTINUE)
-                .insert("return", TokenType.KEYWORD_RETURN)
-                .insert("switch", TokenType.KEYWORD_SWITCH)
-                .insert("const", TokenType.KEYWORD_CONST)
-                .insert("uniform", TokenType.KEYWORD_UNIFORM)
-                .insert("in", TokenType.KEYWORD_IN)
-                .insert("out", TokenType.KEYWORD_OUT)
-                .insert("inout", TokenType.KEYWORD_INOUT)
-                .insert("struct", TokenType.KEYWORD_STRUCT)
-                .insert("layout", TokenType.KEYWORD_LAYOUT)
+                .put("if", TokenType.KEYWORD_IF)
+                .put("else", TokenType.KEYWORD_ELSE)
+                .put("for", TokenType.KEYWORD_FOR)
+                .put("while", TokenType.KEYWORD_WHILE)
+                .put("break", TokenType.KEYWORD_BREAK)
+                .put("continue", TokenType.KEYWORD_CONTINUE)
+                .put("return", TokenType.KEYWORD_RETURN)
+                .put("switch", TokenType.KEYWORD_SWITCH)
+                .put("const", TokenType.KEYWORD_CONST)
+                .put("uniform", TokenType.KEYWORD_UNIFORM)
+                .put("in", TokenType.KEYWORD_IN)
+                .put("out", TokenType.KEYWORD_OUT)
+                .put("inout", TokenType.KEYWORD_INOUT)
+                .put("struct", TokenType.KEYWORD_STRUCT)
+                .put("layout", TokenType.KEYWORD_LAYOUT)
+
+                // package management
+                .put("import", TokenType.KEYWORD_IMPORT)
+                .put("package", TokenType.KEYWORD_PACKAGE)
 
                 // primitive types
-                .insert("int", TokenType.TYPE_INT)
-                .insert("float", TokenType.TYPE_FLOAT)
-                .insert("bool", TokenType.TYPE_BOOL)
-                .insert("void", TokenType.TYPE_VOID)
+                .put("int", TokenType.TYPE_INT)
+                .put("float", TokenType.TYPE_FLOAT)
+                .put("bool", TokenType.TYPE_BOOL)
+                .put("void", TokenType.TYPE_VOID)
 
                 // boolean literals
-                .insert("true", TokenType.LITERAL_TRUE)
-                .insert("false", TokenType.LITERAL_FALSE)
-
-                // macros
-                .insert("#define", TokenType.MACRO_DEF)
-                .insert("#undefine", TokenType.MACRO_UNDEF)
-                .insert("#include", TokenType.MACRO_INCLUDE)
-                .insert("#version", TokenType.MACRO_VERSION)
-                .insert("#pragma", TokenType.MACRO_PRAGMA)
-                .insert("#ifdef", TokenType.MACRO_IFDEF)
-                .insert("#ifndef", TokenType.MACRO_IFNDEF)
-                .insert("#if", TokenType.MACRO_IF)
-                .insert("#elif", TokenType.MACRO_ELIF)
-                .insert("#else", TokenType.MACRO_ELSE)
-                .insert("#endif", TokenType.MACRO_ENDIF)
-                .insert("#line", TokenType.MACRO_LINE)
-
-                // comment
-                .insert("/*", TokenType.COMMENT_LB)
-                .insert("*/", TokenType.COMMENT_RB)
-                .insert("//", TokenType.COMMENT_LINE)
+                .put("true", TokenType.LITERAL_TRUE)
+                .put("false", TokenType.LITERAL_FALSE)
                 .build();
 
         SYMBOLS = new TrieTree.Builder<>(TokenType.UNDEFINED)
-                .insert("(", TokenType.LPAREN)
-                .insert(")", TokenType.RPAREN)
-                .insert("{", TokenType.LBRACE)
-                .insert("}", TokenType.RBRACE)
-                .insert("[", TokenType.LBRACKET)
-                .insert("]", TokenType.RBRACKET)
-                .insert(";", TokenType.SEMICOLON)
-                .insert(",", TokenType.COMMA)
-                .insert(".", TokenType.DOT)
-                .insert(":", TokenType.COLON)
-                .insert("?", TokenType.QUESTION)
+                .put("(", TokenType.LPAREN)
+                .put(")", TokenType.RPAREN)
+                .put("{", TokenType.LBRACE)
+                .put("}", TokenType.RBRACE)
+                .put("[", TokenType.LBRACKET)
+                .put("]", TokenType.RBRACKET)
+                .put(";", TokenType.SEMICOLON)
+                .put(",", TokenType.COMMA)
+                .put(".", TokenType.DOT)
+                .put(":", TokenType.COLON)
+                .put("?", TokenType.QUESTION)
                 .build();
     }
 }
