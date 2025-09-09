@@ -9,9 +9,13 @@ public final class LiteralDecimalExpr extends LiteralExpr {
 
     private final float value;
 
-    public LiteralDecimalExpr(SourceSpan span, String literal) {
+    public static LiteralDecimalExpr of(SourceSpan span, String literal) {
+        return new LiteralDecimalExpr(span, literal, Float.parseFloat(literal));
+    }
+
+    public LiteralDecimalExpr(SourceSpan span, String literal, float value) {
         super(span, literal);
-        this.value = Float.parseFloat(literal);
+        this.value = value;
     }
 
     @Override
