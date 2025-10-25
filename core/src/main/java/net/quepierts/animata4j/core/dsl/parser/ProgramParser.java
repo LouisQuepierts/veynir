@@ -11,6 +11,8 @@ import net.quepierts.animata4j.core.dsl.ast.common.VariableDeclarator;
 import net.quepierts.animata4j.core.dsl.ast.decl.*;
 import net.quepierts.animata4j.core.dsl.ast.expr.Expression;
 import net.quepierts.animata4j.core.dsl.ast.stmt.*;
+import net.quepierts.animata4j.core.dsl.ast.type.StructType;
+import net.quepierts.animata4j.core.dsl.ast.type.Type;
 import net.quepierts.animata4j.core.dsl.lexer.Token;
 import net.quepierts.animata4j.core.dsl.lexer.TokenProvider;
 import net.quepierts.animata4j.core.dsl.lexer.TokenType;
@@ -19,19 +21,14 @@ import net.quepierts.animata4j.core.dsl.source.SourceSpan;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class ProgramParser extends Parser {
     private final ExpressionParser expressionParser;
 
-    private final Set<String> types;
-
     public ProgramParser(@NotNull TokenProvider lexer) {
         super(lexer);
         this.expressionParser = new ExpressionParser(this);
-        this.types = new HashSet<>();
     }
 
     @Override
@@ -108,9 +105,11 @@ public class ProgramParser extends Parser {
                 members
         ));
 
+        final StructType type = new StructType(identifier.getSpan(), typename);
+
         // if it has any field declared, add it to out
         if (this.is(TokenType.IDENTIFIER)) {
-            this.parseVariableDeclarations(out, false, typename);
+            this.parseVariableDeclarations(out, false, type);
         }
 
         this.consume(TokenType.SEMICOLON);
@@ -170,12 +169,13 @@ public class ProgramParser extends Parser {
                     name.getValue()
             ));
         } else {
+            Type type = this.parseType(current);
             VariableDeclarator declarator = this.parseDeclarator();
             out.add(VariableDecl.intf(
                     SourceSpan.of(begin, this.getCurrent().getSpan()),
                     layout,
                     qualifier,
-                    Variable.of(current.getValue(), declarator)
+                    Variable.of(type, declarator)
             ));
         }
     }
@@ -211,12 +211,13 @@ public class ProgramParser extends Parser {
                     members
             ));
         } else if (this.isDatatype(current)) {
+            Type type = this.parseType(current);
             VariableDeclarator declarator = this.parseDeclarator();
             out.add(VariableDecl.intf(
                     SourceSpan.of(begin, this.getCurrent().getSpan()),
                     layout,
                     qualifier,
-                    Variable.of(current.getValue(), declarator)
+                    Variable.of(type, declarator)
             ));
         }
     }
@@ -261,11 +262,11 @@ public class ProgramParser extends Parser {
         final SourceSpan begin = this.getCurrent().getSpan();
 
         final boolean isConst = this.match(TokenType.KEYWORD_CONST);
-        final String typename = this.parseTypename();
+        final Type type = this.parseType();
         final String name = this.expect(TokenType.IDENTIFIER).getValue();
 
         if (this.is(TokenType.LPAREN)) { // function
-            out.add(this.parseFunction(begin, typename, name));
+            out.add(this.parseFunction(begin, type, name));
         } else {
 
             IntList dimensions = this.match(TokenType.LBRACKET) ? this.parseArraySubfix() : new IntArrayList();
@@ -273,13 +274,13 @@ public class ProgramParser extends Parser {
 
             out.add(VariableDecl.variable(
                     SourceSpan.of(begin, this.getCurrent().getSpan()),
-                    Variable.of(name, typename, dimensions),
+                    Variable.of(name, type, dimensions),
                     init,
                     isConst
             ));
 
             if (this.match(TokenType.COMMA)) {
-                this.parseVariableDeclarations(out, isConst, typename);
+                this.parseVariableDeclarations(out, isConst, type);
             }
 
             this.consume(TokenType.SEMICOLON);
@@ -296,19 +297,21 @@ public class ProgramParser extends Parser {
      */
     private Declaration parseFunction(
             final SourceSpan begin,
-            final String returnType,
+            final Type returnType,
             final String name
     ) {
         this.consume(TokenType.LPAREN);
 
-        List<ParameterDecl> parameters = new ArrayList<>();
+        List<Parameter> parameters = new ArrayList<>();
         while (!this.is(TokenType.RPAREN)) {
             // parse parameter decl
 
-            InterfaceQualifier qualifier = InterfaceQualifier.NONE;
-            final TokenType type = this.getCurrent().getType();
+            boolean isConst = this.match(TokenType.KEYWORD_CONST);
 
-            switch (type) {
+            InterfaceQualifier qualifier = InterfaceQualifier.NONE;
+            final TokenType qualifierType = this.getCurrent().getType();
+
+            switch (qualifierType) {
                 case KEYWORD_IN: {
                     qualifier = InterfaceQualifier.IN;
                     break;
@@ -327,14 +330,15 @@ public class ProgramParser extends Parser {
             }
 
             this.advance();
+            Type paramType = this.parseType();
+            Token paramName = this.expect(TokenType.IDENTIFIER);
 
-            Token identifier = this.expect(this::isDatatype, "Invalid datatype");
-            VariableDeclarator declarator = this.parseDeclarator();
-
-            parameters.add(new ParameterDecl(
-                    SourceSpan.of(begin, identifier.getSpan()),
+            parameters.add(new Parameter(
+                    SourceSpan.of(begin, paramType.getSpan()),
+                    isConst,
                     qualifier,
-                    Variable.of(returnType, declarator)
+                    paramType,
+                    paramName.getValue()
             ));
 
             if (!this.match(TokenType.COMMA)) {
@@ -347,6 +351,7 @@ public class ProgramParser extends Parser {
         if (this.match(TokenType.SEMICOLON)) {
             return new FunctionDecl(
                     SourceSpan.of(begin, semicolon),
+                    returnType,
                     name,
                     parameters
             );
@@ -355,6 +360,7 @@ public class ProgramParser extends Parser {
         BlockStmt body = this.parseStatements();
         return new FunctionDef(
                 SourceSpan.of(begin, body.getSpan()),
+                returnType,
                 name,
                 parameters,
                 body
@@ -368,7 +374,7 @@ public class ProgramParser extends Parser {
     private void parseVariableDeclarations(
             final List<Declaration> out,
             final boolean isConst,
-            final String type
+            final Type type
     ) {
 
         do {
@@ -401,12 +407,12 @@ public class ProgramParser extends Parser {
 
         do {
             final SourcePos left = this.getCurrent().getSpan().getEnd();
-            final String typename = this.parseTypename();
+            final Type type = this.parseType();
             final VariableDeclarator declarator = this.parseDeclarator();
             final SourcePos right = this.getCurrent().getSpan().getBegin();
             members.add(new MemberDecl(
                     SourceSpan.of(left, right),
-                    Variable.of(typename, declarator)
+                    Variable.of(type, declarator)
             ));
             this.expect(TokenType.SEMICOLON);
         } while (!this.match(TokenType.RBRACE));
@@ -650,7 +656,7 @@ public class ProgramParser extends Parser {
             final List<Statement> out,
             final boolean isConst
     ) {
-        final String type = this.parseTypename();
+        final Type type = this.parseType();
         List<Declaration> declarations = new ArrayList<>();
         this.parseVariableDeclarations(declarations, isConst, type);
 
@@ -662,11 +668,6 @@ public class ProgramParser extends Parser {
         }
 
         this.consume(TokenType.SEMICOLON);
-    }
-
-    private boolean isDatatype(Token token) {
-        final TokenType type = token.getType();
-        return type.isPrimitiveType() || types.contains(token.getValue());
     }
 
     private Expression parseExpression() {

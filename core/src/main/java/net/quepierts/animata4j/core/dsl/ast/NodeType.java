@@ -39,6 +39,10 @@ public enum NodeType {
     DECL_VARIABLE,
     DECL_BLOCK,     // in, out, uniform
 
+    TYPE_PRIMITIVE,
+    TYPE_STRUCT,
+    TYPE_VOID,
+
     DEF_FUNCTION,
 
     COMPILATION_UNIT,

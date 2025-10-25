@@ -30,6 +30,10 @@ public enum TokenType {
     TYPE_VEC2(false, true, true),
     TYPE_VEC3(false, true, true),
     TYPE_VEC4(false, true, true),
+    TYPE_IVEC2(false, true, true),
+    TYPE_IVEC3(false, true, true),
+    TYPE_IVEC4(false, true, true),
+
     TYPE_MAT2(false, true, true),
     TYPE_MAT3(false, true, true),
     TYPE_MAT4(false, true, true),
@@ -210,6 +214,10 @@ public enum TokenType {
                 .put("vec2", TokenType.TYPE_VEC2)
                 .put("vec3", TokenType.TYPE_VEC3)
                 .put("vec4", TokenType.TYPE_VEC4)
+
+                .put("ivec2", TokenType.TYPE_IVEC2)
+                .put("ivec3", TokenType.TYPE_IVEC3)
+                .put("ivec4", TokenType.TYPE_IVEC4)
 
                 .put("mat2", TokenType.TYPE_MAT2)
                 .put("mat3", TokenType.TYPE_MAT3)

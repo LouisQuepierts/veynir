@@ -2,14 +2,22 @@ package net.quepierts.animata4j.core.dsl.parser;
 
 import lombok.AccessLevel;
 import lombok.Getter;
+import net.quepierts.animata4j.core.dsl.Primitive;
 import net.quepierts.animata4j.core.dsl.ast.Node;
+import net.quepierts.animata4j.core.dsl.ast.type.PrimitiveType;
+import net.quepierts.animata4j.core.dsl.ast.type.StructType;
+import net.quepierts.animata4j.core.dsl.ast.type.Type;
+import net.quepierts.animata4j.core.dsl.ast.type.VoidType;
 import net.quepierts.animata4j.core.dsl.exception.ParserException;
 import net.quepierts.animata4j.core.dsl.lexer.Token;
 import net.quepierts.animata4j.core.dsl.lexer.TokenProvider;
 import net.quepierts.animata4j.core.dsl.lexer.TokenType;
+import net.quepierts.animata4j.core.dsl.source.SourceSpan;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.Predicate;
 
 @Getter(AccessLevel.PROTECTED)
@@ -21,15 +29,19 @@ public abstract class Parser {
     private final Parser parent;
     private Token current;
 
+    protected final Set<String> types;
+
     protected Parser(final @NotNull TokenProvider lexer) {
         this.lexer = lexer;
         this.parent = null;
         this.advance();
+        this.types = new HashSet<>();
     }
 
     protected Parser(final @NotNull Parser other) {
         this.lexer = other.lexer;
         this.parent = other.parent != null ? other.parent : other;
+        this.types = other.types;
     }
 
     public abstract Node parse();
@@ -101,5 +113,33 @@ public abstract class Parser {
 
     protected void errorExpected(String expected, String actual) {
         error("Expected " + expected + " but found '" + actual + "'");
+    }
+
+    protected boolean isDatatype(Token token) {
+        final TokenType type = token.getType();
+        return type.isPrimitiveType() || types.contains(token.getValue());
+    }
+
+
+    protected @NotNull Type parseType() {
+        Token current = this.getCurrent();
+        this.advance();
+        return parseType(current);
+    }
+
+    protected Type parseType(Token token) {
+        final TokenType type = token.getType();
+        final SourceSpan begin = token.getSpan();
+        if (type.isPrimitiveType()) {
+            Primitive primitive = Primitive.fromToken(type);
+            return new PrimitiveType(begin, primitive);
+        } else if (type == TokenType.TYPE_VOID) {
+            return new VoidType(begin);
+        } else if (type == TokenType.IDENTIFIER) {
+            return new StructType(begin, token.getValue());
+        }
+
+        this.error("Unexpected token");
+        throw new RuntimeException();
     }
 }

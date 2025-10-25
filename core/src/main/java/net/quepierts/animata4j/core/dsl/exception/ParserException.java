@@ -1,8 +1,8 @@
 package net.quepierts.animata4j.core.dsl.exception;
 
 import lombok.Getter;
-import net.quepierts.animata4j.core.dsl.source.SourcePos;
 import net.quepierts.animata4j.core.dsl.lexer.Token;
+import net.quepierts.animata4j.core.dsl.source.SourcePos;
 import net.quepierts.animata4j.core.dsl.source.SourceProvider;
 import org.jetbrains.annotations.NotNull;
 

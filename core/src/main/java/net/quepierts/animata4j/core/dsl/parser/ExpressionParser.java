@@ -2,6 +2,7 @@ package net.quepierts.animata4j.core.dsl.parser;
 
 import net.quepierts.animata4j.core.dsl.ast.NodeType;
 import net.quepierts.animata4j.core.dsl.ast.expr.*;
+import net.quepierts.animata4j.core.dsl.ast.type.Type;
 import net.quepierts.animata4j.core.dsl.lexer.ArlLexer;
 import net.quepierts.animata4j.core.dsl.lexer.Token;
 import net.quepierts.animata4j.core.dsl.lexer.TokenProvider;
@@ -426,47 +427,48 @@ public class ExpressionParser extends Parser {
     private @NotNull Expression parsePrimary() {
 //        System.out.println("Primary");
         Token current = this.getCurrent();
+        final SourceSpan span = this.getCurrent().getSpan();
+
+        if (current.getType().isPrimitiveType()) {
+            this.advance();
+            return this.parseConstructor(current, span);
+        }
 
         switch (current.getType()) {
             case IDENTIFIER: {
-                return this.parseIdentifier();
-            }
-            case TYPE_INT:
-            case TYPE_FLOAT:
-            case TYPE_BOOL: { // constructors
-                final String name = this.getCurrent().getValue();
-                final SourceSpan begin = this.getCurrent().getSpan();
+                if (!this.isDatatype(current)) {
+                    return this.parseIdentifier();
+                }
                 this.advance();
-                this.consume(TokenType.LPAREN);
-                return this.parseFunction(name, begin, null);
+                return this.parseConstructor(current, span);
             }
             case LITERAL_INTEGER: {
                 this.advance();
-                return LiteralIntegerExpr.dec(current.getSpan(), current.getValue());
+                return LiteralIntegerExpr.dec(span, current.getValue());
             }
             case LITERAL_HEX: {
                 this.advance();
-                return LiteralIntegerExpr.hex(current.getSpan(), current.getValue());
+                return LiteralIntegerExpr.hex(span, current.getValue());
             }
             case LITERAL_OCT: {
                 this.advance();
-                return LiteralIntegerExpr.oct(current.getSpan(), current.getValue());
+                return LiteralIntegerExpr.oct(span, current.getValue());
             }
             case LITERAL_DECIMAL: {
                 this.advance();
-                return LiteralDecimalExpr.of(current.getSpan(), current.getValue());
+                return LiteralDecimalExpr.of(span, current.getValue());
             }
             case LITERAL_STRING: {
                 this.advance();
-                return LiteralStringExpr.of(current.getSpan(), current.getValue());
+                return LiteralStringExpr.of(span, current.getValue());
             }
             case LITERAL_TRUE: {
                 this.advance();
-                return LiteralBooleanExpr.ofTrue(current.getSpan());
+                return LiteralBooleanExpr.ofTrue(span);
             }
             case LITERAL_FALSE: {
                 this.advance();
-                return LiteralBooleanExpr.ofFalse(current.getSpan());
+                return LiteralBooleanExpr.ofFalse(span);
             }
             case LPAREN: {
                 this.advance();
@@ -504,6 +506,32 @@ public class ExpressionParser extends Parser {
                 SourceSpan.of(begin, this.getCurrent().getSpan()),
                 scope,
                 name,
+                args
+        );
+    }
+
+    private @NotNull Expression parseConstructor(
+            final @NotNull Token last,
+            final @NotNull SourceSpan begin
+    ) {
+        final Type type = this.parseType(last);
+
+        this.consume(TokenType.LPAREN);
+
+        List<Expression> args = new ArrayList<>();
+
+        while (!this.is(TokenType.RPAREN)) {
+            args.add(this.parseExpression());
+
+            if (!this.match(TokenType.COMMA)) {
+                break;
+            }
+        }
+
+        this.consume(TokenType.RPAREN);
+        return new ConstructExpr(
+                SourceSpan.of(begin, this.getCurrent().getSpan()),
+                type,
                 args
         );
     }
