@@ -2,17 +2,20 @@ package net.quepierts.animata4j.core.dsl.ast.expr;
 
 import lombok.Getter;
 import net.quepierts.animata4j.core.dsl.ast.NodeType;
+import net.quepierts.animata4j.core.dsl.ast.capability.HasTargetCapability;
 import net.quepierts.animata4j.core.dsl.source.SourceSpan;
 
 @Getter
-public final class ArrayAccessExpr extends Expression {
+public final class ArrayAccessExpr
+        extends Expression
+        implements HasTargetCapability {
 
-    private final Expression array;
+    private final Expression scope;
     private final Expression index;
 
-    public ArrayAccessExpr(SourceSpan span, Expression array, Expression index) {
+    public ArrayAccessExpr(SourceSpan span, Expression scope, Expression index) {
         super(span);
-        this.array = array;
+        this.scope = scope;
         this.index = index;
     }
 

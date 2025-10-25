@@ -1,6 +1,9 @@
 package net.quepierts.animata4j.core.dsl.source;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
@@ -37,7 +40,7 @@ public final class SourcePointer {
         final char c = this.provider.charAt(this.line, this.col);
         if (c == '\n') {
             this.line ++;
-            this.col = 1;
+            this.col = 0;
         } else {
             this.col ++;
         }

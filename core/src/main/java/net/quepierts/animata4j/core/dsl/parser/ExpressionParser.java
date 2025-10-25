@@ -1,9 +1,14 @@
 package net.quepierts.animata4j.core.dsl.parser;
 
+import net.quepierts.animata4j.core.dsl.ast.NodeType;
 import net.quepierts.animata4j.core.dsl.ast.expr.*;
-import net.quepierts.animata4j.core.dsl.lexer.*;
+import net.quepierts.animata4j.core.dsl.lexer.ArlLexer;
+import net.quepierts.animata4j.core.dsl.lexer.Token;
+import net.quepierts.animata4j.core.dsl.lexer.TokenProvider;
+import net.quepierts.animata4j.core.dsl.lexer.TokenType;
 import net.quepierts.animata4j.core.dsl.source.SourceSpan;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +20,7 @@ public class ExpressionParser extends Parser {
     }
 
     public ExpressionParser(final @NotNull String source) {
-        super(new GeneralLexer(source));
+        super(new ArlLexer(source));
     }
 
     public ExpressionParser(Parser parent) {
@@ -336,16 +341,18 @@ public class ExpressionParser extends Parser {
     }
 
     /*
-    <postfix> ::= <primary> ( <postfix-suffix> )*
+    <postfix> ::= <primary> ( <member-suffix> )* <terminal-suffix>?
 
-    <postfix-suffix> ::= PLUS2 | MINUS2
-        | DOT IDENTIFIER
+    <member-suffix> ::= DOT <identifier>
+        | <function-suffix>
         | LBRACKET <expression> RBRACKET
+
+    <terminal-suffix> ::= PLUS2 | MINUS2
      */
     private @NotNull Expression parsePostfix() {
         Expression node = this.parsePrimary();
-        boolean flag = true;
-        while (flag && this.hasNext()) {
+        boolean nonterminal = true;
+        while (nonterminal && this.hasNext()) {
             Token current = this.getCurrent();
             switch (current.getType()) {
                 case PLUS2: {
@@ -355,6 +362,7 @@ public class ExpressionParser extends Parser {
                             TokenType.PLUS2
                     );
                     this.advance();
+                    nonterminal = false;
                     break;
                 }
                 case MINUS2: {
@@ -364,6 +372,7 @@ public class ExpressionParser extends Parser {
                             TokenType.MINUS2
                     );
                     this.advance();
+                    nonterminal = false;
                     break;
                 }
                 case DOT: {
@@ -387,8 +396,21 @@ public class ExpressionParser extends Parser {
                     );
                     break;
                 }
+                case LPAREN: {
+                    String name = null;
+                    if (node.is(NodeType.EXPR_IDENTIFIER)) {
+                        name = ((IdentifierExpr) node).getValue();
+                    } else if (node.is(NodeType.EXPR_MEMBER_ACCESS)) {
+                        name = ((MemberAccessExpr) node).getMember().getValue();
+                    } else {
+                        this.error("Unexpected token", current);
+                    }
+
+                    node = this.parseFunction(name, node.getSpan(), node);
+                    break;
+                }
                 default:
-                    flag = false;
+                    nonterminal = false;
             }
         }
 
@@ -396,7 +418,7 @@ public class ExpressionParser extends Parser {
     }
 
     /*
-    <primary> ::= <identifier> <function-suffix>?
+    <primary> ::= <identifier>
                         | <number>
                         | <string>
                         | "(" <expression> ")"
@@ -407,13 +429,7 @@ public class ExpressionParser extends Parser {
 
         switch (current.getType()) {
             case IDENTIFIER: {
-                IdentifierExpr identifier = this.parseIdentifier();
-
-                if (this.match(TokenType.LPAREN)) {
-                    return this.parseFunction(identifier.getValue(), identifier.getSpan());
-                } else {
-                    return identifier;
-                }
+                return this.parseIdentifier();
             }
             case TYPE_INT:
             case TYPE_FLOAT:
@@ -422,7 +438,7 @@ public class ExpressionParser extends Parser {
                 final SourceSpan begin = this.getCurrent().getSpan();
                 this.advance();
                 this.consume(TokenType.LPAREN);
-                return this.parseFunction(name, begin);
+                return this.parseFunction(name, begin, null);
             }
             case LITERAL_INTEGER: {
                 this.advance();
@@ -467,7 +483,11 @@ public class ExpressionParser extends Parser {
     /*
     <function-suffix> ::= LPAREN <expression> ( COMMA <expression> )* RPAREN
      */
-    private @NotNull Expression parseFunction(final String name, final SourceSpan begin) {
+    private @NotNull Expression parseFunction(
+            final String name,
+            final SourceSpan begin,
+            final @Nullable Expression scope
+    ) {
         List<Expression> args = new ArrayList<>();
 
         while (!this.is(TokenType.RPAREN)) {
@@ -482,6 +502,7 @@ public class ExpressionParser extends Parser {
 
         return new CallExpr(
                 SourceSpan.of(begin, this.getCurrent().getSpan()),
+                scope,
                 name,
                 args
         );

@@ -2,12 +2,10 @@ package net.quepierts.animata4j.core.dsl.parser;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import net.quepierts.animata4j.core.dsl.exception.ParserException;
-import net.quepierts.animata4j.core.dsl.lexer.TokenProvider;
-import net.quepierts.animata4j.core.dsl.source.SourcePos;
-import net.quepierts.animata4j.core.dsl.source.SourceSpan;
 import net.quepierts.animata4j.core.dsl.ast.Node;
+import net.quepierts.animata4j.core.dsl.exception.ParserException;
 import net.quepierts.animata4j.core.dsl.lexer.Token;
+import net.quepierts.animata4j.core.dsl.lexer.TokenProvider;
 import net.quepierts.animata4j.core.dsl.lexer.TokenType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

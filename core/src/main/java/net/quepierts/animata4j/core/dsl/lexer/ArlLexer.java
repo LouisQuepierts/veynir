@@ -5,12 +5,12 @@ import net.quepierts.animata4j.core.dsl.source.SourceProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class GeneralLexer extends Lexer {
-    public GeneralLexer(@NotNull String source) {
+public class ArlLexer extends Lexer {
+    public ArlLexer(@NotNull String source) {
         super(source);
     }
 
-    public GeneralLexer(@NotNull SourceProvider source) {
+    public ArlLexer(@NotNull SourceProvider source) {
         super(source);
     }
 
@@ -45,23 +45,24 @@ public class GeneralLexer extends Lexer {
             );
         }
 
-        final Token keyword = this.tryMatch(leftPos, TokenType.KEYWORDS);
-        if (keyword != null) {
-            return keyword;
+        final Token operator = this.tryMatch(leftPos, TokenType.SYMBOLS);
+        if (operator != null) {
+            return operator;
         }
 
         if (LexerHelper.isIdentifierStart(c)) {
             StringBuilder identifier = new StringBuilder()
                     .append(c);
             this.readWhile(LexerHelper::isIdentifierPart, identifier);
+            String str = identifier.toString();
             return new Token(
-                    TokenType.IDENTIFIER,
-                    identifier.toString(),
+                    TokenType.KEYWORDS.getOrDefault(str, TokenType.IDENTIFIER),
+                    str,
                     this.span(leftPos)
             );
         }
 
-        this.error("Unexpected character: " + c, leftPos);
+        this.error("Unexpected character: " + c + ", char code: " + (int) c, leftPos);
         return null;
     }
 
@@ -118,6 +119,7 @@ public class GeneralLexer extends Lexer {
         boolean isDecimal = false;
 
         if (this.peek() == '.') {
+            isDecimal = true;
             builder.append('.');
             this.advance();
             this.readWhile(LexerHelper::isDigit, builder);

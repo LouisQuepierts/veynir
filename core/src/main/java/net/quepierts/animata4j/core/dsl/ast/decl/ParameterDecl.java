@@ -1,13 +1,14 @@
 package net.quepierts.animata4j.core.dsl.ast.decl;
 
 import lombok.Getter;
+import net.quepierts.animata4j.core.dsl.ast.Node;
 import net.quepierts.animata4j.core.dsl.ast.NodeType;
 import net.quepierts.animata4j.core.dsl.ast.common.InterfaceQualifier;
 import net.quepierts.animata4j.core.dsl.ast.common.Variable;
 import net.quepierts.animata4j.core.dsl.source.SourceSpan;
 
 @Getter
-public final class ParameterDecl extends Declaration {
+public final class ParameterDecl extends Node {
 
     private final InterfaceQualifier qualifier;
     private final Variable variable;

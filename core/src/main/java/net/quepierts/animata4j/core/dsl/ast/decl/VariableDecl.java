@@ -1,10 +1,9 @@
 package net.quepierts.animata4j.core.dsl.ast.decl;
 
-import it.unimi.dsi.fastutil.ints.IntList;
 import lombok.Getter;
-import lombok.Setter;
 import net.quepierts.animata4j.core.dsl.ast.NodeType;
 import net.quepierts.animata4j.core.dsl.ast.capability.ConstCapability;
+import net.quepierts.animata4j.core.dsl.ast.common.InterfaceQualifier;
 import net.quepierts.animata4j.core.dsl.ast.common.Variable;
 import net.quepierts.animata4j.core.dsl.ast.expr.Expression;
 import net.quepierts.animata4j.core.dsl.source.SourceSpan;
@@ -16,11 +15,49 @@ public final class VariableDecl
         extends Declaration
         implements ConstCapability {
 
+    private final InterfaceQualifier qualifier;
     private final Variable variable;
     private final Expression init;
     private final boolean isConst;
 
-    public VariableDecl(
+    @Nullable
+    private final LayoutQualifier layout;
+
+    public static VariableDecl variable(
+            @NotNull SourceSpan span,
+            @NotNull Variable variable,
+            @Nullable Expression init,
+            boolean isConst
+    ) {
+        return new VariableDecl(span, InterfaceQualifier.NONE, variable, init, null, isConst);
+    }
+
+    public static VariableDecl intf(
+            @NotNull SourceSpan span,
+            @Nullable LayoutQualifier layout,
+            @NotNull InterfaceQualifier qualifier,
+            @NotNull Variable variable
+    ) {
+        return new VariableDecl(span, qualifier, variable, null, layout, false);
+    }
+
+    private VariableDecl(
+            @NotNull SourceSpan span,
+            @NotNull InterfaceQualifier qualifier,
+            @NotNull Variable variable,
+            @Nullable Expression init,
+            @Nullable LayoutQualifier layout,
+            boolean isConst
+    ) {
+        super(span);
+        this.qualifier = qualifier;
+        this.variable = variable;
+        this.init = init;
+        this.isConst = isConst;
+        this.layout = layout;
+    }
+
+    /*public VariableDecl(
             SourceSpan span,
             @NotNull Variable variable,
             @Nullable Expression init,
@@ -30,7 +67,7 @@ public final class VariableDecl
         this.variable = variable;
         this.init = init;
         this.isConst = isConst;
-    }
+    }*/
 
     @Override
     public NodeType getType() {

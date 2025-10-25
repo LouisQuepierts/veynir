@@ -22,13 +22,13 @@ public final class UnaryExpr extends Expression {
                 operator = Operator.PLUS;
                 break;
             case PLUS2:
-                operator = Operator.POST_INC;
+                operator = Operator.PRE_INC;
                 break;
             case MINUS:
                 operator = Operator.MINUS;
                 break;
             case MINUS2:
-                operator = Operator.POST_DEC;
+                operator = Operator.PRE_DEC;
                 break;
             case NOT:
                 operator = Operator.NOT;
