@@ -2,7 +2,6 @@ package net.quepierts.animata4j.core.dsl.ast;
 
 import lombok.Getter;
 import net.quepierts.animata4j.core.dsl.source.SourceSpan;
-import net.quepierts.animata4j.core.dsl.TypeIdentifier;
 
 @Getter
 public abstract class Node {

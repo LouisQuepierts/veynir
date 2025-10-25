@@ -37,8 +37,7 @@ public enum NodeType {
     DECL_STRUCT,
     DECL_MEMBER,
     DECL_VARIABLE,
-    DECL_VAR_INTERFACE,       // in, out, uniform
-    DECL_BLOCK_INTERFACE,     // in, out, uniform
+    DECL_BLOCK,     // in, out, uniform
 
     DEF_FUNCTION,
 
