@@ -1,109 +1,136 @@
 package net.quepierts.animata4j.core.dsl.lexer;
 
 import com.google.common.collect.ImmutableMap;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import net.quepierts.animata4j.core.dsl.TrieTree;
 
 import java.util.Map;
 
+@Getter
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum TokenType {
-    IDENTIFIER,
+    IDENTIFIER(false, false, false),
 
-    LITERAL_INTEGER,
-    LITERAL_HEX,
-    LITERAL_OCT,
-    LITERAL_DECIMAL,
-    LITERAL_STRING,
+    LITERAL_INTEGER(false, false, false),
+    LITERAL_HEX(false, false, false),
+    LITERAL_OCT(false, false, false),
+    LITERAL_DECIMAL(false, false, false),
+    LITERAL_STRING(false, false, false),
 
-    LITERAL_TRUE,
-    LITERAL_FALSE,
+    LITERAL_TRUE(false, false, false),
+    LITERAL_FALSE(false, false, false),
 
-    TYPE_INT,
-    TYPE_FLOAT,
-    TYPE_BOOL,
-    TYPE_VOID,
+    TYPE_INT(false, true, true),
+    TYPE_FLOAT(false, true, true),
+    TYPE_BOOL(false, true, true),
+    TYPE_VOID(false, true, true),
+
+    TYPE_VEC2(false, true, true),
+    TYPE_VEC3(false, true, true),
+    TYPE_VEC4(false, true, true),
+    TYPE_MAT2(false, true, true),
+    TYPE_MAT3(false, true, true),
+    TYPE_MAT4(false, true, true),
+
+    TYPE_SAMPLER1D(false, true, true),
+    TYPE_SAMPLER2D(false, true, true),
+    TYPE_SAMPLER3D(false, true, true),
+    TYPE_SAMPLER1D_ARRAY(false, true, true),
+    TYPE_SAMPLER2D_ARRAY(false, true, true),
+
+    TYPE_ISAMPLER1D(false, true, true),
+    TYPE_ISAMPLER2D(false, true, true),
+    TYPE_ISAMPLER3D(false, true, true),
+    TYPE_ISAMPLER1D_ARRAY(false, true, true),
+    TYPE_ISAMPLER2D_ARRAY(false, true, true),
 
     // operator
-    PLUS,           // +
-    MINUS,          // -
-    STAR,           // *
-    SLASH,          // /
-    PERCENT,        // %
-    AND,            // &
-    OR,             // |
-    XOR,            // ^
+    PLUS(true, false, false),           // +
+    MINUS(true, false, false),          // -
+    STAR(true, false, false),           // *
+    SLASH(true, false, false),          // /
+    PERCENT(true, false, false),        // %
+    AND(true, false, false),            // &
+    OR(true, false, false),             // |
+    XOR(true, false, false),            // ^
 
-    PLUS2,          // ++
-    MINUS2,         // --
-    EQUAL,          // =
-    PLUS_EQUAL,     // +=
-    MINUS_EQUAL,    // -=
-    STAR_EQUAL,     // *=
-    SLASH_EQUAL,    // /=
-    PERCENT_EQUAL,  // %=
-    AND_EQUAL,      // &=
-    OR_EQUAL,       // |=
-    XOR_EQUAL,      // ^=
-    LSHIFT,         // <<
-    LSHIFT_EQUAL,   // <<=
-    RSHIFT,         // >>
-    RSHIFT_EQUAL,   // >>=
-    WAVE,           // ~
+    PLUS2(true, false, false),          // ++
+    MINUS2(true, false, false),         // --
+    EQUAL(true, false, false),          // =
+    PLUS_EQUAL(true, false, false),     // +=
+    MINUS_EQUAL(true, false, false),    // -=
+    STAR_EQUAL(true, false, false),     // *=
+    SLASH_EQUAL(true, false, false),    // /=
+    PERCENT_EQUAL(true, false, false),  // %=
+    AND_EQUAL(true, false, false),      // &=
+    OR_EQUAL(true, false, false),       // |=
+    XOR_EQUAL(true, false, false),      // ^=
+    LSHIFT(true, false, false),         // <<
+    LSHIFT_EQUAL(true, false, false),   // <<=
+    RSHIFT(true, false, false),         // >>
+    RSHIFT_EQUAL(true, false, false),   // >>=
+    WAVE(true, false, false),           // ~
 
-    EQEQ,           // ==
-    NOTEQ,          // !=
-    LT,             // <
-    GT,             // >
-    LTEQ,           // <=
-    GTEQ,           // >=
-    AND2,           // &&
-    XOR2,           // ^^
-    OR2,            // ||
-    NOT,            // !
+    EQEQ(true, false, false),           // ==
+    NOTEQ(true, false, false),          // !=
+    LT(true, false, false),             // <
+    GT(true, false, false),             // >
+    LTEQ(true, false, false),           // <=
+    GTEQ(true, false, false),           // >=
+    AND2(true, false, false),           // &&
+    XOR2(true, false, false),           // ^^
+    OR2(true, false, false),            // ||
+    NOT(true, false, false),            // !
 
     // symbols
-    LPAREN,         // (
-    RPAREN,         // )
-    LBRACE,         // {
-    RBRACE,         // }
-    LBRACKET,       // [
-    RBRACKET,       // ]
-    SEMICOLON,      // ;
-    COMMA,          // ,
-    DOT,            // .
-    COLON,          // :
-    QUESTION,       // ?
+    LPAREN(false, false, false),         // (
+    RPAREN(false, false, false),         // )
+    LBRACE(false, false, false),         // {
+    RBRACE(false, false, false),         // }
+    LBRACKET(false, false, false),       // [
+    RBRACKET(false, false, false),       // ]
+    SEMICOLON(false, false, false),      // ;
+    COMMA(false, false, false),          // ,
+    DOT(false, false, false),            // .
+    COLON(false, false, false),          // :
+    QUESTION(false, false, false),       // ?
 
-    KEYWORD_IF,
-    KEYWORD_ELSE,
-    KEYWORD_FOR,
-    KEYWORD_WHILE,
-    KEYWORD_BREAK,
-    KEYWORD_CONTINUE,
-    KEYWORD_RETURN,
-    KEYWORD_SWITCH,
-    KEYWORD_CONST,
-    KEYWORD_UNIFORM,
-    KEYWORD_IN,
-    KEYWORD_OUT,
-    KEYWORD_INOUT,
-    KEYWORD_STRUCT,
-    KEYWORD_LAYOUT,
-    KEYWORD_IMPORT,
-    KEYWORD_PACKAGE,
+    KEYWORD_IF(false, true, false),
+    KEYWORD_ELSE(false, true, false),
+    KEYWORD_FOR(false, true, false),
+    KEYWORD_WHILE(false, true, false),
+    KEYWORD_BREAK(false, true, false),
+    KEYWORD_CONTINUE(false, true, false),
+    KEYWORD_RETURN(false, true, false),
+    KEYWORD_SWITCH(false, true, false),
+    KEYWORD_CONST(false, true, false),
+    KEYWORD_UNIFORM(false, true, false),
+    KEYWORD_IN(false, true, false),
+    KEYWORD_OUT(false, true, false),
+    KEYWORD_INOUT(false, true, false),
+    KEYWORD_STRUCT(false, true, false),
+    KEYWORD_LAYOUT(false, true, false),
+    KEYWORD_IMPORT(false, true, false),
+    KEYWORD_PACKAGE(false, true, false),
 
     // special
-    EOF,            // <EOF>
-    CUSTOM,         // <CUSTOM>
-    UNDEFINED;      // <UNDEFINED>
+    EOF(false, false, false),            // <EOF>
+    CUSTOM(false, false, false),         // <CUSTOM>
+    UNDEFINED(false, false, false);      // <UNDEFINED>
 
-    public static final TrieTree<TokenType> OPERATORS;
+    private final boolean isOperator;
+    private final boolean isKeyword;
+    private final boolean isPrimitiveType;
+
     public static final TrieTree<TokenType> SYMBOLS;
     
     public static final Map<String, TokenType> KEYWORDS;
 
     static {
         TrieTree.Builder<TokenType> builder = new TrieTree.Builder<>(TokenType.UNDEFINED);
-        OPERATORS = builder
+        SYMBOLS = builder
                 .put("+", TokenType.PLUS)
                 .put("-", TokenType.MINUS)
                 .put("*", TokenType.STAR)
@@ -138,6 +165,18 @@ public enum TokenType {
                 .put("|", TokenType.OR)
                 .put("^", TokenType.XOR)
                 .put("~", TokenType.WAVE)
+
+                .put("(", TokenType.LPAREN)
+                .put(")", TokenType.RPAREN)
+                .put("{", TokenType.LBRACE)
+                .put("}", TokenType.RBRACE)
+                .put("[", TokenType.LBRACKET)
+                .put("]", TokenType.RBRACKET)
+                .put(";", TokenType.SEMICOLON)
+                .put(",", TokenType.COMMA)
+                .put(".", TokenType.DOT)
+                .put(":", TokenType.COLON)
+                .put("?", TokenType.QUESTION)
                 .build();
 
         KEYWORDS = ImmutableMap.<String, TokenType>builder()
@@ -168,23 +207,29 @@ public enum TokenType {
                 .put("bool", TokenType.TYPE_BOOL)
                 .put("void", TokenType.TYPE_VOID)
 
+                .put("vec2", TokenType.TYPE_VEC2)
+                .put("vec3", TokenType.TYPE_VEC3)
+                .put("vec4", TokenType.TYPE_VEC4)
+
+                .put("mat2", TokenType.TYPE_MAT2)
+                .put("mat3", TokenType.TYPE_MAT3)
+                .put("mat4", TokenType.TYPE_MAT4)
+
+                .put("sampler1D", TokenType.TYPE_SAMPLER1D)
+                .put("sampler2D", TokenType.TYPE_SAMPLER2D)
+                .put("sampler3D", TokenType.TYPE_SAMPLER3D)
+                .put("sampler1DArray", TokenType.TYPE_SAMPLER1D_ARRAY)
+                .put("sampler2DArray", TokenType.TYPE_SAMPLER2D_ARRAY)
+
+                .put("isampler1D", TokenType.TYPE_ISAMPLER1D)
+                .put("isampler2D", TokenType.TYPE_ISAMPLER2D)
+                .put("isampler3D", TokenType.TYPE_ISAMPLER3D)
+                .put("isampler1DArray", TokenType.TYPE_ISAMPLER1D_ARRAY)
+                .put("isampler2DArray", TokenType.TYPE_ISAMPLER2D_ARRAY)
+
                 // boolean literals
                 .put("true", TokenType.LITERAL_TRUE)
                 .put("false", TokenType.LITERAL_FALSE)
-                .build();
-
-        SYMBOLS = new TrieTree.Builder<>(TokenType.UNDEFINED)
-                .put("(", TokenType.LPAREN)
-                .put(")", TokenType.RPAREN)
-                .put("{", TokenType.LBRACE)
-                .put("}", TokenType.RBRACE)
-                .put("[", TokenType.LBRACKET)
-                .put("]", TokenType.RBRACKET)
-                .put(";", TokenType.SEMICOLON)
-                .put(",", TokenType.COMMA)
-                .put(".", TokenType.DOT)
-                .put(":", TokenType.COLON)
-                .put("?", TokenType.QUESTION)
                 .build();
     }
 }
