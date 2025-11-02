@@ -6,10 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import net.quepierts.animata4j.core.dsl.TrieTree;
 import net.quepierts.animata4j.core.dsl.exception.LexerException;
-import net.quepierts.animata4j.core.dsl.source.SourcePointer;
-import net.quepierts.animata4j.core.dsl.source.SourcePos;
-import net.quepierts.animata4j.core.dsl.source.SourceProvider;
-import net.quepierts.animata4j.core.dsl.source.SourceSpan;
+import net.quepierts.animata4j.core.dsl.source.*;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -28,7 +25,7 @@ public abstract class Lexer implements TokenProvider {
     private boolean keepComment = true;
 
     protected Lexer(@NotNull String source) {
-        this.source = SourceProvider.of(source);
+        this.source = ProcessesSource.of(source);
         this.pointer = SourcePointer.of(this.source);
     }
 
@@ -110,13 +107,6 @@ public abstract class Lexer implements TokenProvider {
         while (this.hasNext() && predicate.test(this.peek())) {
             builder.append(this.advance());
         }
-    }
-
-    protected <T extends Lexer> T sublexer(
-            @NotNull LexerFactory<T> factory,
-            int length
-    ) {
-        return factory.create(this.source, this.getSourcePos(), length);
     }
 
     protected static boolean isIdentifierStart(char c) {
@@ -221,12 +211,4 @@ public abstract class Lexer implements TokenProvider {
         boolean test(char c);
     }
 
-    @FunctionalInterface
-    protected interface LexerFactory<T extends Lexer> {
-        T create(
-                @NotNull SourceProvider source,
-                @NotNull SourcePos pos,
-                int length
-        );
-    }
 }

@@ -1,11 +1,12 @@
 package net.quepierts.animata4j.core.dsl.lexer;
 
-import net.quepierts.animata4j.core.dsl.source.SourcePos;
 import net.quepierts.animata4j.core.dsl.source.SourceProvider;
+import net.quepierts.animata4j.core.dsl.source.SourcePos;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class ArlLexer extends Lexer {
+
     public ArlLexer(@NotNull String source) {
         super(source);
     }

@@ -10,6 +10,7 @@ import net.quepierts.animata4j.core.dsl.StringSplitter;
 import net.quepierts.animata4j.core.dsl.preprocess.directive.Directive;
 import net.quepierts.animata4j.core.dsl.preprocess.directive.DirectiveFactory;
 import net.quepierts.animata4j.core.dsl.source.SourceProvider;
+import net.quepierts.animata4j.core.dsl.source.ProcessesSource;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -173,7 +174,7 @@ public class Preprocessor {
             }
         }
 
-        return new SourceProvider(
+        return new ProcessesSource(
                 sources.toArray(String[]::new),
                 lineMapping.toIntArray()
         );

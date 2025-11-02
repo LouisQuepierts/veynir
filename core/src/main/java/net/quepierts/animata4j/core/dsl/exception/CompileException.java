@@ -1,16 +1,17 @@
 package net.quepierts.animata4j.core.dsl.exception;
 
 import lombok.Getter;
-import net.quepierts.animata4j.core.dsl.source.SourcePos;
 import net.quepierts.animata4j.core.dsl.source.SourceProvider;
+import net.quepierts.animata4j.core.dsl.source.SourcePos;
 import org.jetbrains.annotations.NotNull;
 
 @Getter
-public abstract class CompileException extends RuntimeException {
+public abstract class CompileException
+        extends RuntimeException
+        implements Comparable<CompileException> {
 
     private final String line;
-    private final int processingLineNumber;
-    private final int processingColNumber;
+    private final SourcePos pos;
     private final int lineNumber;
 
     public CompileException(
@@ -26,10 +27,9 @@ public abstract class CompileException extends RuntimeException {
                 provider
         ));
 
-        this.processingLineNumber = pos.getLine();
-        this.processingColNumber = pos.getCol();
-        this.line = provider.getLine(this.processingLineNumber);
-        this.lineNumber = provider.getLineNumber(this.processingLineNumber);
+        this.pos = pos;
+        this.line = provider.getLine(pos.getLine());
+        this.lineNumber = provider.getLineNumber(pos.getLine());
     }
 
     private static String formatMessage(
@@ -47,5 +47,10 @@ public abstract class CompileException extends RuntimeException {
                 lineContent + "\n" +
                 " ".repeat(Math.max(0, col - 1)) +
                 "^";
+    }
+
+    @Override
+    public int compareTo(@NotNull CompileException o) {
+        return pos.compareTo(o.pos);
     }
 }

@@ -29,11 +29,11 @@ public final class SourcePointer {
     }
 
     public boolean hasNext() {
-        return !this.provider.isEof(this.line, this.col);
+        return !this.provider.isEof(this.line);
     }
 
     public char advance() {
-        if (this.provider.isEof(this.line, this.col)) {
+        if (this.provider.isEof(this.line)) {
             return '\0';
         }
 
@@ -49,7 +49,7 @@ public final class SourcePointer {
 
     @Contract(pure = true)
     public char peek() {
-        return this.provider.isEof(this.line, this.col) ? '\0' : this.provider.charAt(this.line, this.col);
+        return this.provider.isEof(this.line) ? '\0' : this.provider.charAt(this.line, this.col);
     }
 
     public void skipWhitespace() {

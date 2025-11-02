@@ -20,7 +20,7 @@ public class PreprocessTest {
 
         try (FileWriter writer = new FileWriter(out)) {
             int line = 0;
-            while (!source.isEof(line, 0)) {
+            while (!source.isEof(line)) {
                 writer.write(source.getLine(line));
                 writer.write('\n');
                 line++;
