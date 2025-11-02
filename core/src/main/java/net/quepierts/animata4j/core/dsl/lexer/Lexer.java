@@ -112,10 +112,6 @@ public abstract class Lexer implements TokenProvider {
         }
     }
 
-    protected final String source() {
-        return this.source.getSource();
-    }
-
     protected <T extends Lexer> T sublexer(
             @NotNull LexerFactory<T> factory,
             int length
