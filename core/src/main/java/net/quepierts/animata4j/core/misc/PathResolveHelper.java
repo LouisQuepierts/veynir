@@ -3,12 +3,17 @@ package net.quepierts.animata4j.core.misc;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+/**
+ * Only for static and parameterized path, but not for dynamic path like function call or expression.
+ * */
+@UtilityClass
 @SuppressWarnings("unused")
 public class PathResolveHelper {
     private static final Pattern WORD = Pattern.compile("[a-zA-Z_][a-zA-Z0-9_]*");
@@ -24,27 +29,33 @@ public class PathResolveHelper {
         while (right < path.length()) {
             final char c = path.charAt(right);
 
-            if (c == '.') {
-                PathResolveHelper.checkDot(path, last, right);
+            switch (c) {
+                case '.':
+                    PathResolveHelper.checkDot(path, last, right);
 
-                if (right > left) {
-                    final String word = PathResolveHelper.word(path.substring(left, right), path, left);
-                    tokens.add(Token.simple(word));
-                }
-                left = right + 1;
-            } else if (c == '[') {
-                PathResolveHelper.checkDot(path, last, right);
+                    if (right > left) {
+                        final String word = PathResolveHelper.word(path.substring(left, right), path, left);
+                        tokens.add(Token.simple(word));
+                    }
+                    left = right + 1;
+                    break;
+                case '[':
+                    PathResolveHelper.checkDot(path, last, right);
 
-                if (right > left) {
-                    final String word = PathResolveHelper.word(path.substring(left, right), path, left);
-                    tokens.add(Token.simple(word));
-                }
-                left = right;
-                right = findRightBracket(path, left);
+                    if (right > left) {
+                        final String word = PathResolveHelper.word(path.substring(left, right), path, left);
+                        tokens.add(Token.simple(word));
+                    }
+                    left = right;
+                    right = PathResolveHelper.findRightBracket(path, left);
 
-                final String word = PathResolveHelper.subscript(path.substring(left + 1, right), path, left);
-                tokens.add(Token.subscript(word));
-                left = right + 1;
+                    final String word = PathResolveHelper.subscript(path.substring(left + 1, right), path, left);
+                    tokens.add(Token.subscript(word));
+                    left = right + 1;
+                    break;
+                case ']':
+                    PathResolveHelper.error("Unexpected bracket", path, right);
+                    break;
             }
 
             right++;
@@ -64,27 +75,28 @@ public class PathResolveHelper {
             @NotNull String path,
             int left
     ) {
-        int right = path.indexOf('.', left);
-        if (right < 0) {
-            right = path.length() - 1;
-        }
+        int i = left + 1;
+        while (i < path.length()) {
+            final char c = path.charAt(i);
 
-        while (right > left) {
-            final char c = path.charAt(right);
-
-            if (c == ']') {
-                return right;
+            switch (c) {
+                case ']':
+                    if (i - left < 2) {
+                        PathResolveHelper.error("Empty subscript", path, i);
+                    }
+                    return i;
+                case '.':
+                    PathResolveHelper.error("Unexpected dot", path, i);
+                    break;
+                case '[':
+                    PathResolveHelper.error("Unexpected bracket", path, i);
+                    break;
             }
 
-            if (c == '[') {
-                PathResolveHelper.error("Unexpected bracket", path, right);
-                break;
-            }
-
-            right--;
+            i ++;
         }
 
-        PathResolveHelper.error("Unclosed bracket", path, right);
+        PathResolveHelper.error("Unclosed bracket", path, i);
         return -1;
     }
 
@@ -138,7 +150,7 @@ public class PathResolveHelper {
 
     @Getter
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-    public static class Token {
+    public static final class Token {
         private final String raw;
         private final String content;
         private final boolean subscript;

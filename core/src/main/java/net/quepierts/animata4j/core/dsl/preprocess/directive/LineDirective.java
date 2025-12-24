@@ -6,7 +6,7 @@ import net.quepierts.animata4j.core.dsl.preprocess.PreprocessContext;
 import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class LineDirective implements Directive {
+public final class LineDirective implements Directive {
 
     private final int lineNumber;
 

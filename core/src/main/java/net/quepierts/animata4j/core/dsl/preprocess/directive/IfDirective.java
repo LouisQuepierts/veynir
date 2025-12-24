@@ -3,7 +3,7 @@ package net.quepierts.animata4j.core.dsl.preprocess.directive;
 import net.quepierts.animata4j.core.dsl.preprocess.PreprocessContext;
 import org.jetbrains.annotations.NotNull;
 
-public class IfDirective
+public final class IfDirective
         extends BaseExprDirective
         implements ConditionOperationalDirective {
 

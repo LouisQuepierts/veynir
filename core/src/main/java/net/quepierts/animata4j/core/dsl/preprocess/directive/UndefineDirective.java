@@ -6,7 +6,7 @@ import net.quepierts.animata4j.core.dsl.preprocess.PreprocessContext;
 import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class UndefineDirective implements Directive {
+public final class UndefineDirective implements Directive {
 
     private final String macro;
 

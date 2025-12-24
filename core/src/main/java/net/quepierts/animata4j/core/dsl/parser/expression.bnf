@@ -1,0 +1,56 @@
+<expression> ::= <assignment>
+
+<assignment> ::= <ternary> ( EQUAL <assignment> )?
+
+<ternary> ::= <logical-or> ( QUESTION <assignment> COLON <ternary> )?
+
+<logical-or> ::= <logical-xor> ( LOGIC_OR <logical-xor> )*
+
+<logical-xor> ::= <logical-and> ( LOGIC_XOR <logical-and> )*
+
+<logical-and> ::= <bit-or> ( LOGIC_AND <bit-or> )*
+
+<bit-or> ::= <bit-xor> ( BIT_OR <bit-xor> )*
+
+<bit-xor> ::= <bit-and> ( BIT_XOR <bit-and> )*
+
+<bit-and> ::= <equality> ( BIT_AND <equality> )*
+
+<equality> ::= <comparison> ( [EQEQ | NOTEQ] <comparison> )*
+
+<comparison> ::= <shift> ( [LT | GT | LTEQ | GTEQ] <shift> )?
+
+<shift> ::= <additive> ( [LSHIFT | RSHIFT] <additive> )*
+
+<additive> ::= <multiplicative> ( [PLUS | MINUS] <multiplicative> )*
+
+<multiplicative> ::= <unary> ( [STAR | SLASH | PERCENT] <unary> )*
+
+<unary> ::= ( PLUS | PLUS2 | MINUS | MINUS2 | NOT | BIT_NOT ) <unary>
+          | <postfix>
+
+<postfix> ::= <primary> <postfix-suffix>* <terminal-suffix>?
+
+<postfix-suffix> ::= <call-suffix>
+                   | <member-access>
+                   | <array-index>
+
+<call-suffix> ::= LPAREN <arguments>? RPAREN
+
+<member-access> ::= DOT <identifier>
+
+<array-index> ::= LBRACKET <expression> RBRACKET
+
+<terminal-suffix> ::= PLUS2 | MINUS2
+
+<primary> ::= <identifier>
+            | <number>
+            | <boolean>
+            | <string>
+            | LPAREN <expression> RPAREN
+
+<arguments> ::= <expression> ( COMMA <expression> )*
+
+<number> ::= LITERAL_INTEGER | LITERAL_FLOAT
+<boolean> ::= TRUE | FALSE
+<string> ::= LITERAL_STRING

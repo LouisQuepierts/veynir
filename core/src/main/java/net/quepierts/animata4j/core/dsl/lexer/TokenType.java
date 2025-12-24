@@ -12,8 +12,10 @@ import java.util.Map;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum TokenType {
     IDENTIFIER(false, false, false),
+    DIRECTIVE(false, false, false),
 
     LITERAL_INTEGER(false, false, false),
+    LITERAL_BIN(false, false, false),
     LITERAL_HEX(false, false, false),
     LITERAL_OCT(false, false, false),
     LITERAL_DECIMAL(false, false, false),
@@ -100,6 +102,7 @@ public enum TokenType {
     DOT(false, false, false),            // .
     COLON(false, false, false),          // :
     QUESTION(false, false, false),       // ?
+    HASH(false, false, false),           // #
 
     KEYWORD_IF(false, true, false),
     KEYWORD_ELSE(false, true, false),
@@ -119,9 +122,13 @@ public enum TokenType {
     KEYWORD_IMPORT(false, true, false),
     KEYWORD_PACKAGE(false, true, false),
 
+    COMMENT_LINE(false, false, false),
+    COMMENT_BLOCK(false, false, false),
+
     // special
     EOF(false, false, false),            // <EOF>
     CUSTOM(false, false, false),         // <CUSTOM>
+    ERROR(false, false, false),
     UNDEFINED(false, false, false);      // <UNDEFINED>
 
     private final boolean isOperator;
@@ -181,6 +188,7 @@ public enum TokenType {
                 .put(".", TokenType.DOT)
                 .put(":", TokenType.COLON)
                 .put("?", TokenType.QUESTION)
+                .put("#", TokenType.HASH)
                 .build();
 
         KEYWORDS = ImmutableMap.<String, TokenType>builder()

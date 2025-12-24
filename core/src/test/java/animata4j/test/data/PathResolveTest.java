@@ -39,12 +39,15 @@ public class PathResolveTest {
         Assertions.assertThrowsExactly(IllegalArgumentException.class, () -> {
             test("root[2.body", "subscriptError6");
         });
+        Assertions.assertThrowsExactly(IllegalArgumentException.class, () -> {
+            test("root[].object", "subscriptError7");
+        });
     }
 
-    static void test(String path, String id) {
+    static PathResolveHelper.Token[] test(String path, String id) {
         System.out.println("Test " + id + ": ");
         System.out.println(path);
-        wrappedExec(path);
+        return wrappedExec(path);
     }
 
     static PathResolveHelper.Token[] wrappedExec(String path) {

@@ -12,10 +12,10 @@ public final class PPMacroExpr extends PPExpr {
 
     @Override
     public long eval(final PreprocessContext context) {
-        String defined = context.getDefined(this.literal);
+        long value = context.getDefined(literal).toLong();
 
         try {
-            return Long.parseLong(defined);
+            return value;
         } catch (Exception e) {
             return 0;
         }

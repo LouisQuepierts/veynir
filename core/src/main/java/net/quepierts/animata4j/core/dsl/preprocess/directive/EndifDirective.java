@@ -6,7 +6,7 @@ import net.quepierts.animata4j.core.dsl.preprocess.PreprocessContext;
 import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class EndifDirective implements ConditionOperationalDirective {
+public final class EndifDirective implements ConditionOperationalDirective {
 
     public static @NotNull EndifDirective construct(String @NotNull [] args) {
         return new EndifDirective();

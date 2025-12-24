@@ -10,12 +10,22 @@ import org.jetbrains.annotations.NotNull;
 @Getter
 @Setter
 @RequiredArgsConstructor(staticName = "of")
-@AllArgsConstructor
 public final class SourcePointer {
     private final SourceProvider provider;
 
     private int line    = 0;
     private int col     = 0;
+
+    private char current = '\0';
+    private char last    = '\0';
+
+    SourcePointer(@NotNull SourceProvider provider, int line, int col) {
+        this.provider = provider;
+        this.line = line;
+        this.col = col;
+
+        this.current = provider.charAt(line, col);
+    }
 
     public static SourcePointer of(@NotNull SourceProvider provider, int line, int col) {
         return new SourcePointer(provider, line, col);
@@ -32,6 +42,14 @@ public final class SourcePointer {
         return !this.provider.isEof(this.line);
     }
 
+    public boolean isEol() {
+        return this.provider.isEol(this.line, this.col);
+    }
+
+    public boolean isEof() {
+        return this.provider.isEof(this.line);
+    }
+
     public char advance() {
         if (this.provider.isEof(this.line)) {
             return '\0';
@@ -44,12 +62,19 @@ public final class SourcePointer {
         } else {
             this.col ++;
         }
+        this.last = this.current;
+        this.current = c;
         return c;
     }
 
     @Contract(pure = true)
     public char peek() {
-        return this.provider.isEof(this.line) ? '\0' : this.provider.charAt(this.line, this.col);
+        return this.current;
+    }
+
+    @Contract(pure = true)
+    public char last() {
+        return this.last;
     }
 
     public void skipWhitespace() {

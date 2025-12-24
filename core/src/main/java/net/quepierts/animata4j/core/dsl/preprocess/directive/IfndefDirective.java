@@ -6,7 +6,7 @@ import net.quepierts.animata4j.core.dsl.preprocess.PreprocessContext;
 import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class IfndefDirective implements ConditionOperationalDirective {
+public final class IfndefDirective implements ConditionOperationalDirective {
 
     private final String macro;
 

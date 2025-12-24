@@ -1,12 +1,14 @@
 package net.quepierts.animata4j.core.dsl.preprocess.directive;
 
 import lombok.AllArgsConstructor;
+import lombok.experimental.UtilityClass;
 import net.quepierts.animata4j.core.dsl.StringSplitter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
 
+@UtilityClass
 public class DirectiveFactory {
 
     private static final Map<String, ConstructorInfo> CONSTRUCTORS;

@@ -5,6 +5,7 @@ public enum NodeType {
     EXPR_MEMBER_ACCESS,
     EXPR_ASSIGN,
     EXPR_CONSTRUCT,
+    EXPR_INITIALIZER,
     EXPR_CALL,
 
     EXPR_IDENTIFIER,
@@ -42,6 +43,7 @@ public enum NodeType {
     TYPE_PRIMITIVE,
     TYPE_STRUCT,
     TYPE_VOID,
+    TYPE_ARRAY,
 
     DEF_FUNCTION,
 

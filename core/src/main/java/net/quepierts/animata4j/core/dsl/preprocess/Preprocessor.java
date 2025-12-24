@@ -2,15 +2,13 @@ package net.quepierts.animata4j.core.dsl.preprocess;
 
 import it.unimi.dsi.fastutil.booleans.BooleanArrayList;
 import it.unimi.dsi.fastutil.booleans.BooleanStack;
-import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.ints.IntList;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.quepierts.animata4j.core.dsl.StringSplitter;
 import net.quepierts.animata4j.core.dsl.preprocess.directive.Directive;
 import net.quepierts.animata4j.core.dsl.preprocess.directive.DirectiveFactory;
+import net.quepierts.animata4j.core.dsl.preprocess.macro.Macro;
 import net.quepierts.animata4j.core.dsl.source.SourceProvider;
-import net.quepierts.animata4j.core.dsl.source.ProcessesSource;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.*;
@@ -40,18 +38,12 @@ public class Preprocessor {
     private final List<Directive> directives;
     private final List<String> sources;
 
-    private final Map<String, String> defines;
-    private final BooleanStack conditionStack;
-
     Preprocessor(Reader reader) {
         this.lines = new ArrayList<>();
 
         this.sources = new ArrayList<>();
         this.directives = new ArrayList<>();
         this.reader = reader;
-
-        this.defines = new HashMap<>();
-        this.conditionStack = new BooleanArrayList();
 
         try {
             this.scan();
@@ -150,8 +142,8 @@ public class Preprocessor {
     }
 
     public SourceProvider process() {
-        List<String> sources = new ArrayList<>();
-        IntList lineMapping = new IntArrayList();
+        PreprocessingSource source = new PreprocessingSource();
+        PreprocessLexer lexer = new PreprocessLexer(source);
 
         Context context = new Context();
 
@@ -168,30 +160,26 @@ public class Preprocessor {
             } else {
                 String line = sourceIterator.next();
                 if (context.peekCondition()) {
-                    sources.add(line);
-                    lineMapping.add(lineInfo.lineNumber);
+                    source.addLine(line, lineInfo.lineNumber);
                 }
             }
         }
 
-        return new ProcessesSource(
-                sources.toArray(String[]::new),
-                lineMapping.toIntArray()
-        );
+        return source.toProcessesSource();
     }
 
     private static final class Context implements PreprocessContext {
 
-        private final Map<String, String> defines = new HashMap<>();
+        private final Map<String, Macro> defines = new HashMap<>();
         private final BooleanStack conditionStack = new BooleanArrayList();
 
         @Override
         public void define(@NotNull String macro) {
-            this.defines.put(macro, "");
+            this.defines.put(macro, Macro.empty());
         }
 
         @Override
-        public void define(@NotNull String macro, @NotNull String value) {
+        public void define(@NotNull String macro, @NotNull Macro value) {
             this.defines.put(macro, value);
         }
 
@@ -206,7 +194,7 @@ public class Preprocessor {
         }
 
         @Override
-        public String getDefined(@NotNull String macro) {
+        public Macro getDefined(@NotNull String macro) {
             return this.defines.get(macro);
         }
 

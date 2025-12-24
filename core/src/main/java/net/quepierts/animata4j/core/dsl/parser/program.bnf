@@ -1,0 +1,61 @@
+<program> ::= <compilation-unit>
+<compilation-unit> ::= <top-declaration>* EOF
+
+// declarations
+<top-declaration> ::=  <struct-declaration>
+    | <storage-declaration>
+    | <declaration>
+    | SEMICOLON
+
+<struct-declaration> ::= STRUCT IDENTIFIER <members> <variable-declarator>? SEMICOLON
+<members> ::= LBRACE <member> <member>* RBRACE
+<member> ::= <typename> <declarator> SEMICOLON
+
+// storage declarations
+<storage-declaration> ::= <layout>? [<interface-declaration> | <resource-declaration>] SEMICOLON
+<interface-declaration> ::= <interface-identifier> IDENTIFIER ( <declarator> | <members> IDENTIFIER )?
+<resource-declaration> ::= <resource-identifier> IDENTIFIER ( <declarator> | <members> )?
+
+// layout
+<layout> ::= LAYOUT LPAREN <layout expr> ( COMMA <layout-expr> )* RPAREN
+<layout-expr> ::= IDENTIFIER ( EQUAL <integer> )?
+
+// function and variable declarations
+<declaration> ::= CONST? <typename> <declaration-rest>
+<declaration-rest> ::= <function-declarator>
+    | <variable-declarator> SEMICOLON
+<function-declarator> ::= IDENTIFIER  LPAREN <parameters>? RPAREN [ SEMICOLON | <statements> ]
+<variable-declarator> ::= <variable-declaration> ( COMMA <variable-declaration> )*
+<variable-declaration> ::= <declarator> ( EQUAL <expression> )?
+
+// identifier with optional array suffix
+<declarator> ::= IDENTIFIER <array-suffix>?
+<array-suffix> ::= LBRACKET LITERAL_INTEGER? RBRACKET ( LBRACKET LITERAL_INTEGER? RBRACKET )*
+
+// function parameters
+<parameters> ::= <parameter> ( COMMA <parameter> )*
+<parameter> ::= <qualifier>? <typename> <declarator>
+<qualifier> ::= IN | OUT | INOUT
+
+// function statements
+<statements> ::= LBRACE <statement>* RBRACE
+
+<statement> ::= <if> | <for>
+    | <while> | <return>
+    | <break> | <continue>
+    | <statements>
+    | SEMICOLON
+    | <var-decl>
+    | <expression>
+<var-decl> ::= CONST? <typename> <variable-declarator>? SEMICOLON
+<if> ::= IF LPAREN <expression> RPAREN <statement> ( ELSE <statement> )?
+<for> ::= FOR LPAREN <statement> SEMICOLON <expression> SEMICOLON <expression> RPAREN <statement>
+<while> ::= WHILE LPAREN <expression> RPAREN <statement>
+<return> ::= RETURN <expression>? SEMICOLON
+<break> ::= BREAK SEMICOLON
+<continue> ::= CONTINUE SEMICOLON
+
+<interface-identifier> ::= IN | OUT
+<resource-identifier> ::= UNIFORM
+<expression> ::= EXPRESSION
+<typename> ::= IDENTIFIER | VOID

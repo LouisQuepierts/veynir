@@ -342,6 +342,8 @@ public class ExpressionParser extends Parser {
     }
 
     /*
+    <constructor> ::= <datatype> LPAREN <expression>? ( COMMA <expression> )* RPAREN
+    <function> ::= <identifier> LPAREN <expression>? ( COMMA <expression> )* RPAREN
     <postfix> ::= <primary> ( <member-suffix> )* <terminal-suffix>?
 
     <member-suffix> ::= DOT <identifier>

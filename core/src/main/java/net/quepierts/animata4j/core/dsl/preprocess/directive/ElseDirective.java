@@ -6,7 +6,7 @@ import net.quepierts.animata4j.core.dsl.preprocess.PreprocessContext;
 import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-public class ElseDirective implements ConditionOperationalDirective {
+public final class ElseDirective implements ConditionOperationalDirective {
 
     public static @NotNull ElseDirective construct(String @NotNull [] args) {
         return new ElseDirective();

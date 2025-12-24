@@ -2,6 +2,7 @@ package net.quepierts.animata4j.core.dsl.ast.decl;
 
 import lombok.Getter;
 import net.quepierts.animata4j.core.dsl.ast.NodeType;
+import net.quepierts.animata4j.core.dsl.ast.type.Type;
 import net.quepierts.animata4j.core.dsl.source.SourceSpan;
 
 import java.util.List;
@@ -9,11 +10,13 @@ import java.util.List;
 @Getter
 public class FunctionDecl extends Declaration {
 
+    private final Type returnType;
     private final String name;
-    private final List<ParameterDecl> parameters;
+    private final List<Parameter> parameters;
 
-    public FunctionDecl(SourceSpan span, String name, List<ParameterDecl> parameters) {
+    public FunctionDecl(SourceSpan span, Type returnType, String name, List<Parameter> parameters) {
         super(span);
+        this.returnType = returnType;
         this.name = name;
         this.parameters = parameters;
     }
