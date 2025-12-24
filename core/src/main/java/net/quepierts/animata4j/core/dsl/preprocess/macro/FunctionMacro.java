@@ -14,5 +14,6 @@ public final class FunctionMacro extends Macro {
     }
 
     public String apply(String[] args) {
+        throw new UnsupportedOperationException();
     }
 }
