@@ -14,7 +14,7 @@ public final class DefineDirective implements Directive {
     private final boolean hasValue;
 
     public static @NotNull DefineDirective construct(String @NotNull [] args) {
-        return new DefineDirective(args[0], args[1], !args[1].isEmpty());
+        return new DefineDirective(args[0], null, !args[1].isEmpty());
     }
 
     @Override
