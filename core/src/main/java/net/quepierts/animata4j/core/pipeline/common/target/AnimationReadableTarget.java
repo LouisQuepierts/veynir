@@ -5,9 +5,9 @@ package net.quepierts.animata4j.core.pipeline.common.target;
  * */
 @SuppressWarnings("unused")
 public interface AnimationReadableTarget {
-    float getFloat(int index);
+    float read(int index);
 
-    void getFloat(int index, float[] out);
+    void read(int index, float[] out);
 
     double getDouble(int index);
 
@@ -26,13 +26,13 @@ public interface AnimationReadableTarget {
     void getLong(int index, long[] out);
 
     default boolean getBoolean(int index) {
-        return this.getFloat(index) > 0.5f;
+        return this.read(index) > 0.5f;
     }
 
     default void getBoolean(int index, boolean[] out) {
         int left = index;
         for (int i = 0; i < out.length; i++, left++) {
-            out[i] = this.getFloat(left) > 0.5f;
+            out[i] = this.read(left) > 0.5f;
         }
     }
 }

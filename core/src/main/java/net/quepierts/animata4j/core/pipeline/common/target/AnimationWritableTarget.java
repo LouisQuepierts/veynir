@@ -5,9 +5,21 @@ package net.quepierts.animata4j.core.pipeline.common.target;
  */
 @SuppressWarnings("unused")
 public interface AnimationWritableTarget {
-    void setFloat(int index, float value);
+    void write(int index, float value);
 
-    void setFloat(int index, float[] value);
+    void write(int index, float x, float y);
+
+    void write(int index, float x, float y, float z);
+
+    void write(int index, float x, float y, float z, float w);
+
+    void write(int index, float[] value);
+
+    void write(int index, float[] value, int offset, int length);
+
+    void fill(float value);
+
+    void fill(float value, int offset, int length);
 
     void setDouble(int index, double value);
 
@@ -26,7 +38,7 @@ public interface AnimationWritableTarget {
     void setLong(int index, long[] value);
 
     default void setBoolean(int index, boolean value) {
-        this.setFloat(index, value ? 1.0f : 0.0f);
+        this.write(index, value ? 1.0f : 0.0f);
     }
 
     default void setBoolean(int index, boolean[] value) {

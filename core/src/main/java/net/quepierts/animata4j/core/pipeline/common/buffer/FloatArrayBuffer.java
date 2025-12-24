@@ -4,6 +4,9 @@ import lombok.Getter;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
+
 public class FloatArrayBuffer implements AnimationFrameBuffer {
 
     /**
@@ -43,12 +46,12 @@ public class FloatArrayBuffer implements AnimationFrameBuffer {
     }
 
     @Override
-    public float getFloat(int index) {
+    public float read(int index) {
         return this.buffer[index];
     }
 
     @Override
-    public void getFloat(int index, float[] out) {
+    public void read(int index, float[] out) {
         final int require = out.length;
         this.checkBufferSize(index, require);
 
@@ -56,16 +59,53 @@ public class FloatArrayBuffer implements AnimationFrameBuffer {
     }
 
     @Override
-    public void setFloat(int index, float value) {
+    public void write(int index, float value) {
         this.buffer[index] = value;
     }
 
     @Override
-    public void setFloat(int index, float[] value) {
+    public void write(int index, float x, float y) {
+        this.buffer[index] = x;
+        this.buffer[index + 1] = y;
+    }
+
+    @Override
+    public void write(int index, float x, float y, float z) {
+        this.buffer[index] = x;
+        this.buffer[index + 1] = y;
+        this.buffer[index + 2] = z;
+    }
+
+    @Override
+    public void write(int index, float x, float y, float z, float w) {
+        this.buffer[index] = x;
+        this.buffer[index + 1] = y;
+        this.buffer[index + 2] = z;
+        this.buffer[index + 3] = w;
+    }
+
+    @Override
+    public void write(int index, float[] value) {
         final int require = value.length;
         this.checkBufferSize(index, require);
 
         System.arraycopy(value, 0, this.buffer, index, require);
+    }
+
+    @Override
+    public void write(int index, float[] value, int offset, int length) {
+        this.checkBufferSize(index, length);
+        System.arraycopy(value, offset, this.buffer, index, length);
+    }
+
+    @Override
+    public void fill(float value) {
+        Arrays.fill(this.buffer, value);
+    }
+
+    @Override
+    public void fill(float value, int offset, int length) {
+        Arrays.fill(this.buffer, offset, offset + length, value);
     }
 
     private void checkBufferSize(int index, int require) {
