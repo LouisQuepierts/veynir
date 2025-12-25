@@ -4,16 +4,16 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.quepierts.animata4j.core.math.ease.Ease;
+import net.quepierts.animata4j.core.math.interpolation.BiInterpolation;
 import net.quepierts.animata4j.core.math.interpolation.Interpolation;
 import net.quepierts.animata4j.core.pipeline.common.ReadonlyAnimationContext;
+import net.quepierts.animata4j.core.pipeline.common.ValueRef;
 import net.quepierts.animata4j.core.pipeline.common.target.AnimationWritableTarget;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public abstract class Segment {
-
-    private static final float[] EMPTY = new float[16];
 
     @Getter
     private final int startFrame;
@@ -22,131 +22,220 @@ public abstract class Segment {
     @Getter
     private final float invLength;
 
-    protected final float[] x0, x1, x2, x3;
-
-    protected final Interpolation interpolation;
-    protected final Ease ease;
+    private final Ease ease;
 
     @ApiStatus.Internal
     public static Segment create(
             int length,
             int start, int end,
-            float[] x0, float[] x1, float[] x2, float[] x3,
+            ValueRef[] ref,
             Interpolation interpolation,
             Ease ease
     ) {
-        if (length != x1.length || length != x2.length) {
-            throw new IllegalArgumentException("x1.length must be equal to x2.length");
-        }
-
-        float[] x00 = interpolation.isQuadratic() ? x0 : EMPTY;
-        float[] x33 = interpolation.isQuadratic() ? x3 : EMPTY;
         float invLength = 1.0f / (end - start);
-
-        switch (length) {
-            case 0:
-                throw new IllegalArgumentException("x0.length must be greater than 0");
-            case 1:
-                return new $1(start, end, invLength, x00, x1, x2, x33, interpolation, ease);
-            case 2:
-                return new $2(start, end, invLength, x00, x1, x2, x33, interpolation, ease);
-            case 3:
-                return new $3(start, end, invLength, x00, x1, x2, x33, interpolation, ease);
-            case 4:
-                return new $4(start, end, invLength, x00, x1, x2, x33, interpolation, ease);
-            default:
-                return new $N(start, end, invLength, x00, x1, x2, x33, interpolation, ease);
+        ValueRef x0 = ref[0];
+        ValueRef x1 = ref[1];
+        if (interpolation instanceof BiInterpolation) {
+            switch (length) {
+                case 1: {
+                    return new Bi.T1(start, end, invLength, ease, x0, x1, (BiInterpolation) interpolation);
+                }
+                case 2: {
+                    return new Bi.T2(start, end, invLength, ease, x0, x1, (BiInterpolation) interpolation);
+                }
+                case 3: {
+                    return new Bi.T3(start, end, invLength, ease, x0, x1, (BiInterpolation) interpolation);
+                }
+                case 4: {
+                    return new Bi.T4(start, end, invLength, ease, x0, x1, (BiInterpolation) interpolation);
+                }
+                default: {
+                    throw new IllegalArgumentException("Invalid length: " + length);
+                }
+            }
+        } else {
+            ValueRef x2 = ref[2];
+            ValueRef x3 = ref[3];
+            switch (length) {
+                case 1: {
+                    return new Quad.T1(start, end, invLength, ease, x0, x1, x2, x3, interpolation);
+                }
+                case 2: {
+                    return new Quad.T2(start, end, invLength, ease, x0, x1, x2, x3, interpolation);
+                }
+                case 3: {
+                    return new Quad.T3(start, end, invLength, ease, x0, x1, x2, x3, interpolation);
+                }
+                case 4: {
+                    return new Quad.T4(start, end, invLength, ease, x0, x1, x2, x3, interpolation);
+                }
+                default: {
+                    throw new IllegalArgumentException("Invalid length: " + length);
+                }
+            }
         }
     }
 
     public final void sample(
             @NotNull AnimationWritableTarget target,
-            @NotNull ReadonlyAnimationContext context,
             int frame
     ) {
         var t = getDeltaTime(frame);
-        sample(target, context, t);
+        sample(target, t);
     }
 
     public abstract void sample(
             @NotNull AnimationWritableTarget target,
-            @NotNull ReadonlyAnimationContext context,
             float t
     );
 
     public float getDeltaTime(int frame) {
-        return (frame - this.startFrame) * this.invLength;
+        return ease.ease((frame - this.startFrame) * this.invLength);
     }
 
-    // generated code
-    private static class $1 extends Segment {
-        private $1(int start, int end, float invLength, float[] x0, float[] x1, float[] x2, float[] x3, Interpolation interpolation, Ease ease) {
-            super(start, end, invLength, x0, x1, x2, x3, interpolation, ease);
+    // generated
+    private static abstract class Bi extends Segment {
+
+        protected final ValueRef x0, x1;
+        protected final BiInterpolation interpolation;
+
+        private Bi(int startFrame, int endFrame, float invLength, Ease ease, ValueRef x0, ValueRef x1, BiInterpolation interpolation) {
+            super(startFrame, endFrame, invLength, ease);
+            this.x0 = x0;
+            this.x1 = x1;
+            this.interpolation = interpolation;
         }
 
-        @Override
-        public void sample(@NotNull AnimationWritableTarget target, @NotNull ReadonlyAnimationContext context, float t) {
-            target.write(0, interpolation.interpolate(x0[0], x1[0], x2[0], x3[0], ease.ease(t)));
+        private static final class T1 extends Bi {
+            private T1(int startFrame, int endFrame, float invLength, Ease ease, ValueRef x0, ValueRef x1, BiInterpolation interpolation) {
+                super(startFrame, endFrame, invLength, ease, x0, x1, interpolation);
+            }
+
+            @Override
+            public void sample(@NotNull AnimationWritableTarget target,float t) {
+                target.write(0, interpolation.interpolate(x0.getX(), x1.getX(), t));
+            }
+        }
+
+        private static final class T2 extends Bi {
+            private T2(int startFrame, int endFrame, float invLength, Ease ease, ValueRef x0, ValueRef x1, BiInterpolation interpolation) {
+                super(startFrame, endFrame, invLength, ease, x0, x1, interpolation);
+            }
+
+            @Override
+            public void sample(@NotNull AnimationWritableTarget target,float t) {
+                target.write(
+                        0,
+                        interpolation.interpolate(x0.getX(), x1.getX(), t),
+                        interpolation.interpolate(x0.getY(), x1.getY(), t)
+                );
+            }
+        }
+
+        private static final class T3 extends Bi {
+            private T3(int startFrame, int endFrame, float invLength, Ease ease, ValueRef x0, ValueRef x1, BiInterpolation interpolation) {
+                super(startFrame, endFrame, invLength, ease, x0, x1, interpolation);
+            }
+
+            @Override
+            public void sample(@NotNull AnimationWritableTarget target,float t) {
+                target.write(
+                        0,
+                        interpolation.interpolate(x0.getX(), x1.getX(), t),
+                        interpolation.interpolate(x0.getY(), x1.getY(), t),
+                        interpolation.interpolate(x0.getZ(), x1.getZ(), t)
+                );
+            }
+        }
+
+        private static final class T4 extends Bi {
+            private T4(int startFrame, int endFrame, float invLength, Ease ease, ValueRef x0, ValueRef x1, BiInterpolation interpolation) {
+                super(startFrame, endFrame, invLength, ease, x0, x1, interpolation);
+            }
+
+            @Override
+            public void sample(@NotNull AnimationWritableTarget target,float t) {
+                target.write(
+                        0,
+                        interpolation.interpolate(x0.getX(), x1.getX(), t),
+                        interpolation.interpolate(x0.getY(), x1.getY(), t),
+                        interpolation.interpolate(x0.getZ(), x1.getZ(), t),
+                        interpolation.interpolate(x0.getW(), x1.getW(), t)
+                );
+            }
         }
     }
 
-    private static class $2 extends Segment {
-        private $2(int start, int end, float invLength, float[] x0, float[] x1, float[] x2, float[] x3, Interpolation interpolation, Ease ease) {
-            super(start, end, invLength, x0, x1, x2, x3, interpolation, ease);
+    private static abstract class Quad extends Segment { 
+        
+        protected final ValueRef x0, x1, x2, x3;
+        protected final Interpolation interpolation;
+        
+        private Quad(int startFrame, int endFrame, float invLength, Ease ease, ValueRef x0, ValueRef x1, ValueRef x2, ValueRef x3, Interpolation interpolation) {
+            super(startFrame, endFrame, invLength, ease);
+            this.x0 = x0;
+            this.x1 = x1;
+            this.x2 = x2;
+            this.x3 = x3;
+            this.interpolation = interpolation;
         }
-
-        @Override
-        public void sample(@NotNull AnimationWritableTarget target, @NotNull ReadonlyAnimationContext context, float t) {
-            target.write(
-                    0,
-                    interpolation.interpolate(x0[0], x1[0], x2[0], x3[0], ease.ease(t)),
-                    interpolation.interpolate(x0[1], x1[1], x2[1], x3[1], ease.ease(t))
-            );
+        
+        private static final class T1 extends Quad {
+            private T1(int startFrame, int endFrame, float invLength, Ease ease, ValueRef x0, ValueRef x1, ValueRef x2, ValueRef x3, Interpolation interpolation) {
+                super(startFrame, endFrame, invLength, ease, x0, x1, x2, x3, interpolation);
+            }
+            
+            @Override
+            public void sample(@NotNull AnimationWritableTarget target,float t) {
+                target.write(0, interpolation.interpolate(x0.getX(), x1.getX(), x2.getX(), x3.getX(), t));
+            }
         }
-    }
-
-    private static class $3 extends Segment {
-        private $3(int start, int end, float invLength, float[] x0, float[] x1, float[] x2, float[] x3, Interpolation interpolation, Ease ease) {
-            super(start, end, invLength, x0, x1, x2, x3, interpolation, ease);
+        
+        private static final class T2 extends Quad {
+            private T2(int startFrame, int endFrame, float invLength, Ease ease, ValueRef x0, ValueRef x1, ValueRef x2, ValueRef x3, Interpolation interpolation) {
+                super(startFrame, endFrame, invLength, ease, x0, x1, x2, x3, interpolation);
+            }
+            
+            @Override
+            public void sample(@NotNull AnimationWritableTarget target,float t) {
+                target.write(
+                        0,
+                        interpolation.interpolate(x0.getX(), x1.getX(), x2.getX(), x3.getX(), t),
+                        interpolation.interpolate(x0.getY(), x1.getY(), x2.getY(), x3.getY(), t)
+                );
+            }
         }
-
-        @Override
-        public void sample(@NotNull AnimationWritableTarget target, @NotNull ReadonlyAnimationContext context, float t) {
-            target.write(
-                    0,
-                    interpolation.interpolate(x0[0], x1[0], x2[0], x3[0], ease.ease(t)),
-                    interpolation.interpolate(x0[1], x1[1], x2[1], x3[1], ease.ease(t)),
-                    interpolation.interpolate(x0[2], x1[2], x2[2], x3[2], ease.ease(t))
-            );
+        
+        private static final class T3 extends Quad { 
+            private T3(int startFrame, int endFrame, float invLength, Ease ease, ValueRef x0, ValueRef x1, ValueRef x2, ValueRef x3, Interpolation interpolation) {
+                super(startFrame, endFrame, invLength, ease, x0, x1, x2, x3, interpolation);
+            }
+            
+            @Override
+            public void sample(@NotNull AnimationWritableTarget target,float t) {
+                target.write(
+                        0,
+                        interpolation.interpolate(x0.getX(), x1.getX(), x2.getX(), x3.getX(), t),
+                        interpolation.interpolate(x0.getY(), x1.getY(), x2.getY(), x3.getY(), t),
+                        interpolation.interpolate(x0.getZ(), x1.getZ(), x2.getZ(), x3.getZ(), t)
+                );
+            }
         }
-    }
-
-    private static class $4 extends Segment {
-        private $4(int start, int end, float invLength, float[] x0, float[] x1, float[] x2, float[] x3, Interpolation interpolation, Ease ease) {
-            super(start, end, invLength, x0, x1, x2, x3, interpolation, ease);
-        }
-
-        @Override
-        public void sample(@NotNull AnimationWritableTarget target, @NotNull ReadonlyAnimationContext context, float t) {
-            target.write(
-                    0,
-                    interpolation.interpolate(x0[0], x1[0], x2[0], x3[0], ease.ease(t)),
-                    interpolation.interpolate(x0[1], x1[1], x2[1], x3[1], ease.ease(t)),
-                    interpolation.interpolate(x0[2], x1[2], x2[2], x3[2], ease.ease(t)),
-                    interpolation.interpolate(x0[3], x1[3], x2[3], x3[3], ease.ease(t))
-            );
-        }
-    }
-
-    private static class $N extends Segment {
-        private $N(int start, int end, float invLength, float[] x0, float[] x1, float[] x2, float[] x3, Interpolation interpolation, Ease ease) {
-            super(start, end, invLength, x0, x1, x2, x3, interpolation, ease);
-        }
-
-        @Override
-        public void sample(@NotNull AnimationWritableTarget target, @NotNull ReadonlyAnimationContext context, float t) {
-            for (int i = 0; i < x0.length; i++) {
-                target.write(i, interpolation.interpolate(x0[i], x1[i], x2[i], x3[i], ease.ease(t)));
+        
+        private static final class T4 extends Quad {
+            private T4(int startFrame, int endFrame, float invLength, Ease ease, ValueRef x0, ValueRef x1, ValueRef x2, ValueRef x3, Interpolation interpolation) {
+                super(startFrame, endFrame, invLength, ease, x0, x1, x2, x3, interpolation);
+            }
+            
+            @Override
+            public void sample(@NotNull AnimationWritableTarget target,float t) {
+                target.write(
+                        0,
+                        interpolation.interpolate(x0.getX(), x1.getX(), x2.getX(), x3.getX(), t),
+                        interpolation.interpolate(x0.getY(), x1.getY(), x2.getY(), x3.getY(), t),
+                        interpolation.interpolate(x0.getZ(), x1.getZ(), x2.getZ(), x3.getZ(), t),
+                        interpolation.interpolate(x0.getW(), x1.getW(), x2.getW(), x3.getW(), t)
+                );
             }
         }
     }
