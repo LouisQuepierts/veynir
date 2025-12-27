@@ -13,8 +13,30 @@ public final class MemoryLayout {
     private final FieldOffset[] fields;
 
     @Getter private final boolean arrayLike;
+    @Getter private final boolean wrapped;
     @Getter private final int size;
     @Getter private final int alignment;
+
+    /*public static MemoryAccessProcedure compile(
+            @NotNull MemoryLayout layout,
+            @NotNull String path
+    ) {
+        final List<Token> tokens = new PathLexer(path).tokenize();
+
+        final int length = tokens.size();
+        int i = 0;
+        MemoryLayout current = layout;
+        MemoryAccessProcedure.Builder builder = new MemoryAccessProcedure.Builder();
+
+        while (i != length) {
+            final Token token = tokens.get(i);
+            final TypeIdentifier<? extends Token> type = token.getType();
+
+            if (type == TokenTypes.SIMPLE) {
+                final FieldOffset field = current.binarySearch(token.getValue());
+            }
+        }
+    }*/
 
     public static MemoryAccessProcedure resolve(
             @NotNull MemoryLayout layout,
@@ -66,6 +88,14 @@ public final class MemoryLayout {
         return builder.build();
     }
 
+    public static int resolveStatic(
+            @NotNull MemoryLayout layout,
+            @NotNull String path
+    ) {
+        MemoryAccessProcedure procedure = resolve(layout, path);
+        return procedure.resolve(null);
+    }
+
     private static void error(
             @NotNull String message,
             @NotNull String path,
@@ -84,6 +114,14 @@ public final class MemoryLayout {
 
     public MemoryAccessProcedure resolve(@NotNull String path) {
         return MemoryLayout.resolve(this, path);
+    }
+
+    FieldOffset unwrap() {
+        if (!this.wrapped) {
+            throw new IllegalStateException("This layout is not wrapped.");
+        }
+
+        return this.fields[0];
     }
 
     private int getElementSize() {
