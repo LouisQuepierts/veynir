@@ -1,4 +1,4 @@
-package net.quepierts.animata4j.core.pipeline.common;
+package net.quepierts.animata4j.core.pipeline.common.pointer;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -7,7 +7,7 @@ import net.quepierts.animata4j.core.pipeline.common.target.AnimationWritableTarg
 import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor(staticName = "of")
-public final class WritablePointer implements AnimationWritableTarget {
+public final class WriteonlyPointer implements WritablePointer {
 
     private final @NotNull AnimationWritableTarget target;
 
