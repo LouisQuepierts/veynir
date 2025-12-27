@@ -4,13 +4,13 @@ package net.quepierts.animata4j.core.pipeline.animator;
  * Represents a generic animation controller.
  * <p>
  * This interface defines a three-phase animation evaluation model:
- * {@link #update()}, {@link #process()}, and {@link #apply()}, which are intended to be called in a specific order
+ * {@link #update(float)}, {@link #process()}, and {@link #apply()}, which are intended to be called in a specific order
  * per animation tick/frame to separate evaluation, internal computation, and external application of animation data.
  * </p>
  *
  * <p><strong>Three-phase evaluation:</strong></p>
  * <ul>
- *     <li><b>{@link #update()}:</b> Evaluates the animation timeline based on elapsed time (delta).
+ *     <li><b>{@link #update(float)}:</b> Evaluates the animation timeline based on elapsed time (delta).
  *         This step is responsible for calculating raw animation values per clip or sequence.
  *         Skipped if the system is paused or delta time is zero.</li>
  *     <li><b>{@link #process()}:</b> Performs any intermediate post-processing, such as blending, IK solving,
