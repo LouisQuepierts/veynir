@@ -6,7 +6,7 @@ import net.quepierts.animata4j.core.misc.MathHelper;
 import net.quepierts.animata4j.core.pipeline.common.ReadonlyAnimationContext;
 import net.quepierts.animata4j.core.pipeline.common.target.AnimationWritableTarget;
 import net.quepierts.animata4j.core.pipeline.datasource.AnimationSource;
-import net.quepierts.animata4j.core.pipeline.state.SourceState;
+import net.quepierts.animata4j.core.pipeline.common.state.SourceState;
 import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor
@@ -29,23 +29,34 @@ public final class CompiledTimeline implements AnimationSource {
             @NotNull ReadonlyAnimationContext context,
             @NotNull SourceState state
     ) {
-        int frame = MathHelper.clamp((int) (context.getDeltaTime() * frameRate), 0, segments.length - 1);
+        int frame = (int) (context.getLocalTime() * frameRate);
 
-        int cursor = state.getLastFrameIndex();
+        int cursor = state.getCursor();
         var segment = getSegment(cursor);
 
-        if (segment.getStartFrame() < frame || segment.getEndFrame() > frame) {
-            cursor = findSegment(frame);
-            segment = getSegment(cursor);
-            state.setLastFrameIndex(cursor);
+        if (segment.outOfRange(frame)) {
+            cursor += context.getDirection();
+            segment = getSegment(MathHelper.clamp(cursor, 0, segments.length - 1));
+
+            if (segment.outOfRange(frame)) {
+                cursor = findSegment(frame);
+                segment = getSegment(cursor);
+            }
+
+            state.setCursor(cursor);
         }
 
-        segment.sample(target, context, frame);
+        segment.sample(target, state, frame);
     }
 
     @Override
     public boolean isFinished(@NotNull ReadonlyAnimationContext context) {
-        return context.getDeltaTime() >= duration;
+        return context.getLocalTime() >= duration;
+    }
+
+    @Override
+    public @NotNull SourceState createState() {
+        return new SourceState();
     }
 
     private Segment getSegment(int cursor) {

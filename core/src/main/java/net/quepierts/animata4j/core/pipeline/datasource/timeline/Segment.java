@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 import net.quepierts.animata4j.core.math.ease.Ease;
 import net.quepierts.animata4j.core.math.interpolation.BiInterpolation;
 import net.quepierts.animata4j.core.math.interpolation.Interpolation;
-import net.quepierts.animata4j.core.pipeline.common.ReadonlyAnimationContext;
-import net.quepierts.animata4j.core.pipeline.common.ValueRef;
+import net.quepierts.animata4j.core.pipeline.common.value.ValueRef;
+import net.quepierts.animata4j.core.pipeline.common.state.SourceState;
 import net.quepierts.animata4j.core.pipeline.common.target.AnimationWritableTarget;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
@@ -35,27 +35,30 @@ public abstract class Segment {
         float invLength = 1.0f / (end - start);
         ValueRef x0 = ref[0];
         ValueRef x1 = ref[1];
+        ValueRef x2 = ref[2];
+        ValueRef x3 = ref[3];
         if (interpolation instanceof BiInterpolation) {
             switch (length) {
                 case 1: {
-                    return new Bi.T1(start, end, invLength, ease, x0, x1, (BiInterpolation) interpolation);
+                    return new Bi.T1(start, end, invLength, ease, x1, x2, (BiInterpolation) interpolation);
                 }
                 case 2: {
-                    return new Bi.T2(start, end, invLength, ease, x0, x1, (BiInterpolation) interpolation);
+                    return new Bi.T2(start, end, invLength, ease, x1, x2, (BiInterpolation) interpolation);
                 }
                 case 3: {
-                    return new Bi.T3(start, end, invLength, ease, x0, x1, (BiInterpolation) interpolation);
+                    return new Bi.T3(start, end, invLength, ease, x1, x2, (BiInterpolation) interpolation);
                 }
                 case 4: {
-                    return new Bi.T4(start, end, invLength, ease, x0, x1, (BiInterpolation) interpolation);
+                    return new Bi.T4(start, end, invLength, ease, x1, x2, (BiInterpolation) interpolation);
                 }
                 default: {
                     throw new IllegalArgumentException("Invalid length: " + length);
                 }
             }
         } else {
-            ValueRef x2 = ref[2];
-            ValueRef x3 = ref[3];
+            if (x0 == SourceTimeline.EMPTY_REF || x2 == SourceTimeline.EMPTY_REF) {
+                throw new IllegalArgumentException("Invalid reference for quad interpolation");
+            }
             switch (length) {
                 case 1: {
                     return new Quad.T1(start, end, invLength, ease, x0, x1, x2, x3, interpolation);
@@ -78,19 +81,25 @@ public abstract class Segment {
 
     public final void sample(
             @NotNull AnimationWritableTarget target,
+            @NotNull SourceState state,
             int frame
     ) {
         var t = getDeltaTime(frame);
-        sample(target, t);
+        sample(target, state, t);
     }
 
     public abstract void sample(
             @NotNull AnimationWritableTarget target,
+            @NotNull SourceState state,
             float t
     );
 
     public float getDeltaTime(int frame) {
         return ease.ease((frame - this.startFrame) * this.invLength);
+    }
+
+    public boolean outOfRange(int frame) {
+        return frame > endFrame || frame < startFrame;
     }
 
     // generated
@@ -112,8 +121,8 @@ public abstract class Segment {
             }
 
             @Override
-            public void sample(@NotNull AnimationWritableTarget target,float t) {
-                target.write(0, interpolation.interpolate(x0.getX(), x1.getX(), t));
+            public void sample(@NotNull AnimationWritableTarget target, @NotNull SourceState state,float t) {
+                target.write(0, interpolation.interpolate(x0.getX(state), x1.getX(state), t));
             }
         }
 
@@ -123,11 +132,11 @@ public abstract class Segment {
             }
 
             @Override
-            public void sample(@NotNull AnimationWritableTarget target,float t) {
+            public void sample(@NotNull AnimationWritableTarget target, @NotNull SourceState state,float t) {
                 target.write(
                         0,
-                        interpolation.interpolate(x0.getX(), x1.getX(), t),
-                        interpolation.interpolate(x0.getY(), x1.getY(), t)
+                        interpolation.interpolate(x0.getX(state), x1.getX(state), t),
+                        interpolation.interpolate(x0.getY(state), x1.getY(state), t)
                 );
             }
         }
@@ -138,12 +147,12 @@ public abstract class Segment {
             }
 
             @Override
-            public void sample(@NotNull AnimationWritableTarget target,float t) {
+            public void sample(@NotNull AnimationWritableTarget target, @NotNull SourceState state,float t) {
                 target.write(
                         0,
-                        interpolation.interpolate(x0.getX(), x1.getX(), t),
-                        interpolation.interpolate(x0.getY(), x1.getY(), t),
-                        interpolation.interpolate(x0.getZ(), x1.getZ(), t)
+                        interpolation.interpolate(x0.getX(state), x1.getX(state), t),
+                        interpolation.interpolate(x0.getY(state), x1.getY(state), t),
+                        interpolation.interpolate(x0.getZ(state), x1.getZ(state), t)
                 );
             }
         }
@@ -154,13 +163,13 @@ public abstract class Segment {
             }
 
             @Override
-            public void sample(@NotNull AnimationWritableTarget target,float t) {
+            public void sample(@NotNull AnimationWritableTarget target, @NotNull SourceState state,float t) {
                 target.write(
                         0,
-                        interpolation.interpolate(x0.getX(), x1.getX(), t),
-                        interpolation.interpolate(x0.getY(), x1.getY(), t),
-                        interpolation.interpolate(x0.getZ(), x1.getZ(), t),
-                        interpolation.interpolate(x0.getW(), x1.getW(), t)
+                        interpolation.interpolate(x0.getX(state), x1.getX(state), t),
+                        interpolation.interpolate(x0.getY(state), x1.getY(state), t),
+                        interpolation.interpolate(x0.getZ(state), x1.getZ(state), t),
+                        interpolation.interpolate(x0.getW(state), x1.getW(state), t)
                 );
             }
         }
@@ -186,8 +195,8 @@ public abstract class Segment {
             }
             
             @Override
-            public void sample(@NotNull AnimationWritableTarget target,float t) {
-                target.write(0, interpolation.interpolate(x0.getX(), x1.getX(), x2.getX(), x3.getX(), t));
+            public void sample(@NotNull AnimationWritableTarget target, @NotNull SourceState state,float t) {
+                target.write(0, interpolation.interpolate(x0.getX(state), x1.getX(state), x2.getX(state), x3.getX(state), t));
             }
         }
         
@@ -197,11 +206,11 @@ public abstract class Segment {
             }
             
             @Override
-            public void sample(@NotNull AnimationWritableTarget target,float t) {
+            public void sample(@NotNull AnimationWritableTarget target, @NotNull SourceState state,float t) {
                 target.write(
                         0,
-                        interpolation.interpolate(x0.getX(), x1.getX(), x2.getX(), x3.getX(), t),
-                        interpolation.interpolate(x0.getY(), x1.getY(), x2.getY(), x3.getY(), t)
+                        interpolation.interpolate(x0.getX(state), x1.getX(state), x2.getX(state), x3.getX(state), t),
+                        interpolation.interpolate(x0.getY(state), x1.getY(state), x2.getY(state), x3.getY(state), t)
                 );
             }
         }
@@ -212,12 +221,12 @@ public abstract class Segment {
             }
             
             @Override
-            public void sample(@NotNull AnimationWritableTarget target,float t) {
+            public void sample(@NotNull AnimationWritableTarget target, @NotNull SourceState state,float t) {
                 target.write(
                         0,
-                        interpolation.interpolate(x0.getX(), x1.getX(), x2.getX(), x3.getX(), t),
-                        interpolation.interpolate(x0.getY(), x1.getY(), x2.getY(), x3.getY(), t),
-                        interpolation.interpolate(x0.getZ(), x1.getZ(), x2.getZ(), x3.getZ(), t)
+                        interpolation.interpolate(x0.getX(state), x1.getX(state), x2.getX(state), x3.getX(state), t),
+                        interpolation.interpolate(x0.getY(state), x1.getY(state), x2.getY(state), x3.getY(state), t),
+                        interpolation.interpolate(x0.getZ(state), x1.getZ(state), x2.getZ(state), x3.getZ(state), t)
                 );
             }
         }
@@ -228,13 +237,13 @@ public abstract class Segment {
             }
             
             @Override
-            public void sample(@NotNull AnimationWritableTarget target,float t) {
+            public void sample(@NotNull AnimationWritableTarget target, @NotNull SourceState state, float t) {
                 target.write(
                         0,
-                        interpolation.interpolate(x0.getX(), x1.getX(), x2.getX(), x3.getX(), t),
-                        interpolation.interpolate(x0.getY(), x1.getY(), x2.getY(), x3.getY(), t),
-                        interpolation.interpolate(x0.getZ(), x1.getZ(), x2.getZ(), x3.getZ(), t),
-                        interpolation.interpolate(x0.getW(), x1.getW(), x2.getW(), x3.getW(), t)
+                        interpolation.interpolate(x0.getX(state), x1.getX(state), x2.getX(state), x3.getX(state), t),
+                        interpolation.interpolate(x0.getY(state), x1.getY(state), x2.getY(state), x3.getY(state), t),
+                        interpolation.interpolate(x0.getZ(state), x1.getZ(state), x2.getZ(state), x3.getZ(state), t),
+                        interpolation.interpolate(x0.getW(state), x1.getW(state), x2.getW(state), x3.getW(state), t)
                 );
             }
         }

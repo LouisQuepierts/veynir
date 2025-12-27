@@ -1,9 +1,9 @@
 package net.quepierts.animata4j.core.pipeline.common;
 
-import net.quepierts.animata4j.core.data.accessor.StandardMemoryAccessor;
+import net.quepierts.animata4j.core.pipeline.common.target.AnimationReadableTarget;
 import org.jetbrains.annotations.NotNull;
 
 public interface AnimationContext extends ReadonlyAnimationContext {
     @Override
-    @NotNull StandardMemoryAccessor internalBuffer();
+    @NotNull AnimationReadableTarget getInternalBuffer();
 }

@@ -23,4 +23,8 @@ public class MathHelper {
     public static float saturate(float value) {
         return clamp(value, 0f, 1f);
     }
+
+    public static float lerp(float a, float b, float delta) {
+        return a + (b - a) * delta;
+    }
 }

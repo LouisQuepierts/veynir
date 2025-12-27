@@ -1,13 +1,15 @@
 package net.quepierts.animata4j.core.pipeline.common;
 
-import net.quepierts.animata4j.core.data.reader.StandardMemoryReader;
-import net.quepierts.animata4j.core.pipeline.common.target.AnimationWritableTarget;
+import net.quepierts.animata4j.core.pipeline.common.target.AnimationReadableTarget;
 import org.jetbrains.annotations.NotNull;
 
 public interface ReadonlyAnimationContext {
+    float getLocalTime();
+
     float getDeltaTime();
 
-    @NotNull StandardMemoryReader getInternalBuffer();
+    int getDirection();
 
-    @NotNull AnimationWritableTarget getOutputBuffer();
+    @NotNull AnimationReadableTarget getInternalBuffer();
+
 }

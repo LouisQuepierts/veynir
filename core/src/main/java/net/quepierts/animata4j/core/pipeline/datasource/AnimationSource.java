@@ -1,16 +1,17 @@
 package net.quepierts.animata4j.core.pipeline.datasource;
 
-import net.quepierts.animata4j.core.data.layout.AnimataDataType;
-import net.quepierts.animata4j.core.data.writer.StandardMemoryWriter;
 import net.quepierts.animata4j.core.pipeline.common.ReadonlyAnimationContext;
 import net.quepierts.animata4j.core.pipeline.common.target.AnimationWritableTarget;
+import net.quepierts.animata4j.core.pipeline.common.state.SourceState;
+import net.quepierts.animata4j.core.pipeline.drive.GenericAnimationDriver;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * The datasource of an animation channel.
  * It is a flyweight object, which means it will be evaluated every frame,
  * and it will not have any state, no matter internal or external state.
- * If you want to store some state, please use {@link net.quepierts.animata4j.core.pipeline.drive.AnimationDriver}.
+ * If you want to store some state, please use {@link GenericAnimationDriver}.
  * */
 public interface AnimationSource {
     /**
@@ -20,21 +21,40 @@ public interface AnimationSource {
      * */
     void eval(
             @NotNull final AnimationWritableTarget target,
-            @NotNull final ReadonlyAnimationContext context
+            @NotNull final ReadonlyAnimationContext context,
+            @NotNull final SourceState state
     );
 
     /**
      * Get the duration of this source.
      * @return the duration
      * */
+    @Contract(pure = true)
     float getDuration();
+
+    /**
+     * Get the component count of this source.
+     * @return the component count
+     * */
+    @Contract(pure = true)
+    int getComponentCount();
 
     /**
      * Check if this source is finished.
      * @param context the context of the animation {@link ReadonlyAnimationContext}
-     * @return true if this source is finished
+     * @return {@code true} if this source is finished
      * */
+    @Contract(pure = true)
     boolean isFinished(
             @NotNull final ReadonlyAnimationContext context
     );
+
+    /**
+     * Create a state for this source.
+     *
+     * @return the state
+     *
+     */
+    @Contract(pure = true, value = "-> new")
+    @NotNull SourceState createState();
 }

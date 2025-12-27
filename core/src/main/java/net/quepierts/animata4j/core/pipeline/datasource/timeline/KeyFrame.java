@@ -3,6 +3,7 @@ package net.quepierts.animata4j.core.pipeline.datasource.timeline;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import net.quepierts.animata4j.core.math.ease.Ease;
+import net.quepierts.animata4j.core.math.interpolation.BiInterpolation;
 import net.quepierts.animata4j.core.math.interpolation.Interpolation;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -25,5 +26,17 @@ public final class KeyFrame {
 
     public static KeyFrame of(int frame, float[] preValue, float[] postValue, Interpolation interpolation, Ease ease) {
         return new KeyFrame(frame, EMPTY, preValue, postValue, interpolation, ease);
+    }
+
+    public static KeyFrame simple(int frame, float... values) {
+        return new KeyFrame(frame, values, EMPTY, EMPTY, BiInterpolation.LINEAR, Ease.LINEAR);
+    }
+
+    public float[] pre() {
+        return value == EMPTY ? preValue : value;
+    }
+
+    public float[] post() {
+        return value == EMPTY ? postValue : value;
     }
 }

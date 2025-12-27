@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 import java.util.Set;
@@ -14,6 +15,11 @@ public final class StructDefinition {
     private final String name;
     private final FieldDefinition[] fields;
     private final boolean optimize;
+    private final boolean wrapped;
+
+    public static StructDefinition wrap(@NotNull final FieldDefinition type) {
+        return new StructDefinition(type.getName(), new FieldDefinition[]{type}, true, true);
+    }
 
     public static Builder builder(String name) {
         if (!AnimataDataType.isAvailableStructName(name)) {
@@ -59,7 +65,7 @@ public final class StructDefinition {
             }
 
             FieldDefinition[] fields = this.fields.toArray(FieldDefinition[]::new);
-            return new StructDefinition(this.name, fields, this.optimize);
+            return new StructDefinition(this.name, fields, this.optimize, false);
         }
     }
 
