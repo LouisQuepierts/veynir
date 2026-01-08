@@ -1,13 +1,14 @@
 package net.quepierts.animata4j.core.pipeline.common.buffer;
 
 import lombok.Getter;
+import net.quepierts.animata4j.core.pipeline.common.target.AnimationReadableTarget;
+import net.quepierts.animata4j.core.pipeline.common.target.AnimationWritableTarget;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
-import java.lang.reflect.Array;
 import java.util.Arrays;
 
-public class FloatArrayBuffer implements AnimationFrameBuffer {
+public class FloatArrayBuffer implements AnimationBuffer {
 
     /**
      * Create a new FloatArrayBuffer with a given size.
@@ -53,9 +54,22 @@ public class FloatArrayBuffer implements AnimationFrameBuffer {
     @Override
     public void read(int index, float[] out) {
         final int require = out.length;
-        this.checkBufferSize(index, require);
-
         System.arraycopy(this.buffer, index, out, 0, require);
+    }
+
+    @Override
+    public void read(int index, float[] out, int offset, int length) {
+        System.arraycopy(this.buffer, index, out, offset, length);
+    }
+
+    @Override
+    public void read(int index, @NotNull AnimationWritableTarget dst, int length) {
+        dst.write(0, this.buffer, index, length);
+    }
+
+    @Override
+    public void read(int index, @NotNull AnimationWritableTarget dst, int dstOffset, int length) {
+        dst.write(dstOffset, this.buffer, index, length);
     }
 
     @Override
@@ -87,15 +101,22 @@ public class FloatArrayBuffer implements AnimationFrameBuffer {
     @Override
     public void write(int index, float[] value) {
         final int require = value.length;
-        this.checkBufferSize(index, require);
-
         System.arraycopy(value, 0, this.buffer, index, require);
     }
 
     @Override
     public void write(int index, float[] value, int offset, int length) {
-        this.checkBufferSize(index, length);
         System.arraycopy(value, offset, this.buffer, index, length);
+    }
+
+    @Override
+    public void write(int index, @NotNull AnimationReadableTarget src, int length) {
+        src.read(0, this.buffer, index, length);
+    }
+
+    @Override
+    public void write(int index, @NotNull AnimationReadableTarget src, int srcIndex, int length) {
+        src.read(srcIndex, this.buffer, index, length);
     }
 
     @Override

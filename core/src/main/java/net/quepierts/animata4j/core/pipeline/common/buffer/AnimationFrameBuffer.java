@@ -13,10 +13,10 @@ import org.jetbrains.annotations.NotNull;
  * The basic data type is float.
  */
 @SuppressWarnings("unused")
-public interface AnimationFrameBuffer extends AnimationReadableTarget, AnimationWritableTarget {
+public interface AnimationFrameBuffer extends AnimationBuffer {
 
     static AnimationFrameBuffer create(int size) {
-        return FloatArrayBuffer.create(size);
+        return new Impl(size);
     }
 
     int getSize();
@@ -27,104 +27,93 @@ public interface AnimationFrameBuffer extends AnimationReadableTarget, Animation
     }
 
     @Override
-    default double getDouble(int index) {
-        return this.read(index);
-    }
-
-    @Override
-    default void getDouble(int index, double[] out) {
-        for (int i = 0; i < out.length; i++) {
-            out[i] = this.getDouble(index + i);
-        }
-    }
-
-    @Override
-    default byte getByte(int index) {
-        return (byte) this.read(index);
-    }
-
-    @Override
-    default void getByte(int index, byte[] out) {
-        for (int i = 0; i < out.length; i++) {
-            out[i] = this.getByte(index + i);
-        }
-    }
-
-    @Override
-    default int getInteger(int index) {
-        return (int) this.read(index);
-    }
-
-    @Override
-    default void getInteger(int index, int[] out) {
-        for (int i = 0; i < out.length; i++) {
-            out[i] = this.getInteger(index + i);
-        }
-    }
-
-    @Override
-    default long getLong(int index) {
-        return (long) this.read(index);
-    }
-
-    @Override
-    default void getLong(int index, long[] out) {
-        for (int i = 0; i < out.length; i++) {
-            out[i] = this.getLong(index + i);
-        }
-    }
-
-    @Override
-    default void setDouble(int index, double value) {
-        this.write(index, (float) value);
-    }
-
-    @Override
-    default void setDouble(int index, double[] value) {
-        for (int i = 0; i < value.length; i++) {
-            this.setDouble(index + i, value[i]);
-        }
-    }
-
-    @Override
-    default void setByte(int index, byte value) {
-        this.write(index, value);
-    }
-
-    @Override
-    default void setByte(int index, byte[] value) {
-        for (int i = 0; i < value.length; i++) {
-            this.setByte(index + i, value[i]);
-        }
-    }
-
-    @Override
-    default void setInteger(int index, int value) {
-        this.write(index, value);
-    }
-
-    @Override
-    default void setInteger(int index, int[] value) {
-        for (int i = 0; i < value.length; i++) {
-            this.setInteger(index + i, value[i]);
-        }
-    }
-
-    @Override
-    default void setLong(int index, long value) {
-        this.write(index, value);
-    }
-
-    @Override
-    default void setLong(int index, long[] value) {
-        for (int i = 0; i < value.length; i++) {
-            this.setLong(index + i, value[i]);
-        }
-    }
-
-    @Override
     default void fill(float value) {
         this.fill(value, 0, this.getSize());
+    }
+
+    final class Impl implements AnimationFrameBuffer {
+
+        private final AnimationBuffer buffer;
+
+        private Impl(int size) {
+            this.buffer = FloatArrayBuffer.create(size);
+        }
+
+        @Override
+        public int getSize() {
+            return this.buffer.getSize();
+        }
+
+        @Override
+        public float read(int index) {
+            return this.buffer.read(index);
+        }
+
+        @Override
+        public void read(int index, float[] out) {
+            this.buffer.read(index, out);
+        }
+
+        @Override
+        public void read(int index, float[] out, int offset, int length) {
+            this.buffer.read(index, out, offset, length);
+        }
+
+        @Override
+        public void read(int index, @NotNull AnimationWritableTarget dst, int length) {
+            this.buffer.read(index, dst, length);
+        }
+
+        @Override
+        public void read(int index, @NotNull AnimationWritableTarget dst, int dstOffset, int length) {
+            this.buffer.read(index, dst, dstOffset, length);
+        }
+
+        @Override
+        public void write(int index, float value) {
+            this.buffer.write(index, value);
+        }
+
+        @Override
+        public void write(int index, float x, float y) {
+            this.buffer.write(index, x, y);
+        }
+
+        @Override
+        public void write(int index, float x, float y, float z) {
+            this.buffer.write(index, x, y, z);
+        }
+
+        @Override
+        public void write(int index, float x, float y, float z, float w) {
+            this.buffer.write(index, x, y, z, w);
+        }
+
+        @Override
+        public void write(int index, float[] value) {
+            this.buffer.write(index, value);
+        }
+
+        @Override
+        public void write(int index, float[] value, int offset, int length) {
+            this.buffer.write(index, value, offset, length);
+        }
+
+        @Override
+        public void write(int index, @NotNull AnimationReadableTarget src, int length) {
+            this.buffer.write(index, src, length);
+        }
+
+        @Override
+        public void write(int index, @NotNull AnimationReadableTarget src, int srcIndex, int length) {
+            this.buffer.write(index, src, srcIndex, length);
+        }
+
+        @Override
+        public void fill(float value, int offset, int length) {
+            this.buffer.fill(value, offset, length);
+        }
+
     }
 
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -137,9 +126,7 @@ public interface AnimationFrameBuffer extends AnimationReadableTarget, Animation
 
         @Override
         public @NotNull AnimationFrameBuffer slice(int offset) {
-            if (offset >= this.size) {
-                throw new IndexOutOfBoundsException("Offset " + offset + " is out of bounds");
-            }
+            this.validate(offset);
             return new Sliced(
                     this.delegate,
                     this.offset + offset,
@@ -149,47 +136,98 @@ public interface AnimationFrameBuffer extends AnimationReadableTarget, Animation
 
         @Override
         public float read(int index) {
+            this.validate(index);
             return this.delegate.read(this.offset + index);
         }
 
         @Override
         public void read(int index, float[] floats) {
+            this.validate(index, floats.length);
             this.delegate.read(this.offset + index, floats);
         }
 
         @Override
+        public void read(int index, float[] out, int offset, int length) {
+
+            this.delegate.read(this.offset + index, out, offset, length);
+        }
+
+        @Override
+        public void read(int index, @NotNull AnimationWritableTarget dst, int length) {
+            this.validate(index, length);
+            this.delegate.read(this.offset + index, dst, length);
+        }
+
+        @Override
+        public void read(int index, @NotNull AnimationWritableTarget dst, int dstOffset, int length) {
+            this.validate(index, length);
+            this.delegate.read(this.offset + index, dst, dstOffset, length);
+        }
+
+        @Override
         public void write(int index, float value) {
+            this.validate(index);
             this.delegate.write(this.offset + index, value);
         }
 
         @Override
         public void write(int index, float x, float y) {
-            this.delegate.write(index, x, y);
+            this.validate(index);
+            this.delegate.write(this.offset + index, x, y);
         }
 
         @Override
         public void write(int index, float x, float y, float z) {
-            this.delegate.write(index, x, y, z);
+            this.validate(index);
+            this.delegate.write(this.offset + index, x, y, z);
         }
 
         @Override
         public void write(int index, float x, float y, float z, float w) {
-            this.delegate.write(index, x, y, z, w);
+            this.validate(index);
+            this.delegate.write(this.offset + index, x, y, z, w);
         }
 
         @Override
         public void write(int index, float[] value) {
+            this.validate(index);
             this.delegate.write(this.offset + index, value);
         }
 
         @Override
         public void write(int index, float[] value, int offset, int length) {
+            this.validate(index, length);
             this.delegate.write(this.offset + index, value, offset, length);
         }
 
         @Override
+        public void write(int index, @NotNull AnimationReadableTarget src, int length) {
+            this.validate(index, length);
+            this.delegate.write(this.offset + index, src, length);
+        }
+
+        @Override
+        public void write(int index, @NotNull AnimationReadableTarget src, int srcIndex, int length) {
+            this.validate(index, length);
+            this.delegate.write(this.offset + index, src, srcIndex, length);
+        }
+
+        @Override
         public void fill(float value, int offset, int length) {
+            validate(offset, length);
             this.delegate.fill(value, this.offset + offset, length);
+        }
+
+        private void validate(int index) {
+            if (index >= this.size) {
+                throw new IndexOutOfBoundsException("Index " + index + " is out of bounds");
+            }
+        }
+
+        private void validate(int index, int length) {
+            if (index + length >= this.size) {
+                throw new IndexOutOfBoundsException("Index " + index + " is out of bounds");
+            }
         }
     }
 }

@@ -1,5 +1,7 @@
 package net.quepierts.animata4j.core.pipeline.common.target;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * Interface for a readable target which allows animation to read data from a target.
  * */
@@ -9,30 +11,9 @@ public interface AnimationReadableTarget {
 
     void read(int index, float[] out);
 
-    double getDouble(int index);
+    void read(int index, float[] out, int offset, int length);
 
-    void getDouble(int index, double[] out);
+    void read(int index, @NotNull AnimationWritableTarget dst, int length);
 
-    byte getByte(int index);
-
-    void getByte(int index, byte[] out);
-
-    int getInteger(int index);
-
-    void getInteger(int index, int[] out);
-
-    long getLong(int index);
-
-    void getLong(int index, long[] out);
-
-    default boolean getBoolean(int index) {
-        return this.read(index) > 0.5f;
-    }
-
-    default void getBoolean(int index, boolean[] out) {
-        int left = index;
-        for (int i = 0; i < out.length; i++, left++) {
-            out[i] = this.read(left) > 0.5f;
-        }
-    }
+    void read(int index, @NotNull AnimationWritableTarget dst, int dstOffset, int length);
 }

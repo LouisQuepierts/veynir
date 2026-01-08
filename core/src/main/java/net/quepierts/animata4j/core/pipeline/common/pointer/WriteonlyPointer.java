@@ -3,9 +3,11 @@ package net.quepierts.animata4j.core.pipeline.common.pointer;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import net.quepierts.animata4j.core.pipeline.common.target.AnimationReadableTarget;
 import net.quepierts.animata4j.core.pipeline.common.target.AnimationWritableTarget;
 import org.jetbrains.annotations.NotNull;
 
+@SuppressWarnings("unused")
 @RequiredArgsConstructor(staticName = "of")
 public final class WriteonlyPointer implements WritablePointer {
 
@@ -46,6 +48,16 @@ public final class WriteonlyPointer implements WritablePointer {
     }
 
     @Override
+    public void write(int index, @NotNull AnimationReadableTarget src, int length) {
+        this.target.write(index + this.offset, src, length);
+    }
+
+    @Override
+    public void write(int index, @NotNull AnimationReadableTarget src, int srcIndex, int length) {
+        this.target.write(index + this.offset, src, srcIndex, length);
+    }
+
+    @Override
     public void fill(float value) {
         throw new UnsupportedOperationException();
     }
@@ -53,46 +65,6 @@ public final class WriteonlyPointer implements WritablePointer {
     @Override
     public void fill(float value, int offset, int length) {
         this.target.fill(value, offset + this.offset, length);
-    }
-
-    @Override
-    public void setDouble(int index, double value) {
-        this.target.setDouble(index + this.offset, value);
-    }
-
-    @Override
-    public void setDouble(int index, double[] value) {
-        this.target.setDouble(index + this.offset, value);
-    }
-
-    @Override
-    public void setByte(int index, byte value) {
-        this.target.setByte(index + this.offset, value);
-    }
-
-    @Override
-    public void setByte(int index, byte[] value) {
-        this.target.setByte(index + this.offset, value);
-    }
-
-    @Override
-    public void setInteger(int index, int value) {
-        this.target.setInteger(index + this.offset, value);
-    }
-
-    @Override
-    public void setInteger(int index, int[] value) {
-        this.target.setInteger(index + this.offset, value);
-    }
-
-    @Override
-    public void setLong(int index, long value) {
-        this.target.setLong(index + this.offset, value);
-    }
-
-    @Override
-    public void setLong(int index, long[] value) {
-        this.target.setLong(index + this.offset, value);
     }
 
 }
