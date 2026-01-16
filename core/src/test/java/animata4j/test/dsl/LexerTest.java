@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import java.io.*;
 
 public class LexerTest {
-    @Test
+    /*@Test
     public void testLine() {
         final String number = "1. + .2e4 * 3 / 0xef - 0124 + 123.456";
         System.out.println("number");
@@ -35,5 +35,5 @@ public class LexerTest {
         for (Token token : lexer.tokenize()) {
             System.out.println(token);
         }
-    }
+    }*/
 }

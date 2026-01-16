@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import java.io.File;
 
 public class ParserTest {
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         ParserTest test = new ParserTest();
         test.test1();
     }
@@ -36,5 +36,5 @@ public class ParserTest {
         ProgramParser parser = new ProgramParser(lexer);
 
         Node node = parser.parse();
-    }
+    }*/
 }

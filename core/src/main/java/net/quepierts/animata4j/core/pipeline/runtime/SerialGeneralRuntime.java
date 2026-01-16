@@ -7,7 +7,7 @@ import net.quepierts.animata4j.core.pipeline.drive.AnimationDriver;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class SerialGeneralRuntime implements GeneralRuntime {
+public abstract class SerialGeneralRuntime implements GeneralRuntime {
 
     private final AnimationFrameBuffer outputBuffer;
     private final MemoryOffsetResolver memoryOffsetResolver;

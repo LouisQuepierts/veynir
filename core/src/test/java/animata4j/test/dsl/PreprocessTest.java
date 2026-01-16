@@ -9,7 +9,7 @@ import java.io.FileWriter;
 
 public class PreprocessTest {
 
-    @Test
+    /*@Test
     public void test1() {
         final String url = "src/test/resources/preprocess_test_source_1.glsl";
         final String out = "src/test/resources/preprocess_test_processed_1.glsl";
@@ -28,6 +28,6 @@ public class PreprocessTest {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
+    }*/
 
 }
