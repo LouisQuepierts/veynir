@@ -1,7 +1,6 @@
 package net.quepierts.animata4j.dsl.parser;
 
 import net.quepierts.animata4j.dsl.ast.NodeType;
-import net.quepierts.animata4j.core.dsl.ast.expr.*;
 import net.quepierts.animata4j.dsl.ast.expr.*;
 import net.quepierts.animata4j.dsl.ast.type.Type;
 import net.quepierts.animata4j.dsl.lexer.ArlLexer;

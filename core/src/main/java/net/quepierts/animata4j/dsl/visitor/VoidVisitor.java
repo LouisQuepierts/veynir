@@ -1,9 +1,6 @@
 package net.quepierts.animata4j.dsl.visitor;
 
 import net.quepierts.animata4j.dsl.ast.CompilationUnit;
-import net.quepierts.animata4j.core.dsl.ast.decl.*;
-import net.quepierts.animata4j.core.dsl.ast.expr.*;
-import net.quepierts.animata4j.core.dsl.ast.stmt.*;
 import net.quepierts.animata4j.dsl.ast.decl.*;
 import net.quepierts.animata4j.dsl.ast.expr.*;
 import net.quepierts.animata4j.dsl.ast.stmt.*;
