@@ -1,7 +1,4 @@
-package net.quepierts.animata4j.core.pipeline.common.buffer;
-
-import net.quepierts.animata4j.core.pipeline.common.target.AnimationReadableTarget;
-import net.quepierts.animata4j.core.pipeline.common.target.AnimationWritableTarget;
+package net.quepierts.animata4j.core.buffer;
 
 public interface AnimationBuffer extends AnimationReadableTarget, AnimationWritableTarget {
 

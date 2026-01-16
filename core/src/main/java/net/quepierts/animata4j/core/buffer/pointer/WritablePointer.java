@@ -1,6 +1,6 @@
-package net.quepierts.animata4j.core.pipeline.common.pointer;
+package net.quepierts.animata4j.core.buffer.pointer;
 
-import net.quepierts.animata4j.core.pipeline.common.target.AnimationWritableTarget;
+import net.quepierts.animata4j.core.buffer.AnimationWritableTarget;
 
 /**
  * A pointer that can be written to a buffer

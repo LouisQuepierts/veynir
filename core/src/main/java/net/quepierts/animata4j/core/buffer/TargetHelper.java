@@ -1,4 +1,4 @@
-package net.quepierts.animata4j.core.pipeline.common.target;
+package net.quepierts.animata4j.core.buffer;
 
 import lombok.experimental.UtilityClass;
 import org.jetbrains.annotations.NotNull;

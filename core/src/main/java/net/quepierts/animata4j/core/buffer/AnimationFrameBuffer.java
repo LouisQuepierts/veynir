@@ -1,10 +1,8 @@
-package net.quepierts.animata4j.core.pipeline.common.buffer;
+package net.quepierts.animata4j.core.buffer;
 
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.quepierts.animata4j.core.pipeline.common.target.AnimationReadableTarget;
-import net.quepierts.animata4j.core.pipeline.common.target.AnimationWritableTarget;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

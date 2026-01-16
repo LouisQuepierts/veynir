@@ -1,6 +1,6 @@
-package net.quepierts.animata4j.core.pipeline.common.pointer;
+package net.quepierts.animata4j.core.buffer.pointer;
 
-import net.quepierts.animata4j.core.pipeline.common.target.AnimationReadableTarget;
+import net.quepierts.animata4j.core.buffer.AnimationReadableTarget;
 
 /**
  * A pointer that can be read from a buffer

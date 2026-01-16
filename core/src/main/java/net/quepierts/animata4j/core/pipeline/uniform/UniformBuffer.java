@@ -1,8 +1,8 @@
 package net.quepierts.animata4j.core.pipeline.uniform;
 
-import net.quepierts.animata4j.core.pipeline.common.buffer.AnimationBuffer;
-import net.quepierts.animata4j.core.pipeline.common.target.AnimationWritableTarget;
-import net.quepierts.animata4j.core.pipeline.common.target.TargetHelper;
+import net.quepierts.animata4j.core.buffer.AnimationBuffer;
+import net.quepierts.animata4j.core.buffer.AnimationWritableTarget;
+import net.quepierts.animata4j.core.buffer.TargetHelper;
 import org.jetbrains.annotations.NotNull;
 
 public final class UniformBuffer implements UniformWriter, UniformReader {

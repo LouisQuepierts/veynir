@@ -3,7 +3,7 @@ package net.quepierts.animata4j.core.pipeline.runtime;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.quepierts.animata4j.core.data.layout.MemoryOffsetResolver;
-import net.quepierts.animata4j.core.pipeline.common.buffer.AnimationFrameBuffer;
+import net.quepierts.animata4j.core.buffer.AnimationFrameBuffer;
 import net.quepierts.animata4j.core.pipeline.drive.AnimationDriver;
 
 @Getter

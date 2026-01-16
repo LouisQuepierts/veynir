@@ -1,4 +1,4 @@
-package net.quepierts.animata4j.core.pipeline.common.buffer;
+package net.quepierts.animata4j.core.buffer;
 
 import java.util.ArrayList;
 import java.util.List;

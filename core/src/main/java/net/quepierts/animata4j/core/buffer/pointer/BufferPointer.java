@@ -1,11 +1,11 @@
-package net.quepierts.animata4j.core.pipeline.common.pointer;
+package net.quepierts.animata4j.core.buffer.pointer;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import net.quepierts.animata4j.core.pipeline.common.buffer.AnimationBuffer;
-import net.quepierts.animata4j.core.pipeline.common.target.AnimationReadableTarget;
-import net.quepierts.animata4j.core.pipeline.common.target.AnimationWritableTarget;
+import net.quepierts.animata4j.core.buffer.AnimationBuffer;
+import net.quepierts.animata4j.core.buffer.AnimationReadableTarget;
+import net.quepierts.animata4j.core.buffer.AnimationWritableTarget;
 import org.jetbrains.annotations.NotNull;
 
 @SuppressWarnings("unused")

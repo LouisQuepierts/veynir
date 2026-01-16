@@ -3,7 +3,7 @@ package net.quepierts.animata4j.core.pipeline.drive;
 import net.quepierts.animata4j.core.data.layout.MemoryOffsetResolver;
 import net.quepierts.animata4j.core.pipeline.common.ReadonlyAnimationContext;
 import net.quepierts.animata4j.core.pipeline.common.state.RuntimeState;
-import net.quepierts.animata4j.core.pipeline.common.target.AnimationWritableTarget;
+import net.quepierts.animata4j.core.buffer.AnimationWritableTarget;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 

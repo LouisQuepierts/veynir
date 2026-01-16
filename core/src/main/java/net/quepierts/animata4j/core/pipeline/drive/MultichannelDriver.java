@@ -3,10 +3,10 @@ package net.quepierts.animata4j.core.pipeline.drive;
 import lombok.RequiredArgsConstructor;
 import net.quepierts.animata4j.core.data.layout.MemoryOffsetResolver;
 import net.quepierts.animata4j.core.pipeline.common.ReadonlyAnimationContext;
-import net.quepierts.animata4j.core.pipeline.common.pointer.WriteonlyPointer;
+import net.quepierts.animata4j.core.buffer.pointer.WriteonlyPointer;
 import net.quepierts.animata4j.core.pipeline.common.state.RuntimeState;
 import net.quepierts.animata4j.core.pipeline.common.state.SourceState;
-import net.quepierts.animata4j.core.pipeline.common.target.AnimationWritableTarget;
+import net.quepierts.animata4j.core.buffer.AnimationWritableTarget;
 import net.quepierts.animata4j.core.pipeline.datasource.AnimationSource;
 import org.jetbrains.annotations.NotNull;
 

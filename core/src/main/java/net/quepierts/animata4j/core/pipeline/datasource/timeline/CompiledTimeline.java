@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.quepierts.animata4j.core.misc.MathHelper;
 import net.quepierts.animata4j.core.pipeline.common.ReadonlyAnimationContext;
-import net.quepierts.animata4j.core.pipeline.common.target.AnimationWritableTarget;
+import net.quepierts.animata4j.core.buffer.AnimationWritableTarget;
 import net.quepierts.animata4j.core.pipeline.datasource.AnimationSource;
 import net.quepierts.animata4j.core.pipeline.common.state.SourceState;
 import org.jetbrains.annotations.NotNull;

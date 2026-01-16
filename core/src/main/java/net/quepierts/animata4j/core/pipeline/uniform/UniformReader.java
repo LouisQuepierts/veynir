@@ -1,6 +1,6 @@
 package net.quepierts.animata4j.core.pipeline.uniform;
 
-import net.quepierts.animata4j.core.pipeline.common.target.AnimationWritableTarget;
+import net.quepierts.animata4j.core.buffer.AnimationWritableTarget;
 
 @SuppressWarnings("unused")
 public interface UniformReader {

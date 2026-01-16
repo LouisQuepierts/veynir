@@ -1,6 +1,6 @@
 package net.quepierts.animata4j.core.pipeline.common;
 
-import net.quepierts.animata4j.core.pipeline.common.target.AnimationReadableTarget;
+import net.quepierts.animata4j.core.buffer.AnimationReadableTarget;
 import org.jetbrains.annotations.NotNull;
 
 public interface ReadonlyAnimationContext {

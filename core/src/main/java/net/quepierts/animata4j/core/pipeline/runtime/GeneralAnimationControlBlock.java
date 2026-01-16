@@ -3,10 +3,10 @@ package net.quepierts.animata4j.core.pipeline.runtime;
 import lombok.Getter;
 import lombok.Setter;
 import net.quepierts.animata4j.core.pipeline.common.AnimationContext;
-import net.quepierts.animata4j.core.pipeline.common.buffer.AnimationFrameBuffer;
-import net.quepierts.animata4j.core.pipeline.common.buffer.BufferManager;
+import net.quepierts.animata4j.core.buffer.AnimationFrameBuffer;
+import net.quepierts.animata4j.core.buffer.BufferManager;
 import net.quepierts.animata4j.core.pipeline.common.state.RuntimeState;
-import net.quepierts.animata4j.core.pipeline.common.target.AnimationReadableTarget;
+import net.quepierts.animata4j.core.buffer.AnimationReadableTarget;
 import net.quepierts.animata4j.core.pipeline.drive.AnimationDriver;
 import org.jetbrains.annotations.NotNull;
 

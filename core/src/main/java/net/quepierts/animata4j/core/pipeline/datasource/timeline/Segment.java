@@ -8,7 +8,7 @@ import net.quepierts.animata4j.core.math.interpolation.BiInterpolation;
 import net.quepierts.animata4j.core.math.interpolation.Interpolation;
 import net.quepierts.animata4j.core.pipeline.common.value.ValueRef;
 import net.quepierts.animata4j.core.pipeline.common.state.SourceState;
-import net.quepierts.animata4j.core.pipeline.common.target.AnimationWritableTarget;
+import net.quepierts.animata4j.core.buffer.AnimationWritableTarget;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 
