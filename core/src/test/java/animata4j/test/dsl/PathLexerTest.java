@@ -1,9 +1,9 @@
 package animata4j.test.dsl;
 
-import net.quepierts.animata4j.core.dsl.ast.Node;
-import net.quepierts.animata4j.core.dsl.lexer.ArlLexer;
-import net.quepierts.animata4j.core.dsl.lexer.Token;
-import net.quepierts.animata4j.core.dsl.parser.AccessPathParser;
+import net.quepierts.animata4j.dsl.ast.Node;
+import net.quepierts.animata4j.dsl.lexer.ArlLexer;
+import net.quepierts.animata4j.dsl.lexer.Token;
+import net.quepierts.animata4j.dsl.parser.AccessPathParser;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;

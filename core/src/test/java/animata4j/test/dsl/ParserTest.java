@@ -1,11 +1,11 @@
 package animata4j.test.dsl;
 
-import net.quepierts.animata4j.core.dsl.ast.Node;
-import net.quepierts.animata4j.core.dsl.lexer.ArlLexer;
-import net.quepierts.animata4j.core.dsl.lexer.Lexer;
-import net.quepierts.animata4j.core.dsl.parser.ExpressionParser;
-import net.quepierts.animata4j.core.dsl.parser.ProgramParser;
-import net.quepierts.animata4j.core.dsl.source.ProcessesSource;
+import net.quepierts.animata4j.dsl.ast.Node;
+import net.quepierts.animata4j.dsl.lexer.ArlLexer;
+import net.quepierts.animata4j.dsl.lexer.Lexer;
+import net.quepierts.animata4j.dsl.parser.ExpressionParser;
+import net.quepierts.animata4j.dsl.parser.ProgramParser;
+import net.quepierts.animata4j.dsl.source.ProcessesSource;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;

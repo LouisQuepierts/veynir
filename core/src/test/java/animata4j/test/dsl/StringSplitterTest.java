@@ -1,6 +1,6 @@
 package animata4j.test.dsl;
 
-import net.quepierts.animata4j.core.dsl.StringSplitter;
+import net.quepierts.animata4j.dsl.StringSplitter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 

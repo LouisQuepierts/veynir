@@ -1,6 +1,6 @@
 package animata4j.test.dsl;
 
-import net.quepierts.animata4j.core.dsl.runtime.IntExecutor;
+import net.quepierts.animata4j.dsl.runtime.IntExecutor;
 import org.junit.jupiter.api.Test;
 
 public class IntExprExecTest {

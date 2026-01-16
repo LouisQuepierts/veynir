@@ -1,7 +1,9 @@
 package animata4j.test.dsl;
 
-import net.quepierts.animata4j.core.dsl.lexer.*;
-import net.quepierts.animata4j.core.dsl.source.ProcessesSource;
+import net.quepierts.animata4j.dsl.lexer.ArlLexer;
+import net.quepierts.animata4j.dsl.lexer.Lexer;
+import net.quepierts.animata4j.dsl.lexer.Token;
+import net.quepierts.animata4j.dsl.source.ProcessesSource;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;

@@ -1,7 +1,7 @@
 package animata4j.test.dsl;
 
-import net.quepierts.animata4j.core.dsl.preprocess.Preprocessor;
-import net.quepierts.animata4j.core.dsl.source.SourceProvider;
+import net.quepierts.animata4j.dsl.preprocess.Preprocessor;
+import net.quepierts.animata4j.dsl.source.SourceProvider;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
