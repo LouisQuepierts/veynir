@@ -21,7 +21,7 @@ public enum AnimataDataType {
     STRUCT(0, false, "struct")
     ;
 
-    private static final Pattern NAME_PATTERN = Pattern.compile("[a-zA-Z$_][a-zA-Z\\d$_]*(\\.[a-zA-Z$_][a-zA-Z\\d$_]*)*");
+    private static final Pattern NAME_PATTERN = Pattern.compile("[a-zA-Z$_][a-zA-Z\\d$_]*(\\.[a-zA-Z$_][a-zA-Z\\d$_]*)*(\\[\\d+])?");
     private static final AnimataDataType[] VALUES;
     private static final Map<String, AnimataDataType> PRIMITIVE_TYPES;
 

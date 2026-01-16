@@ -1,4 +1,6 @@
-package net.quepierts.animata4j.core.pipeline.animator;
+package net.quepierts.animata4j.core.pipeline.runtime;
+
+import net.quepierts.animata4j.core.pipeline.uniform.UniformWriter;
 
 /**
  * Represents a generic animation controller.
@@ -27,7 +29,7 @@ package net.quepierts.animata4j.core.pipeline.animator;
  * </p>
  */
 @SuppressWarnings("unused")
-public interface Animator {
+public interface AnimationRuntime {
 
     /**
      * Evaluates the internal state of all active animations based on the current time delta.

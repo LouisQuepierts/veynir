@@ -5,9 +5,6 @@ import sun.misc.Unsafe;
 
 import java.lang.reflect.Field;
 
-/**
- * A utility class that provides access to the Unsafe operations and memory management functions.
- */
 @UtilityClass
 @SuppressWarnings("unused")
 public class UnsafeUtil {
@@ -19,34 +16,16 @@ public class UnsafeUtil {
     public static final long FLOAT_ARRAY_OFFSET;
     public static final long DOUBLE_ARRAY_OFFSET;
 
-    /**
-     * Allocates memory of the specified size and initializes it with zeros.
-     *
-     * @param size the size of memory to allocate
-     * @return the address of the allocated memory
-     */
     public static long malloc(long size) {
         return UnsafeUtil.malloc(size, (byte) 0);
     }
 
-    /**
-     * Allocates memory of the specified size and initializes it with the given value.
-     *
-     * @param size the size of memory to allocate
-     * @param value the initial value to set for the allocated memory
-     * @return the address of the allocated memory
-     */
     public static long malloc(long size, byte value) {
         long address = UNSAFE.allocateMemory(size);
         UNSAFE.setMemory(address, size, value);
         return address;
     }
 
-    /**
-     * Frees the memory at the specified address.
-     *
-     * @param address the address of the memory to free
-     */
     public static void free(long address) {
         UNSAFE.freeMemory(address);
     }

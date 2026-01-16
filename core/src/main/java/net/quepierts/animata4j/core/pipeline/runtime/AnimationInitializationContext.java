@@ -1,4 +1,4 @@
-package net.quepierts.animata4j.core.pipeline.animator;
+package net.quepierts.animata4j.core.pipeline.runtime;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

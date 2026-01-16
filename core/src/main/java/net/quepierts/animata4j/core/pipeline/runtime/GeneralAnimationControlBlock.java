@@ -1,8 +1,7 @@
-package net.quepierts.animata4j.core.pipeline.control;
+package net.quepierts.animata4j.core.pipeline.runtime;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.quepierts.animata4j.core.pipeline.animator.AnimationInitializationContext;
 import net.quepierts.animata4j.core.pipeline.common.AnimationContext;
 import net.quepierts.animata4j.core.pipeline.common.buffer.AnimationFrameBuffer;
 import net.quepierts.animata4j.core.pipeline.common.buffer.BufferManager;
@@ -66,6 +65,10 @@ public class GeneralAnimationControlBlock implements AnimationControlBlock {
     @Override
     public boolean isRunning() {
         return !this.paused && !this.stopped;
+    }
+
+    public boolean is(AnimationDriver driver) {
+        return this.driver == driver;
     }
 
     public AnimationFrameBuffer requestBuffer() {

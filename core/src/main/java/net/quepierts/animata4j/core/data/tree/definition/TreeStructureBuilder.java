@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
 public final class TreeStructureBuilder implements TreeStructureDefinition.Builder {
@@ -147,7 +148,7 @@ public final class TreeStructureBuilder implements TreeStructureDefinition.Build
             if (this.optimize) {
                 children = children.stream()
                         .sorted()
-                        .toList();
+                        .collect(Collectors.toList());
             }
 
             for (MutableNode child : children) {

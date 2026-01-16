@@ -60,18 +60,36 @@ public final class MemoryLayoutManager {
 
             offset = this.alignUp(offset, alignment);
 
-            final MemoryLayout nestedLayout = field.getPrimaryType().isPrimitive() ?
-                    null :
-                    this.getLayout(field.getType());
+            MemoryLayout.FieldOffset fieldOffset;
+            if (field.getPrimaryType().isPrimitive()) {
+                fieldOffset = MemoryLayout.FieldOffset.of(
+                        field.getName(),
+                        offset,
+                        size,
+                        alignment,
+                        arrayLength,
+                        null
+                );
+            } else {
+                final MemoryLayout nestedLayout = this.getLayout(field.getType());
 
-            MemoryLayout.FieldOffset fieldOffset = MemoryLayout.FieldOffset.of(
-                    field.getName(),
-                    offset,
-                    size,
-                    alignment,
-                    arrayLength,
-                    nestedLayout
-            );
+                if (nestedLayout == null) {
+                    throw new IllegalArgumentException("Unknown type: " + field.getType());
+                }
+
+                if (nestedLayout.isWrapped()) {
+                    fieldOffset = nestedLayout.unwrap();
+                } else {
+                    fieldOffset = MemoryLayout.FieldOffset.of(
+                            field.getName(),
+                            offset,
+                            size,
+                            alignment,
+                            arrayLength,
+                            nestedLayout
+                    );
+                }
+            }
             fieldOffsets.add(fieldOffset);
 
             maxAlignment = Math.max(maxAlignment, alignment);
@@ -86,6 +104,7 @@ public final class MemoryLayoutManager {
         return MemoryLayout.of(
                 fieldOffsets.toArray(MemoryLayout.FieldOffset[]::new),
                 arrayLike,
+                definition.isWrapped(),
                 totalSize,
                 maxAlignment
         );

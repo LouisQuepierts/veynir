@@ -103,7 +103,7 @@ public final class MemoryAccessProcedure {
             return new MemoryAccessProcedure(
                     this.operations.toArray(Operation[]::new),
                     List.copyOf(this.parameters.keySet()),
-                    this.operations.size() == 1
+                    this.operations.size() == 1 && this.operations.get(0).direct
             );
         }
     }

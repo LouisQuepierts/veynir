@@ -1,12 +1,14 @@
-package net.quepierts.animata4j.core.data.tree;
+package net.quepierts.animata4j.core.data.tree.impl;
 
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import net.quepierts.animata4j.core.data.tree.FlatPathView;
 import net.quepierts.animata4j.core.data.tree.definition.TreeStructureDefinition;
 import net.quepierts.animata4j.core.misc.Generic;
+import net.quepierts.animata4j.core.misc.BinarySearch;
 import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -59,7 +61,12 @@ public class ImmutableTree<T> implements FlatPathView<T> {
         final int right = TreeStructureDefinition.decodeChildIndex(this.nodes[index + 1].firstChildIndex);
 
         if (this.optimized) {
-            return binarySearch(left, right, child);
+            return BinarySearch.search(
+                    left, right,
+                    this.nodes,
+                    child,
+                    Node::getName
+            );
         } else {
             return linearSearch(left, right, child);
         }
@@ -98,31 +105,11 @@ public class ImmutableTree<T> implements FlatPathView<T> {
         return -1;
     }
 
-    private int binarySearch(int left, int right, @NotNull String name) {
-        while (left <= right) {
-            int mid = (left + right) / 2;
-            final int compare = this.nodes[mid].getName().compareTo(name);
-            if (compare == 0) {
-                return mid;
-            } else if (compare < 0) {
-                left = mid + 1;
-            } else {
-                right = mid - 1;
-            }
-        }
-        return -1;
-    }
-
     @Getter
     @RequiredArgsConstructor
-    private static final class Node<T> implements Comparable<Node<T>> {
+    private static final class Node<T>{
         private final String name;
         private final T value;
         private final int firstChildIndex;
-
-        @Override
-        public int compareTo(@NotNull ImmutableTree.Node<T> tNode) {
-            return this.name.compareTo(tNode.name);
-        }
     }
 }

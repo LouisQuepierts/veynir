@@ -1,6 +1,9 @@
-package net.quepierts.animata4j.core.pipeline.animator;
+package net.quepierts.animata4j.core.pipeline.runtime;
 
-public interface AnimationHandle {
+public interface AnimationControlBlock {
+
+    void update(float delta);
+
     void pause();
 
     void stop();
@@ -16,4 +19,5 @@ public interface AnimationHandle {
     void setSpeed(float speed);
 
     float getSpeed();
+
 }
