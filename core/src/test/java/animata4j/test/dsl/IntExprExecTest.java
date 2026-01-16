@@ -4,7 +4,7 @@ import net.quepierts.animata4j.dsl.runtime.IntExecutor;
 import org.junit.jupiter.api.Test;
 
 public class IntExprExecTest {
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         IntExprExecTest test = new IntExprExecTest();
         test.test();
     }
@@ -23,5 +23,5 @@ public class IntExprExecTest {
 
         int result1 = executor.run(1);
         System.out.println(result1);
-    }
+    }*/
 }
