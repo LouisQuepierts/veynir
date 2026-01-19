@@ -1,8 +1,7 @@
-package net.quepierts.animata4j.core.pipeline.datasource;
+package net.quepierts.animata4j.core.program.datasource;
 
 import net.quepierts.animata4j.core.pipeline.common.ReadonlyAnimationContext;
 import net.quepierts.animata4j.core.buffer.AnimationWritableTarget;
-import net.quepierts.animata4j.core.pipeline.common.state.SourceState;
 import net.quepierts.animata4j.core.pipeline.drive.GenericAnimationDriver;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -11,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
  * The datasource of an animation channel.
  * It is a flyweight object, which means it will be evaluated every frame,
  * and it will not have any state, no matter internal or external state.
- * If you want to store some state, please use {@link GenericAnimationDriver}.
  * */
 public interface AnimationSource {
     /**

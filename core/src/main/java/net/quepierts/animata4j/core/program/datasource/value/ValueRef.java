@@ -1,7 +1,7 @@
-package net.quepierts.animata4j.core.pipeline.common.value;
+package net.quepierts.animata4j.core.program.datasource.value;
 
 import lombok.RequiredArgsConstructor;
-import net.quepierts.animata4j.core.pipeline.common.state.SourceState;
+import net.quepierts.animata4j.core.program.datasource.SourceState;
 import org.jetbrains.annotations.NotNull;
 
 public interface ValueRef {

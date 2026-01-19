@@ -1,8 +1,8 @@
 package animata4j.test.pipline.timeline;
 
-import net.quepierts.animata4j.core.pipeline.datasource.timeline.CompiledTimeline;
-import net.quepierts.animata4j.core.pipeline.datasource.timeline.KeyFrame;
-import net.quepierts.animata4j.core.pipeline.datasource.timeline.SourceTimeline;
+import net.quepierts.animata4j.core.program.datasource.timeline.CompiledTimeline;
+import net.quepierts.animata4j.core.program.datasource.timeline.KeyFrame;
+import net.quepierts.animata4j.core.program.datasource.timeline.SourceTimeline;
 import org.junit.jupiter.api.Test;
 
 public class TimelineCompileTest {

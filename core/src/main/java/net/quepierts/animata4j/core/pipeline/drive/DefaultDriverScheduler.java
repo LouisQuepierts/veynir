@@ -3,6 +3,8 @@ package net.quepierts.animata4j.core.pipeline.drive;
 import lombok.RequiredArgsConstructor;
 import net.quepierts.animata4j.core.pipeline.common.ReadonlyAnimationContext;
 import net.quepierts.animata4j.core.buffer.AnimationWritableTarget;
+import net.quepierts.animata4j.core.program.driver.compute.ComputeDriver;
+import net.quepierts.animata4j.core.program.driver.control.ControlDriver;
 import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor

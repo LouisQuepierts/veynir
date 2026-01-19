@@ -6,7 +6,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
-public class FloatArrayBuffer implements AnimationBuffer {
+public final class FloatArrayBuffer implements AnimationBuffer {
 
     /**
      * Create a new FloatArrayBuffer with a given size.

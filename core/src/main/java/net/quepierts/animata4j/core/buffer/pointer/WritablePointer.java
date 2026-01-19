@@ -7,6 +7,10 @@ import net.quepierts.animata4j.core.buffer.AnimationWritableTarget;
  */
 public interface WritablePointer extends AnimationWritableTarget {
 
+    static WritablePointer of(AnimationWritableTarget target) {
+        return WriteonlyPointer.of(target);
+    }
+
     /**
      * Get the offset of the pointer
      * @return the offset of the pointer

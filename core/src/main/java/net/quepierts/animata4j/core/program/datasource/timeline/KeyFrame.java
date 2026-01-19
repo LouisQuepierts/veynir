@@ -1,4 +1,4 @@
-package net.quepierts.animata4j.core.pipeline.datasource.timeline;
+package net.quepierts.animata4j.core.program.datasource.timeline;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

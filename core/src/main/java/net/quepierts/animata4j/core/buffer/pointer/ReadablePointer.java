@@ -7,6 +7,10 @@ import net.quepierts.animata4j.core.buffer.AnimationReadableTarget;
  */
 public interface ReadablePointer extends AnimationReadableTarget {
 
+    static ReadablePointer of(AnimationReadableTarget target) {
+        return ReadonlyPointer.of(target);
+    }
+
     /**
      * Get the offset of the pointer
      * @return the offset of the pointer

@@ -1,4 +1,4 @@
-package net.quepierts.animata4j.core.pipeline.datasource.timeline;
+package net.quepierts.animata4j.core.program.datasource.timeline;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -6,8 +6,8 @@ import lombok.RequiredArgsConstructor;
 import net.quepierts.animata4j.core.math.ease.Ease;
 import net.quepierts.animata4j.core.math.interpolation.BiInterpolation;
 import net.quepierts.animata4j.core.math.interpolation.Interpolation;
-import net.quepierts.animata4j.core.pipeline.common.value.ValueRef;
-import net.quepierts.animata4j.core.pipeline.common.state.SourceState;
+import net.quepierts.animata4j.core.program.datasource.value.ValueRef;
+import net.quepierts.animata4j.core.program.datasource.SourceState;
 import net.quepierts.animata4j.core.buffer.AnimationWritableTarget;
 import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;

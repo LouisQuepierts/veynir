@@ -1,5 +1,7 @@
 package net.quepierts.animata4j.core.buffer;
 
+import net.quepierts.animata4j.core.program.buffer.AnimationFrameBuffer;
+
 import java.util.ArrayList;
 import java.util.List;
 

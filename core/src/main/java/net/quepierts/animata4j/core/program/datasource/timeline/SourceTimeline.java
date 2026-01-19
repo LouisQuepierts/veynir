@@ -1,7 +1,7 @@
-package net.quepierts.animata4j.core.pipeline.datasource.timeline;
+package net.quepierts.animata4j.core.program.datasource.timeline;
 
 import lombok.RequiredArgsConstructor;
-import net.quepierts.animata4j.core.pipeline.common.value.ValueRef;
+import net.quepierts.animata4j.core.program.datasource.value.ValueRef;
 import org.jetbrains.annotations.Contract;
 
 @RequiredArgsConstructor

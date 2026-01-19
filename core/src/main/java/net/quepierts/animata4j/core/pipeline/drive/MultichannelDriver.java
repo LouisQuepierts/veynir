@@ -1,13 +1,13 @@
 package net.quepierts.animata4j.core.pipeline.drive;
 
 import lombok.RequiredArgsConstructor;
+import net.quepierts.animata4j.core.buffer.pointer.WritablePointer;
 import net.quepierts.animata4j.core.data.layout.MemoryOffsetResolver;
 import net.quepierts.animata4j.core.pipeline.common.ReadonlyAnimationContext;
-import net.quepierts.animata4j.core.buffer.pointer.WriteonlyPointer;
 import net.quepierts.animata4j.core.pipeline.common.state.RuntimeState;
-import net.quepierts.animata4j.core.pipeline.common.state.SourceState;
+import net.quepierts.animata4j.core.program.datasource.SourceState;
 import net.quepierts.animata4j.core.buffer.AnimationWritableTarget;
-import net.quepierts.animata4j.core.pipeline.datasource.AnimationSource;
+import net.quepierts.animata4j.core.program.datasource.AnimationSource;
 import org.jetbrains.annotations.NotNull;
 
 public class MultichannelDriver implements GenericAnimationDriver<MultichannelDriver.State> {
@@ -51,7 +51,7 @@ public class MultichannelDriver implements GenericAnimationDriver<MultichannelDr
             @NotNull ReadonlyAnimationContext context,
             @NotNull State state
     ) {
-        var pointer = WriteonlyPointer.of(output);
+        var pointer = WritablePointer.of(output);
 
         for (int i = 0; i < sources.length; i++) {
             if (!state.isActive(i)) continue;
@@ -59,6 +59,8 @@ public class MultichannelDriver implements GenericAnimationDriver<MultichannelDr
             pointer.setOffset(state.getWriteOffset(i));
             sources[i].eval(pointer, context, subState);
         }
+
+        pointer.release();
     }
 
     @RequiredArgsConstructor

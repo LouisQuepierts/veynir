@@ -1,4 +1,4 @@
-package net.quepierts.animata4j.core.pipeline.drive;
+package net.quepierts.animata4j.core.program.driver.compute;
 
 import org.jetbrains.annotations.NotNull;
 
