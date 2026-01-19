@@ -2,7 +2,6 @@ package net.quepierts.animata4j.core.program.datasource;
 
 import net.quepierts.animata4j.core.pipeline.common.ReadonlyAnimationContext;
 import net.quepierts.animata4j.core.buffer.AnimationWritableTarget;
-import net.quepierts.animata4j.core.pipeline.drive.GenericAnimationDriver;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
