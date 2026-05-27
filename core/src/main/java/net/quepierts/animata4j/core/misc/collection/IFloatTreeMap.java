@@ -1,6 +1,6 @@
 package net.quepierts.animata4j.core.misc.collection;
 
-import net.quepierts.animata4j.core.misc.MathHelper;
+import net.quepierts.animata4j.core.misc.Mth;
 
 public interface IFloatTreeMap<T> {
     int getLowerIndex(float pKey);
@@ -20,7 +20,7 @@ public interface IFloatTreeMap<T> {
     T get(int pIndex);
 
     default T getClamped(int pIndex) {
-        return this.get(MathHelper.clamp(pIndex, 0, this.size() - 1));
+        return this.get(Mth.clamp(pIndex, 0, this.size() - 1));
     }
 
     float getKey(int pIndex);

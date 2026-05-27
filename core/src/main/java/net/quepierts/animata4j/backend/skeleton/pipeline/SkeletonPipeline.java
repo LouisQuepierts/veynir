@@ -1,0 +1,59 @@
+package net.quepierts.animata4j.backend.skeleton.pipeline;
+
+import net.quepierts.animata4j.backend.execution.ExecutionReflection;
+import net.quepierts.animata4j.backend.skeleton.SkeletonLayout;
+import net.quepierts.animata4j.backend.uniform.UniformBuffer;
+import net.quepierts.animata4j.core.SkeletonState;
+import net.quepierts.animata4j.core.adapter.AnimationOutput;
+import org.jetbrains.annotations.NotNull;
+
+public interface SkeletonPipeline {
+
+    String INPUT_BUFFER = "Buffer#Input";
+    String OUTPUT_BUFFER = "Buffer#Output";
+
+    static DefaultSkeletonPipelineImpl.Compiler compiler() {
+        return DefaultSkeletonPipelineImpl.compiler();
+    }
+
+    void submit(@NotNull SkeletonState state);
+
+    void bindProvider(
+            String name,
+            SkeletonPoseProvider poseProvider
+    );
+
+    void bindProvider(
+            int location,
+            SkeletonPoseProvider poseProvider
+    );
+
+    void bindUbo(
+            String name,
+            UniformBuffer buffer
+    );
+
+    void bindUbo(
+            int location,
+            UniformBuffer buffer
+    );
+
+    void bindTarget(
+            String name,
+            SkeletonOutput target
+    );
+
+    void bindTarget(
+            int location,
+            SkeletonOutput target
+    );
+
+    SkeletonLayout getLayout();
+
+    UniformBuffer getUniform();
+
+    AnimationOutput getAdapter();
+
+    ExecutionReflection getReflection();
+
+}

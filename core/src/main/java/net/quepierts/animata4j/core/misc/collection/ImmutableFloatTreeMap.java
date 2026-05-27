@@ -4,7 +4,7 @@ import it.unimi.dsi.fastutil.floats.Float2ObjectMap;
 import lombok.Getter;
 import net.quepierts.animata4j.core.misc.FloatKeyed;
 import net.quepierts.animata4j.core.misc.Generic;
-import net.quepierts.animata4j.core.misc.MathHelper;
+import net.quepierts.animata4j.core.misc.Mth;
 
 import java.util.Arrays;
 
@@ -43,20 +43,20 @@ public class ImmutableFloatTreeMap<T> implements IFloatTreeMap<T> {
         int index = Arrays.binarySearch(this.keys, pKey);
 
         if (index >= 0) {
-            return MathHelper.clamp(index - 1, 0, max);
+            return Mth.clamp(index - 1, 0, max);
         }
 
-        return MathHelper.clamp(-index - 2, 0, max);
+        return Mth.clamp(-index - 2, 0, max);
     }
 
     public int getUpperIndex(float pKey) {
         int index = Arrays.binarySearch(this.keys, pKey);
 
         if (index >= 0) {
-            return MathHelper.clamp(index, 0, max);
+            return Mth.clamp(index, 0, max);
         }
 
-        return MathHelper.clamp(-index - 1, 0, max);
+        return Mth.clamp(-index - 1, 0, max);
     }
 
     @Override

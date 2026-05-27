@@ -1,6 +1,6 @@
 package net.quepierts.animata4j.core.misc;
 
-public class MathHelper {
+public class Mth {
     public static final float PI = (float) Math.PI;
     public static final float TAU = (float) (Math.PI * 2);
     public static final float EPSILON = 0.00001f;
@@ -13,11 +13,11 @@ public class MathHelper {
         if (Float.isNaN(value)) {
             return min;
         }
-        return value < min ? min : value > max ? max : value;
+        return (value < min) ? min : (value > max ? max : value);
     }
 
     public static int clamp(int value, int min, int max) {
-        return value < min ? min : value > max ? max : value;
+        return value < min ? min : (value > max ? max : value);
     }
 
     public static float saturate(float value) {
@@ -26,5 +26,9 @@ public class MathHelper {
 
     public static float lerp(float a, float b, float delta) {
         return a + (b - a) * delta;
+    }
+
+    public static float catmullrom(float delta, float start, float left, float right, float end) {
+        return lerp(delta, lerp(delta, start, left), lerp(delta, right, end));
     }
 }
