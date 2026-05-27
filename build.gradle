@@ -8,14 +8,25 @@ allprojects {
     }
 }
 
+allprojects {
+    plugins.withId('java') {
+        java {
+            toolchain {
+                languageVersion.set(JavaLanguageVersion.of(17))
+            }
+        }
+    }
+
+    tasks.withType(JavaCompile).configureEach {
+        options.release = 11
+    }
+}
+
 subprojects {
     plugins.withId('java') {
         dependencies {
             testImplementation platform('org.junit:junit-bom:5.10.0')
             testImplementation 'org.junit.jupiter:junit-jupiter'
-
-            compileOnly group: 'org.projectlombok', name: 'lombok', version: lombok_version
-            annotationProcessor group: 'org.projectlombok', name: 'lombok', version: lombok_version
 
             implementation group: 'com.google.guava', name: 'guava', version: guava_version
             implementation group: 'com.google.code.gson', name: 'gson', version: gson_version
@@ -25,12 +36,6 @@ subprojects {
 
         test {
             useJUnitPlatform()
-        }
-
-        java {
-            toolchain {
-                languageVersion.set(JavaLanguageVersion.of(11))
-            }
         }
     }
 }

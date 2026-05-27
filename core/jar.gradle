@@ -1,0 +1,19 @@
+
+jar {
+    archiveVersion = "${project.version}"
+
+    manifest {
+        attributes(
+                'Implementation-Title': 'Animata4j Core',
+                'Implementation-Version': "${project.version}",
+                'Implementation-Vendor': 'Quepierts',
+                "Build-Jdk": System.getProperty("java.version"),
+                "Build-Jvm": System.getProperty("java.version"),
+                "Automatic-Module-Name": project.group
+        )
+    }
+}
+
+base {
+    archivesName = "animata4j-core"
+}

@@ -2,6 +2,11 @@ plugins {
     id 'java'
     id 'idea'
     id 'animata-codegen'
+
+    id 'java-library'
+    id 'maven-publish'
+
+    id 'io.freefair.lombok' version '9.2.0'
 }
 
 def getGitCommitCount() {
@@ -15,8 +20,16 @@ def getGitCommitCount() {
 
 def buildNumber = getGitCommitCount()
 
-group = 'net.quepierts.animata4j.core'
-version = '1.0.0';
+group       = 'net.quepierts'
+version     = "${project_version}+${buildNumber}"
+
+java {
+    withJavadocJar()
+    withSourcesJar()
+}
+
+apply from: "jar.gradle"
+apply from: "publishing.gradle"
 
 dependencies {
     implementation group: 'it.unimi.dsi', name: 'fastutil', version: fastutil_version
@@ -27,28 +40,3 @@ dependencies {
 
     compileOnly project(':codegen-annotations')
 }
-
-jar {
-    archiveBaseName = 'animata4j-core'
-    archiveVersion = "${project.version}-${buildNumber}"
-}
-
-//tasks.named('compileJava') {
-//    exclude '**/_TEMPLATE_*.java'
-//}
-//
-//tasks.register('codegen', JavaExec) {
-//    group = 'build'
-//    description = 'Generate code for Animata4j core'
-//    classpath = project(':codegen').sourceSets.main.runtimeClasspath
-//    mainClass = 'net.quepierts.animata4j.codegen.CodegenMain'
-//
-//    args = ["--src", "${projectDir}/src/main/java", "--dst", "${projectDir}/src/generated/java"]
-//    doFirst {
-//        delete("${projectDir}/src/generated/java")
-//    }
-//}
-//
-//tasks.named('build') {
-//    dependsOn('codegen')
-//}
