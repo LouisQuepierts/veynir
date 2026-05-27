@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 import net.quepierts.animata4j.backend.buffer.AnimationBuffer;
 import net.quepierts.animata4j.backend.skeleton.SkeletonLayout;
 import net.quepierts.animata4j.core.adapter.TransformAccessor;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import org.jetbrains.annotations.NotNull;
 
 public final class SkeletonPoseBuffer
         extends AnimationBuffer.Slice

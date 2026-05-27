@@ -6,7 +6,6 @@ import net.quepierts.animata4j.backend.buffer.ReadableBuffer;
 import net.quepierts.animata4j.backend.buffer.WritableBuffer;
 import org.jetbrains.annotations.NotNull;
 import org.joml.*;
-import org.jetbrains.annotations.NotNull;
 
 public final class UniformBuffer implements UniformReader {
 

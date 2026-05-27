@@ -4,7 +4,10 @@ import net.quepierts.animata4j.core.data.layout.AnimataDataType;
 import net.quepierts.animata4j.core.data.layout.FieldDefinition;
 import net.quepierts.animata4j.core.data.layout.StructDefinition;
 
-import java.lang.reflect.*;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 
 public class StructParser {
     public static StructDefinition parse(Class<?> clazz) {

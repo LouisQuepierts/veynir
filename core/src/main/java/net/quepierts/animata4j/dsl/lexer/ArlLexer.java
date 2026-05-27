@@ -1,7 +1,7 @@
 package net.quepierts.animata4j.dsl.lexer;
 
-import net.quepierts.animata4j.dsl.source.SourceProvider;
 import net.quepierts.animata4j.dsl.source.SourcePos;
+import net.quepierts.animata4j.dsl.source.SourceProvider;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

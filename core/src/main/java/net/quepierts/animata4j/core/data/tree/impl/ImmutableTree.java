@@ -7,8 +7,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.quepierts.animata4j.core.data.tree.FlatPathView;
 import net.quepierts.animata4j.core.data.tree.definition.TreeStructureDefinition;
-import net.quepierts.animata4j.core.misc.Generic;
 import net.quepierts.animata4j.core.misc.BinarySearch;
+import net.quepierts.animata4j.core.misc.Generic;
 import org.jetbrains.annotations.NotNull;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)

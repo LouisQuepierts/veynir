@@ -1,8 +1,8 @@
 package net.quepierts.animata4j.dsl.exception;
 
 import lombok.Getter;
-import net.quepierts.animata4j.dsl.source.SourceProvider;
 import net.quepierts.animata4j.dsl.source.SourcePos;
+import net.quepierts.animata4j.dsl.source.SourceProvider;
 import org.jetbrains.annotations.NotNull;
 
 @Getter

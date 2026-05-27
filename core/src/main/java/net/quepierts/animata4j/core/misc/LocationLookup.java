@@ -2,7 +2,6 @@ package net.quepierts.animata4j.core.misc;
 
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Iterator;

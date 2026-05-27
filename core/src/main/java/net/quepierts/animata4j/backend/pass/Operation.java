@@ -1,7 +1,5 @@
 package net.quepierts.animata4j.backend.pass;
 
-import java.util.Objects;
-
 public final class Operation {
     private final Type type;
     private final int dst;

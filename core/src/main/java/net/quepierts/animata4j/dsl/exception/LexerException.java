@@ -1,8 +1,8 @@
 package net.quepierts.animata4j.dsl.exception;
 
-import net.quepierts.animata4j.dsl.source.SourceProvider;
 import net.quepierts.animata4j.dsl.source.SourcePointer;
 import net.quepierts.animata4j.dsl.source.SourcePos;
+import net.quepierts.animata4j.dsl.source.SourceProvider;
 import org.jetbrains.annotations.NotNull;
 
 public class LexerException extends CompileException {

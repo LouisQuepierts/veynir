@@ -1,10 +1,10 @@
 package net.quepierts.animata4j.backend.skeleton.pass;
 
 import net.quepierts.animata4j.backend.skeleton.pipeline.SkeletonContext;
+import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
-import org.jetbrains.annotations.NotNull;
 
 public final class ParentOverridePass extends SkeletonPass {
 

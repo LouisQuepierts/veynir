@@ -17,8 +17,8 @@ import net.quepierts.animata4j.backend.uniform.UniformType;
 import net.quepierts.animata4j.core.SkeletonState;
 import net.quepierts.animata4j.core.adapter.AnimationOutput;
 import net.quepierts.animata4j.core.misc.LocationLookup;
-import org.joml.Quaternionf;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Quaternionf;
 
 import java.util.ArrayList;
 import java.util.List;
