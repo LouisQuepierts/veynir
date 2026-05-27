@@ -61,7 +61,6 @@ public class FloatTreeMap<T> implements IFloatTreeMap<T> {
     @Override
     public void insert(float pKey, T pValue) {
         if (!treeMap.containsKey(pKey)) {
-            // 维护同步的键列表（插入后保持有序）
             int insertPos = findInsertPosition(pKey);
             keyList.add(insertPos, pKey);
         }

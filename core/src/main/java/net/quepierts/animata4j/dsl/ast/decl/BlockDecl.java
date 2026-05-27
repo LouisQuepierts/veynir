@@ -50,6 +50,15 @@ public class BlockDecl extends Declaration {
      *     memberDecl;
      * } interfaceName;
      * }</pre>
+     *
+     * @param span the span of the whole block
+     * @param layout the layout qualifier
+     * @param qualifier the interface qualifier
+     * @param blockName the block name
+     * @param members the members
+     * @param interfaceName the interface name
+     *
+     * @return new block declaration for interface
      * */
     public static BlockDecl intf(
             @NotNull SourceSpan span,
@@ -69,6 +78,14 @@ public class BlockDecl extends Declaration {
      *     memberDecl;
      * };
      * }</pre>
+     *
+     * @param span the span of the whole block
+     * @param layout the layout qualifier
+     * @param qualifier the interface qualifier
+     * @param name the name
+     * @param members the members
+     *
+     * @return new block declaration for storage
      */
     public static BlockDecl storage(
             @NotNull SourceSpan span,
