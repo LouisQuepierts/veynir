@@ -16,10 +16,6 @@ allprojects {
             }
         }
     }
-
-    tasks.withType(JavaCompile).configureEach {
-        options.release = 11
-    }
 }
 
 subprojects {
@@ -32,6 +28,8 @@ subprojects {
             implementation group: 'com.google.code.gson', name: 'gson', version: gson_version
 
             implementation group: 'org.jetbrains', name: 'annotations', version: annotations_version
+
+            implementation group: 'org.jspecify', name: 'jspecify', version: jspecify_version
         }
 
         test {
