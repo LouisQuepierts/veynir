@@ -2,7 +2,7 @@ package net.quepierts.animata4j.core.interpolator;
 
 import net.quepierts.animata4j.backend.buffer.AnimationBuffer;
 import net.quepierts.animata4j.backend.buffer.WritableBuffer;
-import net.quepierts.animata4j.core.misc.Mth;
+import net.quepierts.animata4j.core.util.Mth;
 
 @FunctionalInterface
 public interface Interpolator4f {

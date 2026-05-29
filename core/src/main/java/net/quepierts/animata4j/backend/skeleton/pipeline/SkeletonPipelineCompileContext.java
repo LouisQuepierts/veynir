@@ -4,8 +4,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.quepierts.animata4j.backend.Patterns;
 import net.quepierts.animata4j.backend.skeleton.SkeletonLayout;
-import net.quepierts.animata4j.core.misc.LocationLookup;
-import org.jetbrains.annotations.Nullable;
+import net.quepierts.animata4j.core.util.LocationLookup;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;

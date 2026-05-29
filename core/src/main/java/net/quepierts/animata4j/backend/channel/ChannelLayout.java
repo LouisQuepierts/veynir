@@ -2,8 +2,8 @@ package net.quepierts.animata4j.backend.channel;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.quepierts.animata4j.core.misc.LocationLookup;
-import org.jetbrains.annotations.NotNull;
+import net.quepierts.animata4j.core.util.LocationLookup;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -36,7 +36,7 @@ public final class ChannelLayout implements Iterable<String> {
     }
 
     @Override
-    public @NotNull Iterator<String> iterator() {
+    public @NonNull Iterator<String> iterator() {
         return this.lookup.iterator();
     }
 

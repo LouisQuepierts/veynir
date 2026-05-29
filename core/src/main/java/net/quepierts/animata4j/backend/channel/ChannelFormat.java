@@ -6,8 +6,8 @@ import it.unimi.dsi.fastutil.ints.IntList;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.quepierts.animata4j.core.misc.LocationLookup;
-import org.jetbrains.annotations.NotNull;
+import net.quepierts.animata4j.core.util.LocationLookup;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Iterator;
 import java.util.List;
@@ -44,7 +44,7 @@ public final class ChannelFormat implements Iterable<ChannelFormatElement> {
     }
 
     @Override
-    public @NotNull Iterator<ChannelFormatElement> iterator() {
+    public @NonNull Iterator<ChannelFormatElement> iterator() {
         return this.elements.iterator();
     }
 

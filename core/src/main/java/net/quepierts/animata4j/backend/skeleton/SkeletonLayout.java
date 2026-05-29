@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 import net.quepierts.animata4j.backend.channel.ChannelLayout;
 import net.quepierts.animata4j.backend.uniform.UboDefinition;
 import net.quepierts.animata4j.backend.uniform.UniformType;
-import net.quepierts.animata4j.core.misc.LocationLookup;
-import org.jetbrains.annotations.NotNull;
+import net.quepierts.animata4j.core.util.LocationLookup;
+import org.jspecify.annotations.NonNull;
 
 import java.util.*;
 
@@ -24,7 +24,7 @@ public final class SkeletonLayout {
     private final int[]             childStarts;
     private final int[]             childFlat;
 
-    public static Builder builder(@NotNull String root) {
+    public static Builder builder(@NonNull String root) {
         return new Builder(root);
     }
 
@@ -56,7 +56,7 @@ public final class SkeletonLayout {
         System.arraycopy(this.childFlat, this.childStarts[parent], out, 0, this.childStarts[parent + 1] - this.childStarts[parent]);
     }
 
-    public @NotNull ChannelLayout toChannelLayout() {
+    public @NonNull ChannelLayout toChannelLayout() {
         final var builder = ChannelLayout.builder();
         for (final var bone : this.bones) {
             builder.transform(bone);
@@ -64,7 +64,7 @@ public final class SkeletonLayout {
         return builder.build();
     }
 
-    public @NotNull UboDefinition toPivotDefinition() {
+    public @NonNull UboDefinition toPivotDefinition() {
         return UboDefinition.builder()
                 .withArray("pivots", UniformType.VEC4, this.size())
                 .build();
@@ -77,7 +77,7 @@ public final class SkeletonLayout {
 
         private final String                    root;
 
-        private Builder(@NotNull String root) {
+        private Builder(@NonNull String root) {
             this.root       = root;
             this.bones      .add(root);
         }

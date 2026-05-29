@@ -1,9 +1,9 @@
 package net.quepierts.animata4j.backend.skeleton.pass;
 
 import net.quepierts.animata4j.backend.skeleton.pipeline.SkeletonContext;
-import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
+import org.jspecify.annotations.NonNull;
 
 public final class PivotPass extends SkeletonPass {
 
@@ -30,7 +30,7 @@ public final class PivotPass extends SkeletonPass {
     }
 
     @Override
-    public void execute(@NotNull final SkeletonContext context) {
+    public void execute(@NonNull final SkeletonContext context) {
         final var pivots    = context.getUniformBuffer(this.ubo);
         final var reader    = pivots.getRawReader();
         final var src       = context.getPoseBuffer(this.src);

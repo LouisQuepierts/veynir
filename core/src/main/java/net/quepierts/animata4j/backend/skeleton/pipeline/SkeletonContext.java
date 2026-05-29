@@ -3,20 +3,20 @@ package net.quepierts.animata4j.backend.skeleton.pipeline;
 import net.quepierts.animata4j.backend.skeleton.SkeletonLayout;
 import net.quepierts.animata4j.backend.uniform.UniformReader;
 import net.quepierts.animata4j.core.SkeletonState;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public interface SkeletonContext {
 
-    @NotNull SkeletonLayout         getLayout();
+    @NonNull SkeletonLayout         getLayout();
 
-    @NotNull SkeletonState          getState();
+    @NonNull SkeletonState          getState();
 
-    @NotNull SkeletonPoseProvider   getProvider(int location);
+    @NonNull SkeletonPoseProvider   getProvider(int location);
 
-    @NotNull SkeletonPoseBuffer     getPoseBuffer(int location);
+    @NonNull SkeletonPoseBuffer     getPoseBuffer(int location);
 
-    @NotNull UniformReader          getUniform();
+    @NonNull UniformReader          getUniform();
 
-    @NotNull UniformReader          getUniformBuffer(int location);
+    @NonNull UniformReader          getUniformBuffer(int location);
 
 }

@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.quepierts.animata4j.backend.skeleton.SkeletonLayout;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -16,19 +16,19 @@ public final class ParentOverrideConfiguration {
 
     private final float[] parent;
 
-    public static Builder builder(@NotNull final SkeletonLayout layout) {
+    public static Builder builder(@NonNull final SkeletonLayout layout) {
         return new Builder(layout);
     }
 
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     public static final class Builder {
 
-        private final @NotNull @lombok.NonNull SkeletonLayout layout;
+        private final @NonNull @lombok.NonNull SkeletonLayout layout;
         private final Map<String, String> overrides = new HashMap<>();
 
         public Builder override(
-                @NotNull final String bone,
-                @NotNull final String parent
+                @NonNull final String bone,
+                @NonNull final String parent
         ) {
             final var bid = this.layout.id(bone);
             final var pid = this.layout.id(parent);

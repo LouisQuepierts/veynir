@@ -1,7 +1,7 @@
 package net.quepierts.animata4j.backend.skeleton.pass;
 
 import net.quepierts.animata4j.backend.skeleton.pipeline.SkeletonContext;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public final class FetchPass extends SkeletonPass {
 
@@ -19,7 +19,7 @@ public final class FetchPass extends SkeletonPass {
     }
 
     @Override
-    public void execute(@NotNull final SkeletonContext context) {
+    public void execute(@NonNull final SkeletonContext context) {
         final var provider  = context.getProvider(this.provider);
         final var target    = context.getPoseBuffer(this.target);
 

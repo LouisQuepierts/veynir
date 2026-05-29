@@ -4,11 +4,11 @@ import net.quepierts.animata4j.backend.skeleton.SkeletonLayout;
 import net.quepierts.animata4j.backend.uniform.UboDefinition;
 import net.quepierts.animata4j.backend.uniform.UniformBuffer;
 import net.quepierts.animata4j.backend.uniform.UniformParameter;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public final class PivotModificationParameter extends UniformParameter {
 
-    public static PivotModificationParameter of(@NotNull final SkeletonLayout layout) {
+    public static PivotModificationParameter of(@NonNull final SkeletonLayout layout) {
         final var definition = layout.toPivotDefinition();
         return new PivotModificationParameter(layout, definition);
     }
@@ -17,8 +17,8 @@ public final class PivotModificationParameter extends UniformParameter {
     private final float[]           pivots;
 
     private PivotModificationParameter(
-            final @NotNull SkeletonLayout   layout,
-            final @NotNull UboDefinition    definition
+            final @NonNull SkeletonLayout   layout,
+            final @NonNull UboDefinition    definition
     ) {
         super(definition);
         this.layout = layout;
@@ -44,7 +44,7 @@ public final class PivotModificationParameter extends UniformParameter {
     }
 
     @Override
-    public void upload(final @NotNull UniformBuffer buffer) {
+    public void upload(final @NonNull UniformBuffer buffer) {
         final var writer = buffer.getRawWriter();
         writer.write(0, this.pivots);
     }

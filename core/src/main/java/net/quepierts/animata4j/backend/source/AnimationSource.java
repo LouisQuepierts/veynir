@@ -4,8 +4,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.quepierts.animata4j.backend.pipeline.AnimationPipeline;
 import net.quepierts.animata4j.backend.sampler.AnimationSampler;
-import net.quepierts.animata4j.core.misc.LocationLookup;
-import org.jetbrains.annotations.NotNull;
+import net.quepierts.animata4j.core.util.LocationLookup;
+import org.jspecify.annotations.NonNull;
 
 @Getter
 @RequiredArgsConstructor
@@ -13,7 +13,7 @@ public abstract class AnimationSource {
 
     private final LocationLookup channels;
 
-    public abstract @NotNull AnimationSampler link(@NotNull AnimationPipeline pipeline);
+    public abstract @NonNull AnimationSampler link(@NonNull AnimationPipeline pipeline);
 
     public abstract float getDuration();
 

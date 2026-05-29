@@ -5,8 +5,8 @@ import net.quepierts.animata4j.backend.buffer.AnimationBuffer;
 import net.quepierts.animata4j.backend.model.Timeline;
 import net.quepierts.animata4j.backend.pipeline.AnimationPipeline;
 import net.quepierts.animata4j.backend.sampler.TimelineSampler;
-import net.quepierts.animata4j.core.misc.LocationLookup;
-import org.jetbrains.annotations.NotNull;
+import net.quepierts.animata4j.core.util.LocationLookup;
+import org.jspecify.annotations.NonNull;
 
 @Getter
 public final class TimelineSource extends AnimationSource {
@@ -36,7 +36,7 @@ public final class TimelineSource extends AnimationSource {
     }
 
     @Override
-    public @NotNull TimelineSampler link(@NotNull AnimationPipeline pipeline) {
+    public @NonNull TimelineSampler link(@NonNull AnimationPipeline pipeline) {
         return TimelineSampler.of(this, pipeline.getChannelLayout());
     }
 }

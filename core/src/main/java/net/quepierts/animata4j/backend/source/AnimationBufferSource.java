@@ -4,8 +4,8 @@ import lombok.Getter;
 import net.quepierts.animata4j.backend.buffer.AnimationBuffer;
 import net.quepierts.animata4j.backend.pipeline.AnimationPipeline;
 import net.quepierts.animata4j.backend.sampler.AnimationBufferSampler;
-import net.quepierts.animata4j.core.misc.LocationLookup;
-import org.jetbrains.annotations.NotNull;
+import net.quepierts.animata4j.core.util.LocationLookup;
+import org.jspecify.annotations.NonNull;
 
 @Getter
 public final class AnimationBufferSource extends AnimationSource {
@@ -18,7 +18,7 @@ public final class AnimationBufferSource extends AnimationSource {
     }
 
     @Override
-    public @NotNull AnimationBufferSampler link(@NotNull AnimationPipeline pipeline) {
+    public @NonNull AnimationBufferSampler link(@NonNull AnimationPipeline pipeline) {
         return AnimationBufferSampler.of(this, pipeline.getChannelLayout());
     }
 

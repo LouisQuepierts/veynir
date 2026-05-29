@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.quepierts.animata4j.core.adapter.Consumer4f;
 import net.quepierts.animata4j.core.adapter.Consumer4i;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -99,7 +99,7 @@ public final class AnimationBuffer implements ReadableBuffer, WritableBuffer {
     }
 
     @Override
-    public void readFloat(int location, @NotNull Consumer4f consumer) {
+    public void readFloat(int location, @NonNull Consumer4f consumer) {
         consumer.accept(
                 this.buffer[location],
                 this.buffer[location + 1],
@@ -109,12 +109,12 @@ public final class AnimationBuffer implements ReadableBuffer, WritableBuffer {
     }
 
     @Override
-    public void readFloat(int location, int length, float @NotNull [] out) {
+    public void readFloat(int location, int length, float @NonNull [] out) {
         System.arraycopy(this.buffer, location, out, 0, length);
     }
 
     @Override
-    public void readFloat(int location, int length, @NotNull FloatBuffer out) {
+    public void readFloat(int location, int length, @NonNull FloatBuffer out) {
         out.put(this.buffer, location, length);
     }
 
@@ -124,17 +124,17 @@ public final class AnimationBuffer implements ReadableBuffer, WritableBuffer {
     }
 
     @Override
-    public void readInt(int location, @NotNull Consumer4i consumer) {
+    public void readInt(int location, @NonNull Consumer4i consumer) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void readInt(int location, int length, int @NotNull [] out) {
+    public void readInt(int location, int length, int @NonNull [] out) {
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public void readInt(int location, int length, @NotNull IntBuffer out) {
+    public void readInt(int location, int length, @NonNull IntBuffer out) {
         throw new UnsupportedOperationException();
     }
 
@@ -232,17 +232,17 @@ public final class AnimationBuffer implements ReadableBuffer, WritableBuffer {
         }
 
         @Override
-        public void readFloat(int location, @NotNull Consumer4f consumer) {
+        public void readFloat(int location, @NonNull Consumer4f consumer) {
             this.buffer.readFloat(this.offset + location, consumer);
         }
 
         @Override
-        public void readFloat(int location, int length, float @NotNull [] out) {
+        public void readFloat(int location, int length, float @NonNull [] out) {
             this.buffer.readFloat(this.offset + location, length, out);
         }
 
         @Override
-        public void readFloat(int location, int length, @NotNull FloatBuffer out) {
+        public void readFloat(int location, int length, @NonNull FloatBuffer out) {
             this.buffer.readFloat(this.offset + location, length, out);
         }
 
@@ -252,17 +252,17 @@ public final class AnimationBuffer implements ReadableBuffer, WritableBuffer {
         }
 
         @Override
-        public void readInt(int location, @NotNull Consumer4i consumer) {
+        public void readInt(int location, @NonNull Consumer4i consumer) {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public void readInt(int location, int length, int @NotNull [] out) {
+        public void readInt(int location, int length, int @NonNull [] out) {
             throw new UnsupportedOperationException();
         }
 
         @Override
-        public void readInt(int location, int length, @NotNull IntBuffer out) {
+        public void readInt(int location, int length, @NonNull IntBuffer out) {
             throw new UnsupportedOperationException();
         }
     }

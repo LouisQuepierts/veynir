@@ -1,10 +1,10 @@
 package net.quepierts.animata4j.backend.skeleton.pass;
 
 import net.quepierts.animata4j.backend.skeleton.pipeline.SkeletonContext;
-import org.jetbrains.annotations.NotNull;
 import org.joml.Matrix4f;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
+import org.jspecify.annotations.NonNull;
 
 public final class ParentOverridePass extends SkeletonPass {
 
@@ -33,7 +33,7 @@ public final class ParentOverridePass extends SkeletonPass {
     }
 
     @Override
-    public void execute(@NotNull final SkeletonContext context) {
+    public void execute(@NonNull final SkeletonContext context) {
         final var uniform   = context.getUniformBuffer(this.ubo);
         final var enable    = uniform.readBool(0);
 

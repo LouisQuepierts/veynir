@@ -2,7 +2,7 @@ package net.quepierts.animata4j.backend.buffer;
 
 import net.quepierts.animata4j.core.adapter.Consumer4f;
 import net.quepierts.animata4j.core.adapter.Consumer4i;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -12,19 +12,19 @@ public interface ReadableBuffer {
 
     float   readFloat(int location);
 
-    void    readFloat(int location, @NotNull Consumer4f consumer);
+    void    readFloat(int location, @NonNull Consumer4f consumer);
 
-    void    readFloat(int location, int length, float @NotNull[] out);
+    void    readFloat(int location, int length, float @NonNull[] out);
 
-    void    readFloat(int location, int length, @NotNull FloatBuffer out);
+    void    readFloat(int location, int length, @NonNull FloatBuffer out);
 
     int     readInt(int location);
 
-    void    readInt(int location, @NotNull Consumer4i consumer);
+    void    readInt(int location, @NonNull Consumer4i consumer);
 
-    void    readInt(int location, int length, int @NotNull[] out);
+    void    readInt(int location, int length, int @NonNull[] out);
 
-    void    readInt(int location, int length, @NotNull IntBuffer out);
+    void    readInt(int location, int length, @NonNull IntBuffer out);
 
     default boolean readBoolean(int location) {
         return readInt(location) != 0;

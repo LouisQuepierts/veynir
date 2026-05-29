@@ -1,12 +1,12 @@
 package net.quepierts.animata4j.backend.skeleton.pipeline;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public interface SkeletonPoseProvider {
 
     void fetch(
-            @NotNull SkeletonContext    context,
-            @NotNull SkeletonPoseBuffer target
+            @NonNull SkeletonContext    context,
+            @NonNull SkeletonPoseBuffer target
     );
 
 }

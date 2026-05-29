@@ -3,7 +3,7 @@ package net.quepierts.animata4j.backend.skeleton.pass.definition;
 import net.quepierts.animata4j.backend.skeleton.pass.MergePass;
 import net.quepierts.animata4j.backend.skeleton.pass.SkeletonPass;
 import net.quepierts.animata4j.backend.skeleton.pipeline.SkeletonPipelineCompileContext;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public final class MergePassDefinition extends SkeletonPassDefinition {
 
@@ -31,7 +31,7 @@ public final class MergePassDefinition extends SkeletonPassDefinition {
     }
 
     @Override
-    public SkeletonPass compile(@NotNull final SkeletonPipelineCompileContext context) {
+    public SkeletonPass compile(@NonNull final SkeletonPipelineCompileContext context) {
         final var src0       = context.getBufferLocation(this.src0);
         final var src1       = context.getBufferLocation(this.src1);
         final var dst           = context.getBufferLocation(this.dst);

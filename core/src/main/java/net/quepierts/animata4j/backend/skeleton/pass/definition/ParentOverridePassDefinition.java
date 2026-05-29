@@ -3,7 +3,7 @@ package net.quepierts.animata4j.backend.skeleton.pass.definition;
 import net.quepierts.animata4j.backend.skeleton.pass.ParentOverridePass;
 import net.quepierts.animata4j.backend.skeleton.pass.SkeletonPass;
 import net.quepierts.animata4j.backend.skeleton.pipeline.SkeletonPipelineCompileContext;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public final class ParentOverridePassDefinition extends SkeletonPassDefinition {
 
@@ -27,7 +27,7 @@ public final class ParentOverridePassDefinition extends SkeletonPassDefinition {
     }
 
     @Override
-    public SkeletonPass compile(@NotNull final SkeletonPipelineCompileContext context) {
+    public SkeletonPass compile(@NonNull final SkeletonPipelineCompileContext context) {
 
         final var layout    = context.getLayout();
         final var bones     = layout.size();

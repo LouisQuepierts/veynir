@@ -1,11 +1,11 @@
 package net.quepierts.animata4j.backend.execution;
 
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public interface ExecutionReflection {
 
-    int oid(final @NotNull String semantic);
+    int oid(final @NonNull String semantic);
 
-    int location(final @NotNull String semantic);
+    int location(final @NonNull String semantic);
 
 }

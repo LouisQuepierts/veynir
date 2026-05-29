@@ -16,9 +16,9 @@ import net.quepierts.animata4j.backend.uniform.UniformReader;
 import net.quepierts.animata4j.backend.uniform.UniformType;
 import net.quepierts.animata4j.core.SkeletonState;
 import net.quepierts.animata4j.core.adapter.AnimationOutput;
-import net.quepierts.animata4j.core.misc.LocationLookup;
-import org.jetbrains.annotations.NotNull;
+import net.quepierts.animata4j.core.util.LocationLookup;
 import org.joml.Quaternionf;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +82,7 @@ public final class DefaultSkeletonPipelineImpl implements SkeletonPipeline {
     }
 
     @Override
-    public void submit(@NotNull SkeletonState state) {
+    public void submit(@NonNull SkeletonState state) {
         var context     = this.context;
         context.state   = state;
 
@@ -191,17 +191,17 @@ public final class DefaultSkeletonPipelineImpl implements SkeletonPipeline {
             this.buffers.add(OUTPUT_BUFFER);
         }
 
-        public Compiler withLayout(@NotNull SkeletonLayout layout) {
+        public Compiler withLayout(@NonNull SkeletonLayout layout) {
             this.layout = layout;
             return this;
         }
 
-        public Compiler withPass(@NotNull SkeletonPassDefinition pass) {
+        public Compiler withPass(@NonNull SkeletonPassDefinition pass) {
             this.passes.add(pass);
             return this;
         }
 
-        public Compiler withProvider(@NotNull String name) {
+        public Compiler withProvider(@NonNull String name) {
             this.inputs.add(name);
             return this;
         }
@@ -286,7 +286,7 @@ public final class DefaultSkeletonPipelineImpl implements SkeletonPipeline {
         private int ptr;
 
         @Override
-        public void accept(@NotNull final AnimationResultView buffer) {
+        public void accept(@NonNull final AnimationResultView buffer) {
             this.ptr = 0;
             for (var i = 0; i < this.channels; i++) {
                 buffer.read(i * 3, this::position);
@@ -335,32 +335,32 @@ public final class DefaultSkeletonPipelineImpl implements SkeletonPipeline {
         private SkeletonState                       state;
 
         @Override
-        public @NotNull SkeletonLayout getLayout() {
+        public @NonNull SkeletonLayout getLayout() {
             return this.pipeline.layout;
         }
 
         @Override
-        public @NotNull SkeletonState getState() {
+        public @NonNull SkeletonState getState() {
             return this.state;
         }
 
         @Override
-        public @NotNull SkeletonPoseProvider getProvider(final int location) {
+        public @NonNull SkeletonPoseProvider getProvider(final int location) {
             return this.pipeline.providers[location];
         }
 
         @Override
-        public @NotNull SkeletonPoseBuffer getPoseBuffer(final int location) {
+        public @NonNull SkeletonPoseBuffer getPoseBuffer(final int location) {
             return this.pipeline.buffers[location];
         }
 
         @Override
-        public @NotNull UniformReader getUniform() {
+        public @NonNull UniformReader getUniform() {
             return this.pipeline.uniform;
         }
 
         @Override
-        public @NotNull UniformReader getUniformBuffer(final int location) {
+        public @NonNull UniformReader getUniformBuffer(final int location) {
             return this.pipeline.ubos[location];
         }
     }
@@ -376,27 +376,22 @@ public final class DefaultSkeletonPipelineImpl implements SkeletonPipeline {
         private final LocationLookup oid;
 
         @Override
-        public int oid(final @NotNull String semantic) {
+        public int oid(final @NonNull String semantic) {
             return this.oid.find(semantic);
         }
 
         @Override
-        public int location(final @NotNull String semantic) {
+        public int location(final @NonNull String semantic) {
             final var args      = semantic.split("\\.");
             final var namespace = args[0];
 
-            switch (namespace) {
-                case "buffer":
-                    return this.buffers.find(args[1]);
-                case "sampler":
-                    return this.providers.find(args[1]);
-                case "uniform":
-                    return this.uniform.find(args[1]);
-                case "ubo":
-                    return this.ubos.find(args[1]);
-                default:
-                    return -1;
-            }
+            return switch (namespace) {
+                case "buffer"   -> this.buffers.find(args[1]);
+                case "provider" -> this.providers.find(args[1]);
+                case "uniform"  -> this.uniform.find(args[1]);
+                case "ubo"      -> this.ubos.find(args[1]);
+                default         -> -1;
+            };
         }
     }
 

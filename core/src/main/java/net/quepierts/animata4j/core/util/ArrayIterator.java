@@ -1,4 +1,4 @@
-package net.quepierts.animata4j.core.misc;
+package net.quepierts.animata4j.core.util;
 
 import lombok.RequiredArgsConstructor;
 

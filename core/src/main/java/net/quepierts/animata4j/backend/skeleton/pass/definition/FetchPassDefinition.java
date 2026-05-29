@@ -3,7 +3,7 @@ package net.quepierts.animata4j.backend.skeleton.pass.definition;
 import net.quepierts.animata4j.backend.skeleton.pass.FetchPass;
 import net.quepierts.animata4j.backend.skeleton.pass.SkeletonPass;
 import net.quepierts.animata4j.backend.skeleton.pipeline.SkeletonPipelineCompileContext;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public final class FetchPassDefinition extends SkeletonPassDefinition {
 
@@ -25,7 +25,7 @@ public final class FetchPassDefinition extends SkeletonPassDefinition {
     }
 
     @Override
-    public SkeletonPass compile(@NotNull final SkeletonPipelineCompileContext context) {
+    public SkeletonPass compile(@NonNull final SkeletonPipelineCompileContext context) {
         final var provider = context.getProviderLocation(this.provider);
         final var target   = context.getBufferLocation(this.target);
 

@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.quepierts.animata4j.backend.skeleton.pass.SkeletonPass;
 import net.quepierts.animata4j.backend.skeleton.pipeline.SkeletonPipelineCompileContext;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
@@ -13,6 +13,6 @@ public abstract class SkeletonPassDefinition {
 
     private final String name;
 
-    public abstract SkeletonPass compile(@NotNull SkeletonPipelineCompileContext context);
+    public abstract SkeletonPass compile(@NonNull SkeletonPipelineCompileContext context);
 
 }

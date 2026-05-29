@@ -2,7 +2,7 @@ package net.quepierts.animata4j.backend.uniform;
 
 import net.quepierts.animata4j.backend.buffer.AnimationBuffer;
 import net.quepierts.animata4j.backend.buffer.ReadableBuffer;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public interface UniformReader {
 
@@ -31,7 +31,7 @@ public interface UniformReader {
             AnimationBuffer out
     );
 
-    @NotNull ReadableBuffer getRawReader();
+    @NonNull ReadableBuffer getRawReader();
 
     int address(int location);
 

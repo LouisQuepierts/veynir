@@ -8,28 +8,28 @@ import net.quepierts.animata4j.backend.sampler.SamplingMode;
 import net.quepierts.animata4j.backend.uniform.UniformReader;
 import net.quepierts.animata4j.core.AnimationState;
 import net.quepierts.animata4j.core.adapter.PipelineInputProvider;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public interface AnimationContext {
 
     float                               getProgress();
 
-    @NotNull    ChannelLayout           getChannelLayout();
+    @NonNull    ChannelLayout           getChannelLayout();
 
-    @NotNull    ChannelFormat           getChannelFormat();
+    @NonNull    ChannelFormat           getChannelFormat();
 
-    @NotNull    AnimationState          getAnimationState();
+    @NonNull    AnimationState          getAnimationState();
 
-    @NotNull    AnimationSampler        getSampler(int location);
+    @NonNull    AnimationSampler        getSampler(int location);
 
-    @NotNull    SamplingMode            getSamplingMode(int location);
+    @NonNull    SamplingMode            getSamplingMode(int location);
 
-    @NotNull    AnimationFrameBuffer    getFrameBuffer(int location);
+    @NonNull    AnimationFrameBuffer    getFrameBuffer(int location);
 
-    @NotNull    AnimationBuffer         getParameterBuffer();
+    @NonNull    AnimationBuffer         getParameterBuffer();
 
-    @NotNull    UniformReader           getUniform();
+    @NonNull    UniformReader           getUniform();
 
     @Nullable   UniformReader           getUniformBuffer(int location);
 

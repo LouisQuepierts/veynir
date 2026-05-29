@@ -1,7 +1,8 @@
-package net.quepierts.animata4j.core.misc;
+package net.quepierts.animata4j.core.util;
 
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -38,7 +39,7 @@ public final class LocationLookup implements Iterable<String> {
     }
 
     @Override
-    public @NotNull Iterator<String> iterator() {
+    public @NonNull Iterator<String> iterator() {
         return new ArrayIterator<>(this.names);
     }
 

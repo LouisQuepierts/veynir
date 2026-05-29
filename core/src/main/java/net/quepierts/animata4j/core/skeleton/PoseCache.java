@@ -5,9 +5,9 @@ import net.quepierts.animata4j.backend.skeleton.SkeletonLayout;
 import net.quepierts.animata4j.backend.skeleton.pipeline.SkeletonOutput;
 import net.quepierts.animata4j.backend.skeleton.pipeline.SkeletonResultView;
 import net.quepierts.animata4j.core.adapter.TransformF;
-import net.quepierts.animata4j.core.misc.ArrayUtils;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import net.quepierts.animata4j.core.util.ArrayUtils;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public final class PoseCache implements SkeletonOutput {
 
@@ -34,7 +34,7 @@ public final class PoseCache implements SkeletonOutput {
     }
 
     @Override
-    public void accept(@NotNull final SkeletonResultView view) {
+    public void accept(@NonNull final SkeletonResultView view) {
         for (var i = 0; i < this.transforms.length; i++) {
             final var pose = view.get(i);
             pose.getTransform(this.transforms[i]);

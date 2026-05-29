@@ -3,7 +3,7 @@ package net.quepierts.animata4j.backend.buffer;
 import lombok.Getter;
 import net.quepierts.animata4j.core.adapter.Consumer4f;
 import net.quepierts.animata4j.core.adapter.Consumer4i;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -28,7 +28,7 @@ public final class AttributeBuffer implements ReadableBuffer, WritableBuffer {
     }
 
     @Override
-    public void readFloat(int location, @NotNull Consumer4f consumer) {
+    public void readFloat(int location, @NonNull Consumer4f consumer) {
         consumer.accept(
                 Float.intBitsToFloat(this.buffer[location]),
                 Float.intBitsToFloat(this.buffer[location + 1]),
@@ -38,14 +38,14 @@ public final class AttributeBuffer implements ReadableBuffer, WritableBuffer {
     }
 
     @Override
-    public void readFloat(int location, int length, float @NotNull [] out) {
+    public void readFloat(int location, int length, float @NonNull [] out) {
         for (int i = 0; i < length; i++) {
             out[i] = Float.intBitsToFloat(this.buffer[location + i]);
         }
     }
 
     @Override
-    public void readFloat(int location, int length, @NotNull FloatBuffer out) {
+    public void readFloat(int location, int length, @NonNull FloatBuffer out) {
         for (int i = 0; i < length; i++) {
             out.put(i, Float.intBitsToFloat(this.buffer[location + i]));
         }
@@ -57,7 +57,7 @@ public final class AttributeBuffer implements ReadableBuffer, WritableBuffer {
     }
 
     @Override
-    public void readInt(int location, @NotNull Consumer4i consumer) {
+    public void readInt(int location, @NonNull Consumer4i consumer) {
         consumer.accept(
                 this.buffer[location],
                 this.buffer[location + 1],
@@ -67,12 +67,12 @@ public final class AttributeBuffer implements ReadableBuffer, WritableBuffer {
     }
 
     @Override
-    public void readInt(int location, int length, int @NotNull [] out) {
+    public void readInt(int location, int length, int @NonNull [] out) {
         System.arraycopy(this.buffer, location, out, 0, length);
     }
 
     @Override
-    public void readInt(int location, int length, @NotNull IntBuffer out) {
+    public void readInt(int location, int length, @NonNull IntBuffer out) {
         out.put(this.buffer, location, length);
     }
 

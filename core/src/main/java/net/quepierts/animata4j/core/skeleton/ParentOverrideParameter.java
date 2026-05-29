@@ -8,12 +8,12 @@ import net.quepierts.animata4j.backend.uniform.UniformBuffer;
 import net.quepierts.animata4j.backend.uniform.UniformParameter;
 import net.quepierts.animata4j.backend.uniform.UniformType;
 import net.quepierts.animata4j.core.model.ParentOverrideConfiguration;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public final class ParentOverrideParameter extends UniformParameter {
 
-    public static ParentOverrideParameter of(@NotNull final SkeletonLayout layout) {
+    public static ParentOverrideParameter of(@NonNull final SkeletonLayout layout) {
         final var size = layout.size();
         final var definition = UboDefinition.builder()
 //                .withArray("order", UniformType.INT, size)
@@ -39,7 +39,7 @@ public final class ParentOverrideParameter extends UniformParameter {
     }
 
     @Override
-    public void upload(final @NotNull UniformBuffer buffer) {
+    public void upload(final @NonNull UniformBuffer buffer) {
         if (this.data == null) {
             buffer.write(this.LOC_ENABLE, 0.0f);
             return;
@@ -53,7 +53,7 @@ public final class ParentOverrideParameter extends UniformParameter {
 
     public void upload(
             @Nullable final ParentOverrideConfiguration configuration,
-            @NotNull  final UniformBuffer               buffer
+            @NonNull  final UniformBuffer               buffer
     ) {
         if (configuration != this.data) {
             this.data = configuration;

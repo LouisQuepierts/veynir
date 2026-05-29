@@ -116,124 +116,53 @@ public final class OperationComputePassDefinition extends AnimationPassDefinitio
 
             oids[i]         = context.oidObject(operation.semantic()[0]);
 
-            switch (operation.type()) {
-                case SAMPLE: {
-                    operations[i]   = Operation.sample(
-                            context.getSamplerLocation(operation.src0()),
-                            context.getBufferLocation(operation.dst())
-                    );
-                    break;
-                }
-                case BLEND_P: {
-                    operations[i]   = Operation.blend(
-                            context.getBufferLocation(operation.src0()),
-                            context.getBufferLocation(operation.src1()),
-                            context.getBufferLocation(operation.dst()),
-                            operation.param0()
-                    );
-                    break;
-                }
-                case BLEND_A: {
-                    operations[i]   = Operation.blend(
-                            context.getBufferLocation(operation.src0()),
-                            context.getBufferLocation(operation.src1()),
-                            context.getBufferLocation(operation.dst()),
-                            context.getUniformLocation(operation.arg0())
-                    );
-                }
-                case ASSIGN: {
-                    operations[i]   = Operation.assign(
-                            context.getBufferLocation(operation.src0()),
-                            context.getBufferLocation(operation.dst())
-                    );
-                }
-                case CLEAR: {
-                    operations[i]   = Operation.clear(
-                            context.getBufferLocation(operation.dst())
-                    );
-                }
-                case CUSTOM:{
-                    throw new UnsupportedOperationException("Custom operations are not supported yet.");
-                }
+            operations[i]   = switch (operation.type()) {
+                case SAMPLE -> Operation.sample(
+                        context.getSamplerLocation(operation.src0()),
+                        context.getBufferLocation(operation.dst())
+                );
+                case BLEND_P -> Operation.blend(
+                        context.getBufferLocation(operation.src0()),
+                        context.getBufferLocation(operation.src1()),
+                        context.getBufferLocation(operation.dst()),
+                        operation.param0()
+                );
+                case BLEND_A -> Operation.blend(
+                        context.getBufferLocation(operation.src0()),
+                        context.getBufferLocation(operation.src1()),
+                        context.getBufferLocation(operation.dst()),
+                        context.getUniformLocation(operation.arg0())
+                );
+                case ASSIGN -> Operation.assign(
+                        context.getBufferLocation(operation.src0()),
+                        context.getBufferLocation(operation.dst())
+                );
+                case CLEAR -> Operation.clear(
+                        context.getBufferLocation(operation.dst())
+                );
+                case CUSTOM -> throw new UnsupportedOperationException("Custom operations are not supported yet.");
             };
         }
 
         return new ComputePass(this.getName(), operations, oids);
     }
 
-    private static final class OperationDescription {
-        private final Operation.Type type;
-        private final String dst;
-        private final String src0;
-        private final String src1;
-        private final String arg0;
-        private final String arg1;
-        private final float param0;
-        private final float param1;
-        private final String[] semantic;
+    private record OperationDescription(
+            Operation.Type type,
 
-        private OperationDescription(
-                Operation.Type type,
+            String dst,
+            String src0,
+            String src1,
 
-                String dst,
-                String src0,
-                String src1,
+            String arg0,
+            String arg1,
 
-                String arg0,
-                String arg1,
+            float param0,
+            float param1,
 
-                float param0,
-                float param1,
-
-                String[] semantic
-        ) {
-            this.type = type;
-            this.dst = dst;
-            this.src0 = src0;
-            this.src1 = src1;
-            this.arg0 = arg0;
-            this.arg1 = arg1;
-            this.param0 = param0;
-            this.param1 = param1;
-            this.semantic = semantic;
-        }
-
-        public Operation.Type type() {
-            return type;
-        }
-
-        public String dst() {
-            return dst;
-        }
-
-        public String src0() {
-            return src0;
-        }
-
-        public String src1() {
-            return src1;
-        }
-
-        public String arg0() {
-            return arg0;
-        }
-
-        public String arg1() {
-            return arg1;
-        }
-
-        public float param0() {
-            return param0;
-        }
-
-        public float param1() {
-            return param1;
-        }
-
-        public String[] semantic() {
-            return semantic;
-        }
-
+            String[] semantic
+    ) {
 
     }
+
 }

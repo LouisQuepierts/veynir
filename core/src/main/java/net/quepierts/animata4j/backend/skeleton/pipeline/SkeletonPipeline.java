@@ -5,7 +5,7 @@ import net.quepierts.animata4j.backend.skeleton.SkeletonLayout;
 import net.quepierts.animata4j.backend.uniform.UniformBuffer;
 import net.quepierts.animata4j.core.SkeletonState;
 import net.quepierts.animata4j.core.adapter.AnimationOutput;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public interface SkeletonPipeline {
 
@@ -16,7 +16,7 @@ public interface SkeletonPipeline {
         return DefaultSkeletonPipelineImpl.compiler();
     }
 
-    void submit(@NotNull SkeletonState state);
+    void submit(@NonNull SkeletonState state);
 
     void bindProvider(
             String name,

@@ -7,15 +7,15 @@ import net.quepierts.animata4j.backend.buffer.WritableBuffer;
 import net.quepierts.animata4j.backend.channel.ChannelLayout;
 import net.quepierts.animata4j.backend.pipeline.AnimationContext;
 import net.quepierts.animata4j.backend.source.AnimationBufferSource;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class AnimationBufferSampler implements AnimationSampler {
 
     public static AnimationBufferSampler of(
-            @NotNull AnimationBufferSource source,
-            @NotNull ChannelLayout layout
+            @NonNull AnimationBufferSource source,
+            @NonNull ChannelLayout layout
     ) {
 
         var same    = source.getChannels() == layout.getLookup();

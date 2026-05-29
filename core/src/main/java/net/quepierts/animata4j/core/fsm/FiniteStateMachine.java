@@ -4,8 +4,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.quepierts.animata4j.core.misc.LocationLookup;
-import org.jetbrains.annotations.NotNull;
+import net.quepierts.animata4j.core.util.LocationLookup;
+import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,19 +30,19 @@ public final class FiniteStateMachine {
     @Getter
     final int                   terminal;
 
-    public void start(@NotNull final FSMState state) {
+    public void start(@NonNull final FSMState state) {
         this.reset(state);
     }
 
-    public void exit(@NotNull final FSMState state) {
+    public void exit(@NonNull final FSMState state) {
         this.event(state, EVENT_EXIT);
     }
 
-    public void abort(@NotNull final FSMState state) {
+    public void abort(@NonNull final FSMState state) {
         this.reset(state);
     }
 
-    public void reset(@NotNull final FSMState state) {
+    public void reset(@NonNull final FSMState state) {
         state.currentState              = this.initial;
         state.elapsed                   = 0.0f;
         state.blendElapsed              = 0.0f;
@@ -56,7 +56,7 @@ public final class FiniteStateMachine {
     }
 
     public void update(
-            @NotNull final FSMState state,
+            @NonNull final FSMState state,
             float                   delta
     ) {
         if (state.uniform        == null) {
@@ -101,7 +101,7 @@ public final class FiniteStateMachine {
     }
 
     public void event(
-            @NotNull final FSMState state,
+            @NonNull final FSMState state,
             int event
     ) {
         if (state.uniform == null) {
@@ -116,7 +116,7 @@ public final class FiniteStateMachine {
         this                    .transition(state, next);
     }
     private void transition(
-            @NotNull final FSMState state,
+            @NonNull final FSMState state,
             int                     next
     ) {
         if (next == state.currentState) { // loop
@@ -171,7 +171,7 @@ public final class FiniteStateMachine {
             return this;
         }
 
-        public Compiler withState(final @NotNull String state) {
+        public Compiler withState(final @NonNull String state) {
 
             if (this.states.size() == Byte.MAX_VALUE) {
                 throw new IllegalStateException("Too many states");
@@ -199,7 +199,7 @@ public final class FiniteStateMachine {
             return this;
         }
 
-        public Compiler withInitialState(final @NotNull String state) {
+        public Compiler withInitialState(final @NonNull String state) {
 
             if (!this.states.contains(state)) {
                 throw new IllegalArgumentException("State does not exist: " + state);
@@ -209,7 +209,7 @@ public final class FiniteStateMachine {
             return this;
         }
 
-        public Compiler withTerminalState(final @NotNull String state) {
+        public Compiler withTerminalState(final @NonNull String state) {
 
             if (!this.states.contains(state)) {
                 throw new IllegalArgumentException("State does not exist: " + state);
@@ -220,8 +220,8 @@ public final class FiniteStateMachine {
         }
 
         public Compiler withTransition(
-                final @NotNull  String  from,
-                final @NotNull  String  to
+                final @NonNull  String  from,
+                final @NonNull  String  to
         ) {
             if (!this.states.contains(from)) {
                 throw new IllegalArgumentException("State does not exist: " + from);

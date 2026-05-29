@@ -18,17 +18,14 @@ import net.quepierts.animata4j.backend.pass.definition.AnimationPassDefinition;
 import net.quepierts.animata4j.backend.sampler.AnimationSampler;
 import net.quepierts.animata4j.backend.sampler.OriginSampler;
 import net.quepierts.animata4j.backend.sampler.SamplingMode;
-import net.quepierts.animata4j.backend.uniform.UboDefinition;
-import net.quepierts.animata4j.backend.uniform.UniformBuffer;
-import net.quepierts.animata4j.backend.uniform.UniformReader;
-import net.quepierts.animata4j.backend.uniform.UniformType;
+import net.quepierts.animata4j.backend.uniform.*;
 import net.quepierts.animata4j.core.AnimationState;
 import net.quepierts.animata4j.core.adapter.AnimationOutput;
 import net.quepierts.animata4j.core.adapter.PipelineInputProvider;
-import net.quepierts.animata4j.core.misc.ArrayUtils;
-import net.quepierts.animata4j.core.misc.LocationLookup;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import net.quepierts.animata4j.core.util.ArrayUtils;
+import net.quepierts.animata4j.core.util.LocationLookup;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
@@ -110,7 +107,7 @@ public final class DefaultAnimationPipelineImpl implements AnimationPipeline {
     }
 
     @Override
-    public void submit(@NotNull final AnimationState state) {
+    public void submit(@NonNull final AnimationState state) {
         var context     = this.context;
         context.state   = state;
 
@@ -146,9 +143,9 @@ public final class DefaultAnimationPipelineImpl implements AnimationPipeline {
 
     /*@Override
     public void submit(
-            @NotNull AnimationState state,
+            @NonNull AnimationState state,
             @Nullable PipelineInputProvider input,
-            @NotNull AnimationOutput output
+            @NonNull AnimationOutput output
     ) {
         var context     = this.context;
         context.state   = state;
@@ -396,42 +393,42 @@ public final class DefaultAnimationPipelineImpl implements AnimationPipeline {
         }
 
         @Override
-        public @NotNull ChannelLayout getChannelLayout() {
+        public @NonNull ChannelLayout getChannelLayout() {
             return this.pipeline.getChannelLayout();
         }
 
         @Override
-        public @NotNull ChannelFormat getChannelFormat() {
+        public @NonNull ChannelFormat getChannelFormat() {
             return this.pipeline.getChannelFormat();
         }
 
         @Override
-        public @NotNull AnimationState getAnimationState() {
+        public @NonNull AnimationState getAnimationState() {
             return this.state;
         }
 
         @Override
-        public @NotNull AnimationSampler getSampler(int location) {
+        public @NonNull AnimationSampler getSampler(int location) {
             return this.pipeline.samplers[location];
         }
 
         @Override
-        public @NotNull SamplingMode getSamplingMode(int location) {
+        public @NonNull SamplingMode getSamplingMode(int location) {
             return this.pipeline.samplingModes[location];
         }
 
         @Override
-        public @NotNull AnimationFrameBuffer getFrameBuffer(int location) {
+        public @NonNull AnimationFrameBuffer getFrameBuffer(int location) {
             return this.pipeline.buffers[location];
         }
 
         @Override
-        public @NotNull AnimationBuffer getParameterBuffer() {
+        public @NonNull AnimationBuffer getParameterBuffer() {
             return this.state.getParameterBuffer();
         }
 
         @Override
-        public @NotNull UniformReader getUniform() {
+        public @NonNull UniformReader getUniform() {
             return this.pipeline.getUniform();
         }
 
@@ -467,27 +464,22 @@ public final class DefaultAnimationPipelineImpl implements AnimationPipeline {
         private final LocationLookup oid;
 
         @Override
-        public int oid(final @NotNull String semantic) {
+        public int oid(final @NonNull String semantic) {
             return this.oid.find(semantic);
         }
 
         @Override
-        public int location(final @NotNull String semantic) {
+        public int location(final @NonNull String semantic) {
             final var args      = semantic.split("\\.");
             final var namespace = args[0];
 
-            switch (namespace) {
-                case "buffer":
-                    return this.buffers.find(args[1]);
-                case "sampler":
-                    return this.samplers.find(args[1]);
-                case "uniform":
-                    return this.uniform.find(args[1]);
-                case "ubo":
-                    return this.ubos.find(args[1]);
-                default:
-                    return -1;
-            }
+            return switch (namespace) {
+                case "buffer"   -> this.buffers.find(args[1]);
+                case "sampler"  -> this.samplers.find(args[1]);
+                case "uniform"  -> this.uniform.find(args[1]);
+                case "ubo"      -> this.ubos.find(args[1]);
+                default -> -1;
+            };
         }
     }
 

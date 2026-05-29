@@ -10,24 +10,24 @@ import net.quepierts.animata4j.backend.uniform.UniformBuffer;
 import net.quepierts.animata4j.core.AnimationState;
 import net.quepierts.animata4j.core.adapter.AnimationOutput;
 import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public interface AnimationPipeline {
     String ORIGINAL_SAMPLER = "Sampler#Origin";
     String OUTPUT_BUFFER = "Buffer#Result";
 
     @Contract(" -> new")
-    static DefaultAnimationPipelineImpl.@NotNull Compiler compiler() {
+    static DefaultAnimationPipelineImpl.@NonNull Compiler compiler() {
         return DefaultAnimationPipelineImpl.compiler();
     }
 
     void submit(
-            @NotNull AnimationState state
+            @NonNull AnimationState state
     );
 
     default void submit(
-            @NotNull AnimationState state,
-            @NotNull AnimationOutput output
+            @NonNull AnimationState state,
+            @NonNull AnimationOutput output
     ) {
         this.bindTarget(0, output);
         this.submit(state);

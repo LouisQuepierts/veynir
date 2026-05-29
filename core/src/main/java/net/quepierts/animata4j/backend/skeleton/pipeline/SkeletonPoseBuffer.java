@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 import net.quepierts.animata4j.backend.buffer.AnimationBuffer;
 import net.quepierts.animata4j.backend.skeleton.SkeletonLayout;
 import net.quepierts.animata4j.core.adapter.TransformAccessor;
-import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
+import org.jspecify.annotations.NonNull;
 
 public final class SkeletonPoseBuffer
         extends AnimationBuffer.Slice
@@ -31,7 +31,7 @@ public final class SkeletonPoseBuffer
         return views[id];
     }
 
-    public void copy(final @NotNull SkeletonPoseBuffer src) {
+    public void copy(final @NonNull SkeletonPoseBuffer src) {
         if (this == src) {
             return;
         }

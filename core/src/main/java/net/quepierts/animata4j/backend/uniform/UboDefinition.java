@@ -4,7 +4,7 @@ import com.google.common.collect.ImmutableList;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.quepierts.animata4j.core.misc.LocationLookup;
+import net.quepierts.animata4j.core.util.LocationLookup;
 
 import java.util.*;
 import java.util.regex.Pattern;
@@ -59,30 +59,12 @@ public final class UboDefinition {
         return new Builder();
     }
 
-    @RequiredArgsConstructor
-    public static final class Entry {
-        private final String name;
-        private final UniformType type;
-        private final int offset;
-        private final int length;
-
-        public String name() {
-            return name;
-        }
-
-        public UniformType type() {
-            return type;
-        }
-
-        public int offset() {
-            return offset;
-        }
-
-        public int length() {
-            return length;
-        }
-
-    }
+    public record Entry (
+            String      name,
+            UniformType type,
+            int         offset,
+            int         length
+    ) { }
 
     public static final class Builder {
         private static final Pattern                NAME_PATTERN    = Pattern.compile("[a-zA-Z_][a-zA-Z0-9_]*");

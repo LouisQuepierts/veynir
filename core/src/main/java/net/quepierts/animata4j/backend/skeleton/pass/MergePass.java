@@ -1,9 +1,9 @@
 package net.quepierts.animata4j.backend.skeleton.pass;
 
 import net.quepierts.animata4j.backend.skeleton.pipeline.SkeletonContext;
-import org.jetbrains.annotations.NotNull;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
+import org.jspecify.annotations.NonNull;
 
 public final class MergePass extends SkeletonPass {
 
@@ -28,7 +28,7 @@ public final class MergePass extends SkeletonPass {
     }
 
     @Override
-    public void execute(@NotNull final SkeletonContext context) {
+    public void execute(@NonNull final SkeletonContext context) {
         final var src0      = context.getPoseBuffer(this.src0);
         final var src1      = context.getPoseBuffer(this.src1);
         final var dst       = context.getPoseBuffer(this.dst);

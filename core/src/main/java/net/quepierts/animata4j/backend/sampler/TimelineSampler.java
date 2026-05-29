@@ -9,7 +9,7 @@ import net.quepierts.animata4j.backend.model.Timeline;
 import net.quepierts.animata4j.backend.pipeline.AnimationContext;
 import net.quepierts.animata4j.backend.source.TimelineSource;
 import net.quepierts.animata4j.core.interpolator.Interpolator4f;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 import java.util.Arrays;
 
@@ -23,8 +23,8 @@ public final class TimelineSampler implements AnimationSampler {
     };
 
     public static TimelineSampler of(
-            @NotNull TimelineSource  source,
-            @NotNull ChannelLayout   layout
+            @NonNull TimelineSource  source,
+            @NonNull ChannelLayout   layout
     ) {
         var channels        = source.getChannels();
         var mapping         = new int[channels.size()];

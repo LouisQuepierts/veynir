@@ -3,7 +3,7 @@ package net.quepierts.animata4j.backend.skeleton.pass.definition;
 import net.quepierts.animata4j.backend.skeleton.pass.PivotPass;
 import net.quepierts.animata4j.backend.skeleton.pass.SkeletonPass;
 import net.quepierts.animata4j.backend.skeleton.pipeline.SkeletonPipelineCompileContext;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
 public final class PivotPassDefinition extends SkeletonPassDefinition {
 
@@ -27,7 +27,7 @@ public final class PivotPassDefinition extends SkeletonPassDefinition {
     }
 
     @Override
-    public SkeletonPass compile(@NotNull final SkeletonPipelineCompileContext context) {
+    public SkeletonPass compile(@NonNull final SkeletonPipelineCompileContext context) {
         final var layout    = context.getLayout();
         final var bones     = layout.size();
         final var location  = context.getUboLocation(REQUIRED_UBO);
