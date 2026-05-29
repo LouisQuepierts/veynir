@@ -4,10 +4,9 @@ plugins {
     id 'animata-codegen'
 
     id 'java-library'
-    id 'maven-publish'
-    id 'signing'
 
     id 'io.freefair.lombok' version '9.2.0'
+    id "com.vanniktech.maven.publish" version "0.34.0"
 }
 
 def getGitCommitCount() {
@@ -22,14 +21,7 @@ def getGitCommitCount() {
 def buildNumber = getGitCommitCount()
 
 group       = 'net.quepierts.animata4j'
-version     = hasProperty("build.snapshot") ?
-            "${project_version}-SNAPSHOT" :
-            "${project_version}"
-
-java {
-    withJavadocJar()
-    withSourcesJar()
-}
+version     = "${project_version}+build.${buildNumber}"
 
 apply from: "jar.gradle"
 apply from: "publishing.gradle"

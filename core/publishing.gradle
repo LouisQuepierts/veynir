@@ -2,55 +2,45 @@ artifacts {
     archives tasks.jar
 }
 
-publishing {
-    publications {
-        register('mavenJava', MavenPublication) {
+mavenPublishing {
 
-            from components.java
+    publishToMavenCentral()
 
-            artifactId = "animata4j-core"
+    signAllPublications()
 
-            pom {
-                name = "animata4j-core"
-                description = "Core module for Animata4j, a pipelined animation system library for java."
-                url = "https://github.com/LouisQuepierts/animata4j"
+    def jarName = "${rootProject.name}-${project.name}"
 
-                licenses {
-                    license {
-                        name = "MIT"
-                        url = "https://opensource.org/licenses/MIT"
-                    }
-                }
+    coordinates(
+            group.toString(),
+            jarName,
+            version.toString()
+    )
 
-                developers {
-                    developer {
-                        id = "LouisQuepierts"
-                        name = "Quepierts Andier"
-                        email = "LouisQuepierts@Outlook.com"
-                    }
-                }
+    pom {
+        name = jarName
+        description = "Core module for Animata4j, a pipelined animation system library for java."
+        url = "https://github.com/LouisQuepierts/animata4j"
 
-                scm {
-                    url = "https://github.com/LouisQuepierts/animata4j"
-                    connection = "scm:git:https://github.com/LouisQuepierts/animata4j.git"
-                    developerConnection = "scm:git:https://github.com/LouisQuepierts/animata4j.git"
-                }
+        licenses {
+            license {
+                name = "MIT"
+                url = "https://opensource.org/licenses/MIT"
             }
         }
-    }
 
-    repositories {
-        maven {
-            name = "sonatype"
-            url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-            credentials {
-                username = findProperty("SONATYPE_USERNAME") as String
-                password = findProperty("SONATYPE_PASSWORD") as String
+        developers {
+            developer {
+                id = "LouisQuepierts"
+                name = "Quepierts Andier"
+                email = "LouisQuepierts@Outlook.com"
+                url = "https://github.com/LouisQuepierts"
             }
         }
-    }
 
-    signing {
-        sign publishing.publications.getByName("mavenJava")
+        scm {
+            url = "https://github.com/LouisQuepierts/animata4j"
+            connection = "scm:git:https://github.com/LouisQuepierts/animata4j.git"
+            developerConnection = "scm:git:https://github.com/LouisQuepierts/animata4j.git"
+        }
     }
 }
