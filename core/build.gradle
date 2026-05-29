@@ -5,6 +5,7 @@ plugins {
 
     id 'java-library'
     id 'maven-publish'
+    id 'signing'
 
     id 'io.freefair.lombok' version '9.2.0'
 }
@@ -20,8 +21,10 @@ def getGitCommitCount() {
 
 def buildNumber = getGitCommitCount()
 
-group       = 'net.quepierts'
-version     = "${project_version}+${buildNumber}"
+group       = 'net.quepierts.animata4j'
+version     = hasProperty("build.snapshot") ?
+            "${project_version}-SNAPSHOT" :
+            "${project_version}"
 
 java {
     withJavadocJar()

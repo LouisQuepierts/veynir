@@ -5,14 +5,14 @@ artifacts {
 publishing {
     publications {
         register('mavenJava', MavenPublication) {
+
             from components.java
 
-            artifact tasks.named("sourcesJar")
-            artifact tasks.named("javadocJar")
+            artifactId = "animata4j-core"
 
             pom {
-                name = project.name
-                description = "pipelined animation system"
+                name = "animata4j-core"
+                description = "Core module for Animata4j, a pipelined animation system library for java."
                 url = "https://github.com/LouisQuepierts/animata4j"
 
                 licenses {
@@ -29,11 +29,28 @@ publishing {
                         email = "LouisQuepierts@Outlook.com"
                     }
                 }
+
+                scm {
+                    url = "https://github.com/LouisQuepierts/animata4j"
+                    connection = "scm:git:https://github.com/LouisQuepierts/animata4j.git"
+                    developerConnection = "scm:git:https://github.com/LouisQuepierts/animata4j.git"
+                }
             }
         }
     }
 
     repositories {
+        maven {
+            name = "sonatype"
+            url = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            credentials {
+                username = findProperty("SONATYPE_USERNAME") as String
+                password = findProperty("SONATYPE_PASSWORD") as String
+            }
+        }
+    }
 
+    signing {
+        sign publishing.publications.getByName("mavenJava")
     }
 }

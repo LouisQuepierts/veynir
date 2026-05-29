@@ -4,4 +4,3 @@ pluginManagement {
 
 rootProject.name = 'animata4j'
 include('core', 'codegen-annotations')
-
