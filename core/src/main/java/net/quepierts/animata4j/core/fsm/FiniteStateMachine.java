@@ -115,6 +115,13 @@ public final class FiniteStateMachine {
 
         this                    .transition(state, next);
     }
+
+    public boolean isLooping(
+            @NonNull final FSMState state
+    ) {
+        return state.currentState == state.lastState;
+    }
+
     private void transition(
             @NonNull final FSMState state,
             int                     next
@@ -123,6 +130,7 @@ public final class FiniteStateMachine {
             final var duration = state.uniform.duration()[state.currentState];
             state.elapsed           %= duration;
             state.normalizedElapsed = Math.min(state.elapsed / duration, 1.0f);
+            state.lastState         = state.currentState;
             return;
         }
 
