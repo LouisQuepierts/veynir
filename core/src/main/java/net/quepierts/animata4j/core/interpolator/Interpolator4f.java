@@ -51,12 +51,15 @@ public interface Interpolator4f {
         var r0      = buffer0.getBuffer();
         var r1      = buffer1.getBuffer();
 
+        float t2 = progress * progress;
+        float t3 = t2 * progress;
+
         target.write(
                 offset,
-                Mth.catmullrom(progress, r0[address0], r0[address0 + 4], r1[address1], r1[address1 + 4]),
-                Mth.catmullrom(progress, r0[address0 + 1], r0[address0 + 5], r1[address1 + 1], r1[address1 + 5]),
-                Mth.catmullrom(progress, r0[address0 + 2], r0[address0 + 6], r1[address1 + 2], r1[address1 + 6]),
-                Mth.catmullrom(progress, r0[address0 + 3], r0[address0 + 7], r1[address1 + 3], r1[address1 + 7])
+                Mth.catmullrom(progress, t2, t3, r0[address0], r0[address0 + 4], r1[address1], r1[address1 + 4]),
+                Mth.catmullrom(progress, t2, t3, r0[address0 + 1], r0[address0 + 5], r1[address1 + 1], r1[address1 + 5]),
+                Mth.catmullrom(progress, t2, t3, r0[address0 + 2], r0[address0 + 6], r1[address1 + 2], r1[address1 + 6]),
+                Mth.catmullrom(progress, t2, t3, r0[address0 + 3], r0[address0 + 7], r1[address1 + 3], r1[address1 + 7])
         );
     };
 
