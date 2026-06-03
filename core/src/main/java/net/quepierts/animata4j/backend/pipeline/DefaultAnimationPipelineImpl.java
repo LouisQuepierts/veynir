@@ -24,6 +24,7 @@ import net.quepierts.animata4j.backend.uniform.*;
 import net.quepierts.animata4j.core.AnimationState;
 import net.quepierts.animata4j.core.adapter.AnimationOutput;
 import net.quepierts.animata4j.core.adapter.PipelineInputProvider;
+import net.quepierts.animata4j.core.interpolator.Interpolator4f;
 import net.quepierts.animata4j.core.util.ArrayUtils;
 import net.quepierts.animata4j.core.util.LocationLookup;
 import org.jspecify.annotations.NonNull;
@@ -55,6 +56,8 @@ public final class DefaultAnimationPipelineImpl implements AnimationPipeline {
     @Getter
     private final UniformBuffer             uniform;
 
+    private final Interpolator4f[]          interpolations;
+
     private final Reflection                reflection;
 
     @Getter
@@ -67,12 +70,14 @@ public final class DefaultAnimationPipelineImpl implements AnimationPipeline {
             ChannelLayout       layout,
             AnimationPass[][]   passes,
             UboDefinition       uniform,
+            Interpolator4f[]    interpolations,
             Reflection          reflection
     ) {
         this.channelFormat      = format;
         this.channelLayout      = layout;
         this.parameterPasses    = passes[0];
         this.passes             = passes[1];
+        this.interpolations     = interpolations;
         this.reflection         = reflection;
         this.executionState     = new ExecutionState(reflection.oid.size());
 
@@ -256,10 +261,15 @@ public final class DefaultAnimationPipelineImpl implements AnimationPipeline {
         private final Set<String>                       buffers     = new ObjectArraySet<>();
         private final UboDefinition.Builder             uniforms    = UboDefinition.builder();
         private final Map<String, UboDefinition>        ubo         = new Object2ObjectArrayMap<>();
+        private final Map<String, Interpolator4f>       lerps       = new Object2ObjectArrayMap<>();
 
         private Compiler() {
             this.samplers.add(ORIGINAL_SAMPLER);
             this.buffers.add(OUTPUT_BUFFER);
+
+            this.lerps.put("linear",        Interpolator4f.LINEAR);
+            this.lerps.put("catmull_rom",   Interpolator4f.CATMULL_ROM);
+            this.lerps.put("constant",      Interpolator4f.CONSTANT);
         }
 
         public Compiler withChannelLayout(ChannelLayout layout) {
@@ -322,6 +332,16 @@ public final class DefaultAnimationPipelineImpl implements AnimationPipeline {
             return this;
         }
 
+        public Compiler withInterpolation(String name, Interpolator4f lerp) {
+            if (!Patterns.PATTERN_IDENTIFIER
+                    .matcher(name)
+                    .matches()) {
+                throw new IllegalArgumentException("Invalid lerp name: " + name);
+            }
+            this.lerps.put(name, lerp);
+            return this;
+        }
+
         @SuppressWarnings("unchecked")
         public DefaultAnimationPipelineImpl compile() {
 
@@ -338,6 +358,7 @@ public final class DefaultAnimationPipelineImpl implements AnimationPipeline {
             var bufferNames     = LocationLookup.of(this.buffers);
             var samplerNames    = LocationLookup.of(this.samplers);
             var uboNames        = LocationLookup.of(this.ubo.keySet());
+            var lerpNames       = LocationLookup.of(this.lerps.keySet());
 
             var oids            = new ArrayList<String>();
 
@@ -367,8 +388,14 @@ public final class DefaultAnimationPipelineImpl implements AnimationPipeline {
                     samplerNames,
                     uniform.getLookup(),
                     uboNames,
-                    LocationLookup.of(oids)
+                    LocationLookup.of(oids),
+                    lerpNames
             );
+
+            var interpolations = new Interpolator4f[this.lerps.size()];
+            for (var i = 0; i < this.lerps.size(); i++) {
+                interpolations[i] = this.lerps.get(lerpNames.name(i));
+            }
 
             return new DefaultAnimationPipelineImpl(
                     this.format,
@@ -377,6 +404,7 @@ public final class DefaultAnimationPipelineImpl implements AnimationPipeline {
                             .map(a -> a.toArray(AnimationPass[]::new))
                             .toArray(AnimationPass[][]::new),
                     uniform,
+                    interpolations,
                     reflection
             );
         }
@@ -448,6 +476,11 @@ public final class DefaultAnimationPipelineImpl implements AnimationPipeline {
         }
 
         @Override
+        public @NonNull Interpolator4f[] getInterpolators() {
+            return this.pipeline.interpolations;
+        }
+
+        @Override
         public @Nullable PipelineInputProvider getInputProvider() {
             return this.input;
         }
@@ -473,6 +506,8 @@ public final class DefaultAnimationPipelineImpl implements AnimationPipeline {
 
         private final LocationLookup oid;
 
+        private final LocationLookup interpolations;
+
         @Override
         public int oid(final @NonNull String semantic) {
             return this.oid.find(semantic);
@@ -484,10 +519,11 @@ public final class DefaultAnimationPipelineImpl implements AnimationPipeline {
             final var namespace = args[0];
 
             return switch (namespace) {
-                case "buffer"   -> this.buffers.find(args[1]);
-                case "sampler"  -> this.samplers.find(args[1]);
-                case "uniform"  -> this.uniform.find(args[1]);
-                case "ubo"      -> this.ubos.find(args[1]);
+                case "buffer"           -> this.buffers.find(args[1]);
+                case "sampler"          -> this.samplers.find(args[1]);
+                case "uniform"          -> this.uniform.find(args[1]);
+                case "ubo"              -> this.ubos.find(args[1]);
+                case "interpolation"    -> this.interpolations.find(args[1]);
                 default -> -1;
             };
         }

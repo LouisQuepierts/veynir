@@ -16,12 +16,6 @@ import java.util.Arrays;
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class TimelineSampler implements AnimationSampler {
 
-    private static final Interpolator4f[]   BUILTIN_INTERPOLATIONS  = new Interpolator4f[]{
-            Interpolator4f.LINEAR,
-            Interpolator4f.CATMULL_ROM,
-            Interpolator4f.CONSTANT
-    };
-
     public static TimelineSampler of(
             @NonNull TimelineSource  source,
             @NonNull ChannelLayout   layout
@@ -204,7 +198,7 @@ public final class TimelineSampler implements AnimationSampler {
         var o1              = Timeline.Address.offset(a1);
 
         var lerp            = timeline.interpolation()[cursor];
-        BUILTIN_INTERPOLATIONS[lerp].interpolate(
+        context.getInterpolators()[lerp].interpolate(
                 time,
                 o0,
                 o1,

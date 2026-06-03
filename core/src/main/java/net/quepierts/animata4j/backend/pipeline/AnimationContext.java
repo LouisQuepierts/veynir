@@ -8,6 +8,7 @@ import net.quepierts.animata4j.backend.sampler.SamplingMode;
 import net.quepierts.animata4j.backend.uniform.UniformReader;
 import net.quepierts.animata4j.core.AnimationState;
 import net.quepierts.animata4j.core.adapter.PipelineInputProvider;
+import net.quepierts.animata4j.core.interpolator.Interpolator4f;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -32,6 +33,8 @@ public interface AnimationContext {
     @NonNull    UniformReader           getUniform();
 
     @NonNull    UniformReader           getUniformBuffer(int location);
+
+    @NonNull    Interpolator4f[]        getInterpolators();
 
     @Nullable   PipelineInputProvider   getInputProvider();
 
