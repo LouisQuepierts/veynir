@@ -25,4 +25,12 @@ public interface FSMHook {
             final int       state
     );
 
+    void onStart(
+            final FSMState  fsmState
+    );
+
+    void onFinish(
+            final FSMState  fsmState
+    );
+
 }

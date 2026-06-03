@@ -35,6 +35,10 @@ public final class FiniteStateMachine {
 
     public void start(@NonNull final FSMState state) {
         this.reset(state);
+
+        if (this.hook != null) {
+            this.hook.onStart(state);
+        }
     }
 
     public void exit(@NonNull final FSMState state) {
@@ -104,6 +108,9 @@ public final class FiniteStateMachine {
 
         if (state.currentState == this.terminal) {
             state.finished     = true;
+            if (this.hook != null) {
+                this.hook.onFinish(state);
+            }
             return;
         }
 
