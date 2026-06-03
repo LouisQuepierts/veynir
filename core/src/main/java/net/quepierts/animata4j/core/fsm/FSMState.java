@@ -23,4 +23,8 @@ public final class FSMState {
     @Getter
     FSMParameter    uniform;
 
+    @Getter
+    @Setter
+    Object          attachment;
+
 }

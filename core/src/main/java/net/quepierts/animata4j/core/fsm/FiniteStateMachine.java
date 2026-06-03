@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.quepierts.animata4j.core.util.LocationLookup;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +30,8 @@ public final class FiniteStateMachine {
 
     @Getter
     final int                   terminal;
+
+    final @Nullable FSMHook     hook;
 
     public void start(@NonNull final FSMState state) {
         this.reset(state);
@@ -77,6 +80,14 @@ public final class FiniteStateMachine {
 
             if (state.blendElapsed >= state.blendDuration) {
                 state.blending      = false;
+
+                if (this.hook != null) {
+                    this.hook.onTransitionEnd(
+                            state,
+                            state.lastState,
+                            state.currentState
+                    );
+                }
             }
 
             return;
@@ -97,7 +108,7 @@ public final class FiniteStateMachine {
         }
 
         final var next      = this.next[state.currentState];
-        this                .transition(state, next);
+        this                .transition(state, next, FSMHook.TRIGGER_TYPE_AUTO, 0);
     }
 
     public void event(
@@ -113,7 +124,7 @@ public final class FiniteStateMachine {
                                 this.terminal :
                                 event;
 
-        this                    .transition(state, next);
+        this                    .transition(state, next, FSMHook.TRIGGER_TYPE_EVENT, event);
     }
 
     public boolean isLooping(
@@ -122,27 +133,51 @@ public final class FiniteStateMachine {
         return state.currentState == state.lastState;
     }
 
+    public int getNextState(
+            final int state
+    ) {
+        return this.next[state];
+    }
+
     private void transition(
             @NonNull final FSMState state,
-            int                     next
+            final int               next,
+            final int               triggerType,
+            final int               event
     ) {
-        if (next == state.currentState) { // loop
-            final var duration = state.uniform.duration()[state.currentState];
+
+        final var current           = state.currentState;
+        if (next == current) { // loop
+            final var duration      = state.uniform.duration()[current];
             state.elapsed           %= duration;
             state.normalizedElapsed = Math.min(state.elapsed / duration, 1.0f);
-            state.lastState         = state.currentState;
+            state.lastState         = current;
+
+            if (this.hook != null) {
+                this.hook.onLoop(state, current);
+            }
             return;
+        }
+
+        if (this.hook != null) {
+            this.hook.onTransitionStart(
+                    state,
+                    current,
+                    next,
+                    FSMHook.TRIGGER_TYPE_AUTO,
+                    0
+            );
         }
 
         state.blendElapsed      = 0.0f;
         state.normalizedElapsed = 0.0f;
         state.blendDuration     = Math.max(
-                                    state.uniform.fadeOut()[state.currentState],
+                                    state.uniform.fadeOut()[current],
                                     state.uniform.fadeIn()[next]
                                 );
         state.blending          = state.blendDuration > 0.0f;
 
-        state.lastState         = state.currentState;
+        state.lastState         = current;
         state.currentState      = next;
         state.elapsed           = 0.0f;
         state.normalizedElapsed = 0.0f;
@@ -171,6 +206,8 @@ public final class FiniteStateMachine {
 
         private String                      initialState;
         private String                      terminalState;
+
+        private FSMHook                     hook;
 
         private boolean                     sequence;
 
@@ -243,6 +280,11 @@ public final class FiniteStateMachine {
             return this;
         }
 
+        public Compiler withHook(final @NonNull FSMHook hook) {
+            this.hook = hook;
+            return this;
+        }
+
         public FiniteStateMachine compile() {
 
             if (this.initialState   == null) {
@@ -267,7 +309,8 @@ public final class FiniteStateMachine {
                     lookup,
                     next,
                     initial,
-                    terminal
+                    terminal,
+                    this.hook
             );
         }
 
