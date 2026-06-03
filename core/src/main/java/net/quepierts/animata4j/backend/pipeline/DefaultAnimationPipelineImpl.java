@@ -11,6 +11,8 @@ import net.quepierts.animata4j.backend.buffer.AnimationBuffer;
 import net.quepierts.animata4j.backend.channel.ChannelFormat;
 import net.quepierts.animata4j.backend.channel.ChannelLayout;
 import net.quepierts.animata4j.backend.channel.DefaultChannelFormats;
+import net.quepierts.animata4j.backend.exception.UnboundSamplerException;
+import net.quepierts.animata4j.backend.exception.UnboundUniformBufferException;
 import net.quepierts.animata4j.backend.execution.ExecutionReflection;
 import net.quepierts.animata4j.backend.execution.ExecutionState;
 import net.quepierts.animata4j.backend.pass.AnimationPass;
@@ -409,7 +411,11 @@ public final class DefaultAnimationPipelineImpl implements AnimationPipeline {
 
         @Override
         public @NonNull AnimationSampler getSampler(int location) {
-            return this.pipeline.samplers[location];
+            final var sampler = this.pipeline.samplers[location];
+            if (sampler == null) {
+                throw new UnboundSamplerException(location);
+            }
+            return sampler;
         }
 
         @Override
@@ -433,8 +439,12 @@ public final class DefaultAnimationPipelineImpl implements AnimationPipeline {
         }
 
         @Override
-        public @Nullable UniformReader getUniformBuffer(final int location) {
-            return this.pipeline.ubos[location];
+        public @NonNull UniformReader getUniformBuffer(final int location) {
+            final var ubo = this.pipeline.ubos[location];
+            if (ubo == null) {
+                throw new UnboundUniformBufferException(location);
+            }
+            return ubo;
         }
 
         @Override

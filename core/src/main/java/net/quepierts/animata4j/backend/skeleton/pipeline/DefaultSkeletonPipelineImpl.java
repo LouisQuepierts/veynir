@@ -5,9 +5,11 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.quepierts.animata4j.backend.buffer.AnimationBuffer;
+import net.quepierts.animata4j.backend.exception.UnboundUniformBufferException;
 import net.quepierts.animata4j.backend.execution.ExecutionReflection;
 import net.quepierts.animata4j.backend.pipeline.AnimationResultView;
 import net.quepierts.animata4j.backend.skeleton.SkeletonLayout;
+import net.quepierts.animata4j.backend.skeleton.exception.UnboundProviderException;
 import net.quepierts.animata4j.backend.skeleton.pass.SkeletonPass;
 import net.quepierts.animata4j.backend.skeleton.pass.definition.SkeletonPassDefinition;
 import net.quepierts.animata4j.backend.uniform.UboDefinition;
@@ -346,7 +348,11 @@ public final class DefaultSkeletonPipelineImpl implements SkeletonPipeline {
 
         @Override
         public @NonNull SkeletonPoseProvider getProvider(final int location) {
-            return this.pipeline.providers[location];
+            final var provider = this.pipeline.providers[location];
+            if (provider == null) {
+                throw new UnboundProviderException(location);
+            }
+            return provider;
         }
 
         @Override
@@ -361,7 +367,11 @@ public final class DefaultSkeletonPipelineImpl implements SkeletonPipeline {
 
         @Override
         public @NonNull UniformReader getUniformBuffer(final int location) {
-            return this.pipeline.ubos[location];
+            final var ubo = this.pipeline.ubos[location];
+            if (ubo == null) {
+                throw new UnboundUniformBufferException(location);
+            }
+            return ubo;
         }
     }
 

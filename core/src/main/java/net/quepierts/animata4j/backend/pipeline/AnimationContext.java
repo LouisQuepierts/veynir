@@ -31,7 +31,7 @@ public interface AnimationContext {
 
     @NonNull    UniformReader           getUniform();
 
-    @Nullable   UniformReader           getUniformBuffer(int location);
+    @NonNull    UniformReader           getUniformBuffer(int location);
 
     @Nullable   PipelineInputProvider   getInputProvider();
 
