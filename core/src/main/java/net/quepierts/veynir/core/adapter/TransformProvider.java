@@ -1,0 +1,9 @@
+package net.quepierts.veynir.core.adapter;
+
+import net.quepierts.veynir.backend.skeleton.pipeline.PoseView;
+
+public interface TransformProvider {
+    
+    void write(final PoseView target);
+    
+}

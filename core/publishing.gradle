@@ -18,8 +18,8 @@ mavenPublishing {
 
     pom {
         name = jarName
-        description = "Core module for Animata4j, a pipelined animation system library for java."
-        url = "https://github.com/LouisQuepierts/animata4j"
+        description = "Core module for Veynir, a pipelined animation system library for java."
+        url = "https://github.com/LouisQuepierts/veynir"
 
         licenses {
             license {
@@ -38,9 +38,9 @@ mavenPublishing {
         }
 
         scm {
-            url = "https://github.com/LouisQuepierts/animata4j"
-            connection = "scm:git:https://github.com/LouisQuepierts/animata4j.git"
-            developerConnection = "scm:git:https://github.com/LouisQuepierts/animata4j.git"
+            url = "https://github.com/LouisQuepierts/veynir"
+            connection = "scm:git:https://github.com/LouisQuepierts/veynir.git"
+            developerConnection = "scm:git:https://github.com/LouisQuepierts/veynir.git"
         }
     }
 }

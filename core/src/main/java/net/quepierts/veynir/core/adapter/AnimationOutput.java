@@ -1,0 +1,30 @@
+package net.quepierts.veynir.core.adapter;
+
+import lombok.AccessLevel;
+import lombok.RequiredArgsConstructor;
+import net.quepierts.veynir.backend.pipeline.AnimationResultView;
+import org.jetbrains.annotations.Contract;
+import org.jspecify.annotations.NonNull;
+
+public interface AnimationOutput {
+
+    @Contract("_ -> new")
+    static @NonNull AnimationOutput compose(@NonNull AnimationOutput... outputs) {
+        return new Composed(outputs);
+    }
+
+    void accept(@NonNull AnimationResultView buffer);
+
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+     class Composed implements AnimationOutput {
+        private final @lombok.NonNull AnimationOutput[] outputs;
+
+        @Override
+        public void accept(@NonNull final AnimationResultView buffer) {
+            for (final var output : outputs) {
+                output.accept(buffer);
+            }
+        }
+    }
+
+}

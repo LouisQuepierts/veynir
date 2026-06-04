@@ -1,1 +1,0 @@
-# Animata General Animation Pipeline

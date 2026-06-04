@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'idea'
-    id 'animata-codegen'
+    id 'veynir-codegen'
 
     id 'java-library'
 
@@ -20,7 +20,7 @@ def getGitCommitCount() {
 
 def buildNumber = getGitCommitCount()
 
-group       = 'net.quepierts.animata4j'
+group       = 'net.quepierts.veynir'
 version     = "${project_version}+build.${buildNumber}"
 
 apply from: "jar.gradle"

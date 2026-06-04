@@ -2,5 +2,5 @@ pluginManagement {
     includeBuild("codegen-plugin")
 }
 
-rootProject.name = 'animata4j'
+rootProject.name = 'veynir'
 include('core', 'codegen-annotations')

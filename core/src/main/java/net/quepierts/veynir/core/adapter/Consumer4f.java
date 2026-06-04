@@ -1,0 +1,8 @@
+package net.quepierts.veynir.core.adapter;
+
+@FunctionalInterface
+public interface Consumer4f {
+
+    void accept(float x, float y, float z, float w);
+
+}
