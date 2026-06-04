@@ -1,4 +1,4 @@
-package net.quepierts.animata4j.core.data.layout.mapper;
+package net.quepierts.veynir.core.data.layout.mapper;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -7,7 +7,7 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface AnimataStruct {
+public @interface VeynirStruct {
     String value() default "";
 
     boolean optimize() default false;

@@ -1,6 +1,6 @@
-package net.quepierts.animata4j.core.data.layout.mapper;
+package net.quepierts.veynir.core.data.layout.mapper;
 
-import net.quepierts.animata4j.core.data.layout.AnimataDataType;
+import net.quepierts.veynir.core.data.layout.VeynirDataType;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -9,16 +9,16 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.FIELD)
-public @interface AnimataField {
+public @interface VeynirField {
     String value() default "";
 
     int length() default 1;
 
-    Type type() default @Type(value = AnimataDataType.STRUCT);
+    Type type() default @Type(value = VeynirDataType.STRUCT);
 
     @Retention(RetentionPolicy.RUNTIME)
     @interface Type {
-        AnimataDataType value() default AnimataDataType.STRUCT;
+        VeynirDataType value() default VeynirDataType.STRUCT;
 
         int count() default 1;
 

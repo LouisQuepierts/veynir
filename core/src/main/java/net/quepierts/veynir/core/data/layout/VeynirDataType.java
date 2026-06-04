@@ -1,4 +1,4 @@
-package net.quepierts.animata4j.core.data.layout;
+package net.quepierts.veynir.core.data.layout;
 
 import com.google.common.collect.ImmutableMap;
 import lombok.Getter;
@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 @Getter
 @RequiredArgsConstructor(access = lombok.AccessLevel.PRIVATE)
-public enum AnimataDataType {
+public enum VeynirDataType {
     BYTE(1, true, "byte"),
     BOOLEAN(1, false, "boolean"),
     SHORT(2, true, "short"),
@@ -22,8 +22,8 @@ public enum AnimataDataType {
     ;
 
     private static final Pattern NAME_PATTERN = Pattern.compile("[a-zA-Z$_][a-zA-Z\\d$_]*(\\.[a-zA-Z$_][a-zA-Z\\d$_]*)*(\\[\\d+])?");
-    private static final AnimataDataType[] VALUES;
-    private static final Map<String, AnimataDataType> PRIMITIVE_TYPES;
+    private static final VeynirDataType[] VALUES;
+    private static final Map<String, VeynirDataType> PRIMITIVE_TYPES;
 
     public static boolean isPrimitiveType(String name) {
         return PRIMITIVE_TYPES.containsKey(name.toUpperCase(Locale.ROOT));
@@ -37,7 +37,7 @@ public enum AnimataDataType {
         return isPrimitiveType(name) || isAvailableStructName(name);
     }
 
-    public static AnimataDataType getType(String name) {
+    public static VeynirDataType getType(String name) {
         return PRIMITIVE_TYPES.getOrDefault(name.toUpperCase(Locale.ROOT), STRUCT);
     }
 
@@ -48,8 +48,8 @@ public enum AnimataDataType {
     static {
         VALUES = values();
 
-        ImmutableMap.Builder<String, AnimataDataType> builder = ImmutableMap.builderWithExpectedSize(VALUES.length - 2);
-        for (AnimataDataType type : VALUES) {
+        ImmutableMap.Builder<String, VeynirDataType> builder = ImmutableMap.builderWithExpectedSize(VALUES.length - 2);
+        for (VeynirDataType type : VALUES) {
             if (type == STRUCT) continue;
             builder.put(type.name.toUpperCase(Locale.ROOT), type);
         }

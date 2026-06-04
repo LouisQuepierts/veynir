@@ -1,9 +1,9 @@
-package net.quepierts.animata4j.dsl;
+package net.quepierts.veynir.dsl;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class AnimataIR {
+public class VeynirIR {
     private byte opcode;
     private String dst;
     private String op1;

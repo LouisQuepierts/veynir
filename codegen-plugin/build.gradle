@@ -7,8 +7,8 @@ version = 'dev'
 
 gradlePlugin {
     plugins {
-        create("animataCodegenPlugin") {
-            id = "animata-codegen"
+        create("veynirCodegenPlugin") {
+            id = "veynir-codegen"
             implementationClass = "net.quepierts.codegen.plugin.CodegenPlugin"
         }
     }
