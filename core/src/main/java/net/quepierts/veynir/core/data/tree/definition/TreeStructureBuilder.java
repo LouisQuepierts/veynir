@@ -228,7 +228,7 @@ public final class TreeStructureBuilder implements TreeStructureDefinition.Build
         @Override
         @Contract(value = "_ -> !null")
         public <E> TreeData<E> data(@NotNull final Class<E> clazz) {
-            return TreeData.of(Generic.cast(this.data));
+            return TreeData.of(Generic.<E[]>cast(this.data));
         }
 
         @Override
