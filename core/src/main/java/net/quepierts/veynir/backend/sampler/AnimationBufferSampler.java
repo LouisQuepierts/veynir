@@ -41,7 +41,7 @@ public final class AnimationBufferSampler implements AnimationSampler {
         var raw         = source.getBuffer().getBuffer();
 
         for (int i = 0; i < layout.getChannelCount(); i++) {
-            if (!context.getSamplerMask(i)) {
+            if (!context.getChannelMask(i)) {
                 continue;
             }
 

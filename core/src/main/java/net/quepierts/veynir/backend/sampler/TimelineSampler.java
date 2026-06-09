@@ -60,6 +60,7 @@ public final class TimelineSampler implements AnimationSampler {
 
         var format      = context.getChannelFormat();
         var cursorOff   = format.getOffset(ChannelFormatElement.CURSOR);
+        var enableOff   = format.getOffset(ChannelFormatElement.MASK);
         var attrSize    = format.getAttributeSize();
         var attributes  = state.getChannelAttribute();
 
@@ -68,7 +69,7 @@ public final class TimelineSampler implements AnimationSampler {
         for (int i = 0; i < this.mapping.length; i++) {
             var channel = this.mapping[i];
 
-            if (!context.getSamplerMask(channel)) {
+            if (!context.getChannelMask(channel)) {
                 continue;
             }
 
@@ -102,7 +103,7 @@ public final class TimelineSampler implements AnimationSampler {
         for (int i = 0; i < this.mapping.length; i++) {
             final var channel   = this.mapping[i];
 
-            if (!context.getSamplerMask(channel)) {
+            if (!context.getChannelMask(channel)) {
                 continue;
             }
 

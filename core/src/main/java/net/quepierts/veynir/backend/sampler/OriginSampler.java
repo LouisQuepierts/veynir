@@ -19,7 +19,7 @@ public final class OriginSampler implements AnimationSampler {
 
         var layout      = context.getChannelLayout();
         for (int i = 0; i < layout.getChannelCount(); i++) {
-            if (!context.getSamplerMask(i)) {
+            if (!context.getChannelMask(i)) {
                 continue;
             }
 

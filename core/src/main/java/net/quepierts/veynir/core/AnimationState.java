@@ -12,7 +12,7 @@ public abstract class AnimationState {
     public float progress;
     public float lastProgress;
 
-    private final AttributeBuffer channelAttribute;
+    private final AttributeBuffer   channelAttribute;
 
     protected AnimationState(
             ChannelLayout channelLayout,

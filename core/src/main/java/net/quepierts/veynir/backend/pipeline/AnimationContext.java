@@ -40,6 +40,6 @@ public interface AnimationContext {
 
     boolean                             getOperationMask(int index);
 
-    boolean                             getSamplerMask(int channel);
+    boolean                             getChannelMask(int channel);
 
 }

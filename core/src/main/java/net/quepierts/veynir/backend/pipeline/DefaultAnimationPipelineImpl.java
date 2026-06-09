@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import net.quepierts.veynir.backend.Patterns;
 import net.quepierts.veynir.backend.buffer.AnimationBuffer;
 import net.quepierts.veynir.backend.channel.ChannelFormat;
+import net.quepierts.veynir.backend.channel.ChannelFormatElement;
 import net.quepierts.veynir.backend.channel.ChannelLayout;
 import net.quepierts.veynir.backend.channel.DefaultChannelFormats;
 import net.quepierts.veynir.backend.exception.UnboundSamplerException;
@@ -410,12 +411,27 @@ public final class DefaultAnimationPipelineImpl implements AnimationPipeline {
         }
     }
 
-    @RequiredArgsConstructor
     private static final class Context implements AnimationContext {
 
         private final   DefaultAnimationPipelineImpl    pipeline;
+
+        private final   int                             attrubuteSize;
+        private final   int                             enableOffset;
+        private final   boolean                         hasMaskElement;
+
+
         private         AnimationState                  state;
         private         PipelineInputProvider           input;
+
+        private Context(
+                DefaultAnimationPipelineImpl pipeline
+        ) {
+            this.pipeline       = pipeline;
+            var format          = pipeline.getChannelFormat();
+            this.attrubuteSize  = format.getAttributeSize();
+            this.enableOffset   = format.getOffset(ChannelFormatElement.MASK);
+            this.hasMaskElement = format.getElements().contains(ChannelFormatElement.MASK);
+        }
 
         @Override
         public float getProgress() {
@@ -491,8 +507,14 @@ public final class DefaultAnimationPipelineImpl implements AnimationPipeline {
         }
 
         @Override
-        public boolean getSamplerMask(int channel) {
-            return channel != -1; // todo
+        public boolean getChannelMask(int channel) {
+            if (channel == -1) {
+                return false;
+            }
+
+            return !this.hasMaskElement
+                    || this.state.getChannelAttribute()
+                        .readBoolean(channel * this.attrubuteSize + this.enableOffset);
         }
     }
 
