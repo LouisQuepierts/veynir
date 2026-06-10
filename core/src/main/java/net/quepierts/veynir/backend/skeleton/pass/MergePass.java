@@ -43,7 +43,7 @@ public final class MergePass extends SkeletonPass {
         for (int i = 0; i < this.bones; i++) {
 
             if (!context.getMask(i)) {
-                return;
+                continue;
             }
 
             final var view0 = src0.get(i);

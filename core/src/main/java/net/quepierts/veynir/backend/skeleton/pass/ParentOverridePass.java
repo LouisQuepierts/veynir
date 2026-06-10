@@ -67,7 +67,7 @@ public final class ParentOverridePass extends SkeletonPass {
         for (int i = 0; i < size; i++) {
 
             if (!context.getMask(i)) {
-                return;
+                continue;
             }
 
             final var parent    = (int) parents[i];
