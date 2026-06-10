@@ -50,7 +50,7 @@ public final class DefaultSkeletonPipelineImpl implements SkeletonPipeline {
 
     private final Reflection                reflection;
 
-    private final Context                   context = new Context(this);
+    private final Context                   context;
 
     private DefaultSkeletonPipelineImpl(
             final SkeletonLayout    layout,
@@ -81,6 +81,8 @@ public final class DefaultSkeletonPipelineImpl implements SkeletonPipeline {
 
         this.targets                = new SkeletonOutput[1];
         this.adapter                = new FlatAdapter(this.buffers[0], boneAmount);
+
+        this.context                = new Context(this);
     }
 
     public void clear() {

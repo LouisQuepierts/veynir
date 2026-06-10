@@ -64,7 +64,7 @@ public final class DefaultAnimationPipelineImpl implements AnimationPipeline {
     @Getter
     private final ExecutionState            executionState;
 
-    private final Context                   context = new Context(this);
+    private final Context                   context;
 
     private DefaultAnimationPipelineImpl(
             ChannelFormat       format,
@@ -112,6 +112,8 @@ public final class DefaultAnimationPipelineImpl implements AnimationPipeline {
 
         this.samplers[0]        = new OriginSampler();
         Arrays.fill(this.samplingModes, SamplingMode.DEFAULT);
+
+        this.context            = new Context(this);
     }
 
     @Override
