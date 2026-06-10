@@ -19,9 +19,10 @@ def getGitCommitCount() {
 }
 
 def buildNumber = getGitCommitCount()
+def isSnapshot = is_snapshot == "true"
 
 group       = 'net.quepierts.veynir'
-version     = "${project_version}+build.${buildNumber}"
+version     = isSnapshot ? "${project_version}+build.${buildNumber}" : "${project_version}"
 
 apply from: "jar.gradle"
 apply from: "publishing.gradle"

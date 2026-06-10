@@ -11,6 +11,8 @@ public interface SkeletonContext {
 
     @NonNull SkeletonState          getState();
 
+    boolean                         getMask(int bone);
+
     @NonNull SkeletonPoseProvider   getProvider(int location);
 
     @NonNull SkeletonPoseBuffer     getPoseBuffer(int location);

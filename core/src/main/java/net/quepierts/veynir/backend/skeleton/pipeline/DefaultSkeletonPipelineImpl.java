@@ -77,10 +77,16 @@ public final class DefaultSkeletonPipelineImpl implements SkeletonPipeline {
 
         this.ubos                   = new UniformBuffer[reflection.ubos.size()];
 
-        this.uniform               = new UniformBuffer(definition);
+        this.uniform                = new UniformBuffer(definition);
 
-        this.targets               = new SkeletonOutput[1];
-        this.adapter               = new FlatAdapter(this.buffers[0], boneAmount);
+        this.targets                = new SkeletonOutput[1];
+        this.adapter                = new FlatAdapter(this.buffers[0], boneAmount);
+    }
+
+    public void clear() {
+        for (final var buffer : this.buffers) {
+            buffer.clear();
+        }
     }
 
     @Override
@@ -344,6 +350,11 @@ public final class DefaultSkeletonPipelineImpl implements SkeletonPipeline {
         @Override
         public @NonNull SkeletonState getState() {
             return this.state;
+        }
+
+        @Override
+        public boolean getMask(int bone) {
+            return this.state.getMask(bone);
         }
 
         @Override

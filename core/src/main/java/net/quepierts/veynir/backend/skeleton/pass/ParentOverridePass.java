@@ -6,6 +6,8 @@ import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.jspecify.annotations.NonNull;
 
+import java.util.Arrays;
+
 public final class ParentOverridePass extends SkeletonPass {
 
     private final int src;
@@ -52,6 +54,7 @@ public final class ParentOverridePass extends SkeletonPass {
         final var size      = this.bones;
         final var parents   = new float[size];
         final var matrices  = new Matrix4f[size];
+        Arrays.fill(matrices, new Matrix4f());
 
         reader.readFloat(pParent, size, parents);
 
@@ -62,6 +65,11 @@ public final class ParentOverridePass extends SkeletonPass {
         final var local = new Matrix4f();
 
         for (int i = 0; i < size; i++) {
+
+            if (!context.getMask(i)) {
+                return;
+            }
+
             final var parent    = (int) parents[i];
 
             final var srcView   = src.get(i);

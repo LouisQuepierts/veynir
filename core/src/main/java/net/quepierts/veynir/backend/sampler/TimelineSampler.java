@@ -60,7 +60,6 @@ public final class TimelineSampler implements AnimationSampler {
 
         var format      = context.getChannelFormat();
         var cursorOff   = format.getOffset(ChannelFormatElement.CURSOR);
-        var enableOff   = format.getOffset(ChannelFormatElement.MASK);
         var attrSize    = format.getAttributeSize();
         var attributes  = state.getChannelAttribute();
 

@@ -13,6 +13,12 @@ public final class SkeletonPoseBuffer
         extends AnimationBuffer.Slice
         implements SkeletonResultView {
 
+    private static final float[]    DEFAULT = {
+            0.0f, 0.0f, 0.0f, 0.0f,
+            0.0f, 0.0f, 0.0f, 1.0f,
+            1.0f, 1.0f, 1.0f, 1.0f
+    };
+
     private final View[] views;
 
     SkeletonPoseBuffer(
@@ -25,10 +31,25 @@ public final class SkeletonPoseBuffer
         for (int i = 0; i < layout.size(); i++) {
             this.views[i] = new View(buffer, offset + i * SkeletonLayout.BONE_SIZE);
         }
+        this.clear();
     }
 
     public PoseView get(int id) {
         return views[id];
+    }
+
+    public void clear() {
+        // position : vec4 (0, 0, 0, 0)
+        // rotation : vec4 (0, 0, 0, 1) for euler angle or quaternion
+        // scale    : vec4 (1, 1, 1, 1)
+
+        final var buffer    = this.getBuffer();
+        final var length    = this.views.length;
+
+        for (var i = 0; i < length; i++) {
+            buffer.write(this.offset + i * SkeletonLayout.BONE_SIZE, DEFAULT);
+        }
+
     }
 
     public void copy(final @NonNull SkeletonPoseBuffer src) {
@@ -58,6 +79,11 @@ public final class SkeletonPoseBuffer
         @Override
         public void setScale(final float x, final float y, final float z) {
             buffer.write(offset + 8, x, y, z);
+        }
+
+        @Override
+        public void clear() {
+            buffer.write(offset, DEFAULT);
         }
 
         @Override

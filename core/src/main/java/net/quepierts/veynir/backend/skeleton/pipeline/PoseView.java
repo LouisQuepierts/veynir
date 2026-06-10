@@ -11,6 +11,8 @@ public interface PoseView extends ReadablePose {
 
     void setScale(final float x, final float y, final float z);
 
+    void clear();
+
     default void setPosition(final Vector3f position) {
         this.setPosition(position.x, position.y, position.z);
     }

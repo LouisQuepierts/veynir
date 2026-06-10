@@ -45,6 +45,11 @@ public final class PivotPass extends SkeletonPass {
         final var tmp       = new Vector3f();
 
         for (int i = 0; i < this.bones; i++) {
+
+            if (!context.getMask(i)) {
+                continue;
+            }
+
             reader              .readFloat(i * 4, 4, pivot);
 
             final var srcView   = src.get(i);
