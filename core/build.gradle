@@ -1,38 +1,7 @@
 plugins {
     id 'java'
     id 'idea'
-    id 'veynir-codegen'
-
     id 'java-library'
-
     id 'io.freefair.lombok' version '9.2.0'
     id "com.vanniktech.maven.publish" version "0.34.0"
-}
-
-def getGitCommitCount() {
-    def stdout = new ByteArrayOutputStream()
-    exec {
-        commandLine 'git', 'rev-list', '--count', 'HEAD'
-        standardOutput = stdout
-    }
-    return stdout.toString().trim().toInteger()
-}
-
-def buildNumber = getGitCommitCount()
-def isSnapshot = is_snapshot == "true"
-
-group       = 'net.quepierts.veynir'
-version     = isSnapshot ? "${project_version}+build.${buildNumber}" : "${project_version}"
-
-apply from: "jar.gradle"
-apply from: "publishing.gradle"
-
-dependencies {
-    implementation group: 'it.unimi.dsi', name: 'fastutil', version: fastutil_version
-    implementation group: 'org.joml', name: 'joml', version: joml_version
-
-    implementation group: 'org.slf4j', name: 'slf4j-api', version: slf4j_api_version
-    implementation group: 'org.slf4j', name: 'slf4j-simple', version: slf4j_simple_version
-
-    compileOnly project(':codegen-annotations')
 }

@@ -1,0 +1,28 @@
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    implementation(libs.joml)
+    implementation(libs.guava)
+    implementation(libs.gson)
+    implementation(libs.fastutil)
+
+    implementation(libs.slf4j.api)
+    implementation(libs.slf4j.simple)
+
+    implementation(libs.jspecify)
+
+    // no longer to use it
+    implementation(libs.jetbrains.annotations)
+
+    testImplementation platform(libs.junit.bom)
+    testImplementation(libs.junit.jupiter)
+    testRuntimeOnly(libs.junit.platform.launcher)
+}
+
+test {
+    useJUnitPlatform()
+}

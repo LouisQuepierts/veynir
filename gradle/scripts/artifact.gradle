@@ -1,12 +1,12 @@
 
-jar {
+tasks.named("jar", Jar) {
     archiveVersion = "${project.version}"
 
     from(rootProject.file('LICENSE')) {}
 
     manifest {
         attributes(
-                'Implementation-Title': 'Veynir Core',
+                'Implementation-Title': "${project.properties.title}",
                 'Implementation-Version': "${project.version}",
                 'Implementation-Vendor': 'Quepierts',
                 "Build-Jdk": System.getProperty("java.version"),
@@ -17,5 +17,5 @@ jar {
 }
 
 base {
-    archivesName = "veynir-core"
+    archivesName = "${rootProject.name}-${project.name}"
 }

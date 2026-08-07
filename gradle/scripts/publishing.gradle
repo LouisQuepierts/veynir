@@ -18,7 +18,7 @@ mavenPublishing {
 
     pom {
         name = jarName
-        description = "Core module for Veynir, a pipelined animation system library for java."
+        description = "${project.properties.description}"
         url = "https://github.com/LouisQuepierts/veynir"
 
         licenses {
