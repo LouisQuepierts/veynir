@@ -48,3 +48,4 @@ bin/
 
 ### Codegen ###
 /core/src/generated/
+/.idea/

@@ -1,0 +1,18 @@
+
+tasks.named("jar", Jar) {
+    archiveVersion = "${rootProject.version}"
+    archiveFileName = "${rootProject.name}-${project.name}-${rootProject.version}.jar"
+
+    from(rootProject.file('LICENSE')) {}
+
+    manifest {
+        attributes(
+                'Implementation-Title': "${project.properties.title}",
+                'Implementation-Version': "${project.version}",
+                'Implementation-Vendor': 'Quepierts',
+                "Build-Jdk": System.getProperty("java.version"),
+                "Build-Jvm": System.getProperty("java.version"),
+                "Automatic-Module-Name": project.group
+        )
+    }
+}
