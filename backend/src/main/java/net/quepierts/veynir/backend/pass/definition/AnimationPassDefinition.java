@@ -4,10 +4,11 @@ import lombok.Getter;
 import net.quepierts.veynir.backend.Patterns;
 import net.quepierts.veynir.backend.pass.AnimationPass;
 import net.quepierts.veynir.backend.pipeline.AnimationPipelineCompileContext;
+import net.quepierts.veynir.core.pipeline.PassDefinition;
 import org.jetbrains.annotations.NotNull;
 
 @Getter
-public abstract class AnimationPassDefinition {
+public abstract class AnimationPassDefinition implements PassDefinition {
 
     private final String    name;
     private final PassType  type;

@@ -20,7 +20,7 @@ public abstract class AnimationState {
     ) {
 
         var attributes          = channelLayout.getChannelCount() * channelFormat.getAttributeSize();
-        this.channelAttribute   = Veynir13.vyAllocateAttributeBuffer(attributes);
+        this.channelAttribute   = Veynir13.attributeBuffer(attributes);
     }
 
     public AnimationBufferObject getParameterBuffer() {

@@ -16,7 +16,7 @@ public abstract class UniformParameter {
     public abstract void upload(@NonNull final UniformBufferObject buffer);
 
     public UniformBufferObject create() {
-        return Veynir13.vyAllocateUniformBuffer(this.definition);
+        return Veynir13.uniformBuffer(this.definition);
     }
 
 }
