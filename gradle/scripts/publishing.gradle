@@ -11,14 +11,13 @@ mavenPublishing {
     def jarName = "${rootProject.name}-${project.name}"
 
     coordinates(
-            group.toString(),
+            rootProject.group.toString(),
             jarName,
-            version.toString()
+            rootProject.version.toString()
     )
 
     pom {
         name = jarName
-        description = "${project.properties.description}"
         url = "https://github.com/LouisQuepierts/veynir"
 
         licenses {

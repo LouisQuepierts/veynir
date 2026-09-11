@@ -31,9 +31,10 @@ subprojects {
             }
         }
 
-        if (hasProperty('is_artifact')) {
-            apply from: "$rootDir/gradle/scripts/artifact.gradle"
-            apply from: "$rootDir/gradle/scripts/dependencies.gradle"
+        tasks.withType(JavaCompile).configureEach {
+            options.compilerArgs += [
+                    '--add-modules', 'jdk.incubator.vector'
+            ]
         }
     }
 }
