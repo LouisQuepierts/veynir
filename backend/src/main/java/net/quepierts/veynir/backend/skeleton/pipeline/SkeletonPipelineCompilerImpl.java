@@ -12,7 +12,7 @@ public final class SkeletonPipelineCompilerImpl implements SkeletonPipelineCompi
 
     private final DefaultSkeletonPipelineImpl.Compiler compiler;
 
-    public SkeletonPipelineCompilerImpl(final @NonNull DefaultSkeletonPipelineImpl.Compiler compiler) {
+    public SkeletonPipelineCompilerImpl(final DefaultSkeletonPipelineImpl.@NonNull Compiler compiler) {
         this.compiler = compiler;
     }
 

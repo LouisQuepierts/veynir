@@ -3,7 +3,7 @@ package net.quepierts.veynir.core.uniform;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.quepierts.veynir.core.Veynir13;
+import net.quepierts.veynir.core.Veynir;
 import net.quepierts.veynir.core.pipeline.UniformBufferObject;
 import org.jspecify.annotations.NonNull;
 
@@ -16,7 +16,7 @@ public abstract class UniformParameter {
     public abstract void upload(@NonNull final UniformBufferObject buffer);
 
     public UniformBufferObject create() {
-        return Veynir13.uniformBuffer(this.definition);
+        return Veynir.uniformBuffer(this.definition);
     }
 
 }

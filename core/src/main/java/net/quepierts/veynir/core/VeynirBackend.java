@@ -14,7 +14,7 @@ import org.jspecify.annotations.NonNull;
  * Service provider interface of a rendering backend.
  * <p>
  * Implementations are discovered through {@link Services} and are expected to be driven through
- * {@link Veynir13}. Methods are prefixed with {@code _} to mark them as implementation surface.
+ * {@link Veynir}. Methods are prefixed with {@code _} to mark them as implementation surface.
  */
 public interface VeynirBackend extends Prioritized {
 

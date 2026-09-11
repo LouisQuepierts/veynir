@@ -16,7 +16,7 @@ import org.jspecify.annotations.NonNull;
  * (currently the Java fallback, later a native implementation) stays interchangeable.
  */
 @UtilityClass
-public class Veynir13 {
+public class Veynir {
 
     public static @NonNull AttributeBufferObject attributeBuffer(int size) {
         return VeynirBackend._BACKEND._allocateAttributeBuffer(size);
