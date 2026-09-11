@@ -1,6 +1,6 @@
 package net.quepierts.veynir.core.adapter;
 
-import net.quepierts.veynir.backend.buffer.WritableBuffer;
+import net.quepierts.veynir.core.buffer.WritableBuffer;
 
 public interface PipelineInputProvider {
 

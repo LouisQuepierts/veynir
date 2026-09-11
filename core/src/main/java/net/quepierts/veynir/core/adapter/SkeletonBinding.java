@@ -2,8 +2,8 @@ package net.quepierts.veynir.core.adapter;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import net.quepierts.veynir.backend.skeleton.pipeline.SkeletonPoseBuffer;
-import net.quepierts.veynir.backend.skeleton.pipeline.SkeletonResultView;
+import net.quepierts.veynir.core.pipeline.PoseBuffer;
+import net.quepierts.veynir.core.pipeline.SkeletonResultView;
 import net.quepierts.veynir.core.skeleton.PoseCache;
 import org.jspecify.annotations.NonNull;
 
@@ -37,7 +37,7 @@ public final class SkeletonBinding {
         }
     }
 
-    public void fetch(@NonNull final SkeletonPoseBuffer target) {
+    public void fetch(@NonNull final PoseBuffer target) {
         for (final var entry : this.entries) {
             final var view = target.get(entry.location());
             entry.provider().write(view);

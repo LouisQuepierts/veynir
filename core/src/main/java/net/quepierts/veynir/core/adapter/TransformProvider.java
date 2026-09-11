@@ -1,6 +1,6 @@
 package net.quepierts.veynir.core.adapter;
 
-import net.quepierts.veynir.backend.skeleton.pipeline.PoseView;
+import net.quepierts.veynir.core.pipeline.PoseView;
 
 public interface TransformProvider {
     

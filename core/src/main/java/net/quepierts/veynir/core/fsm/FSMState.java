@@ -59,4 +59,30 @@ public final class FSMState {
         this.finished                       = state.finished;
     }
 
+    public static FSMState direct(
+            final float                     elapsed,
+            final float                     blendElapsed,
+            final float                     blendDuration,
+            final float                     normalizedElapsed,
+            final float                     normalizedBlendElapsed,
+            final int                       lastState,
+            final int                       currentState,
+            final boolean                   blending,
+            final boolean                   finished
+    ) {
+        final var instance                 = new FSMState();
+
+        instance.elapsed                   = elapsed;
+        instance.blendElapsed              = blendElapsed;
+        instance.blendDuration             = blendDuration;
+        instance.normalizedElapsed         = normalizedElapsed;
+        instance.normalizedBlendElapsed    = normalizedBlendElapsed;
+        instance.lastState                 = lastState;
+        instance.currentState              = currentState;
+        instance.blending                  = blending;
+        instance.finished                  = finished;
+
+        return instance;
+    }
+
 }

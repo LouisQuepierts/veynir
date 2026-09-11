@@ -5,3 +5,4 @@ pluginManagement {
 rootProject.name = 'veynir'
 include 'core'
 include 'backend'
+include 'dsl'

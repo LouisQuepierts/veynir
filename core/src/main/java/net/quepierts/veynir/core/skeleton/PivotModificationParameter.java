@@ -1,9 +1,9 @@
 package net.quepierts.veynir.core.skeleton;
 
-import net.quepierts.veynir.backend.skeleton.SkeletonLayout;
-import net.quepierts.veynir.backend.uniform.UboDefinition;
-import net.quepierts.veynir.backend.uniform.UniformBuffer;
-import net.quepierts.veynir.backend.uniform.UniformParameter;
+import net.quepierts.veynir.core.SkeletonLayout;
+import net.quepierts.veynir.core.pipeline.UniformBufferObject;
+import net.quepierts.veynir.core.uniform.UboDefinition;
+import net.quepierts.veynir.core.uniform.UniformParameter;
 import org.jspecify.annotations.NonNull;
 
 public final class PivotModificationParameter extends UniformParameter {
@@ -44,7 +44,7 @@ public final class PivotModificationParameter extends UniformParameter {
     }
 
     @Override
-    public void upload(final @NonNull UniformBuffer buffer) {
+    public void upload(final @NonNull UniformBufferObject buffer) {
         final var writer = buffer.getRawWriter();
         writer.write(0, this.pivots);
     }

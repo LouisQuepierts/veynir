@@ -2,12 +2,12 @@ package net.quepierts.veynir.core.skeleton;
 
 import lombok.Getter;
 import lombok.Setter;
-import net.quepierts.veynir.backend.skeleton.SkeletonLayout;
-import net.quepierts.veynir.backend.uniform.UboDefinition;
-import net.quepierts.veynir.backend.uniform.UniformBuffer;
-import net.quepierts.veynir.backend.uniform.UniformParameter;
-import net.quepierts.veynir.backend.uniform.UniformType;
+import net.quepierts.veynir.core.SkeletonLayout;
 import net.quepierts.veynir.core.model.ParentOverrideConfiguration;
+import net.quepierts.veynir.core.pipeline.UniformBufferObject;
+import net.quepierts.veynir.core.uniform.UboDefinition;
+import net.quepierts.veynir.core.uniform.UniformParameter;
+import net.quepierts.veynir.core.uniform.UniformType;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -39,21 +39,22 @@ public final class ParentOverrideParameter extends UniformParameter {
     }
 
     @Override
-    public void upload(final @NonNull UniformBuffer buffer) {
+    public void upload(final @NonNull UniformBufferObject buffer) {
+        final var writer = buffer.getRawWriter();
+
         if (this.data == null) {
-            buffer.write(this.LOC_ENABLE, 0.0f);
+            writer.write(this.LOC_ENABLE, 0.0f);
             return;
         }
 
-        buffer.write(this.LOC_ENABLE, 1.0f);
-        final var writer = buffer.getRawWriter();
+        writer.write(this.LOC_ENABLE, 1.0f);
 //        writer.write(0, this.data.getOrder());
         writer.write(this.ADDR_PARENT, this.data.getParent());
     }
 
     public void upload(
             @Nullable final ParentOverrideConfiguration configuration,
-            @NonNull  final UniformBuffer               buffer
+            @NonNull  final UniformBufferObject         buffer
     ) {
         if (configuration != this.data) {
             this.data = configuration;

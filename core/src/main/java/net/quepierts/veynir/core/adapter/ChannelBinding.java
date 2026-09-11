@@ -2,7 +2,7 @@ package net.quepierts.veynir.core.adapter;
 
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
-import net.quepierts.veynir.backend.pipeline.AnimationResultView;
+import net.quepierts.veynir.core.pipeline.AnimationResultView;
 import org.jspecify.annotations.NonNull;
 
 import java.util.ArrayList;

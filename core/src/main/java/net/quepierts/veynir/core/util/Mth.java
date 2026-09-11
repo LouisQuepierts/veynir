@@ -9,6 +9,10 @@ public class Mth {
         return start + delta * (end - start);
     }
 
+    public static float horner(float t, float a, float b, float c, float d) {
+        return ((a * t + b) * t + c) * t + d;
+    }
+
     public static float catmullrom(float delta, float start, float left, float right, float end) {
         final var t2 = delta * delta;
         final var t3 = t2 * delta;

@@ -9,5 +9,5 @@ plugins {
 apply from: "$rootDir/gradle/scripts/artifact.gradle"
 
 dependencies {
-    implementation(project(":core"))
+    api(project(":core"))
 }

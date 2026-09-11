@@ -1,10 +1,10 @@
 package net.quepierts.veynir.core;
 
 import lombok.Getter;
-import net.quepierts.veynir.backend.buffer.AnimationBuffer;
-import net.quepierts.veynir.backend.buffer.AttributeBuffer;
-import net.quepierts.veynir.backend.channel.ChannelFormat;
-import net.quepierts.veynir.backend.channel.ChannelLayout;
+import net.quepierts.veynir.core.buffer.AnimationBufferObject;
+import net.quepierts.veynir.core.buffer.AttributeBufferObject;
+import net.quepierts.veynir.core.channel.ChannelFormat;
+import net.quepierts.veynir.core.channel.ChannelLayout;
 
 @Getter
 public abstract class AnimationState {
@@ -12,7 +12,7 @@ public abstract class AnimationState {
     public float progress;
     public float lastProgress;
 
-    private final AttributeBuffer   channelAttribute;
+    private final AttributeBufferObject channelAttribute;
 
     protected AnimationState(
             ChannelLayout channelLayout,
@@ -20,10 +20,10 @@ public abstract class AnimationState {
     ) {
 
         var attributes          = channelLayout.getChannelCount() * channelFormat.getAttributeSize();
-        this.channelAttribute   = new AttributeBuffer(attributes);
+        this.channelAttribute   = Veynir13.vyAllocateAttributeBuffer(attributes);
     }
 
-    public AnimationBuffer getParameterBuffer() {
+    public AnimationBufferObject getParameterBuffer() {
         return null;
     }
 }

@@ -3,7 +3,7 @@ package net.quepierts.veynir.core.model;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.quepierts.veynir.backend.skeleton.SkeletonLayout;
+import net.quepierts.veynir.core.SkeletonLayout;
 import org.jspecify.annotations.NonNull;
 
 import java.util.Arrays;

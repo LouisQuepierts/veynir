@@ -2,11 +2,9 @@ package net.quepierts.veynir.core;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 
 @Getter
 @Setter
-@Accessors(chain = true)
 public class SkeletonState {
 
     private boolean[] mask;

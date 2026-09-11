@@ -1,10 +1,10 @@
 package net.quepierts.veynir.core.skeleton;
 
 import lombok.Getter;
-import net.quepierts.veynir.backend.skeleton.SkeletonLayout;
-import net.quepierts.veynir.backend.skeleton.pipeline.SkeletonOutput;
-import net.quepierts.veynir.backend.skeleton.pipeline.SkeletonResultView;
+import net.quepierts.veynir.core.SkeletonLayout;
 import net.quepierts.veynir.core.adapter.TransformF;
+import net.quepierts.veynir.core.pipeline.SkeletonOutput;
+import net.quepierts.veynir.core.pipeline.SkeletonResultView;
 import net.quepierts.veynir.core.util.ArrayUtils;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
