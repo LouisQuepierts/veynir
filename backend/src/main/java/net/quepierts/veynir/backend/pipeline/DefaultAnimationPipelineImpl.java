@@ -6,7 +6,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.quepierts.veynir.backend.Patterns;
+import net.quepierts.veynir.core.misc.Patterns;
 import net.quepierts.veynir.backend.buffer.AnimationBuffer;
 import net.quepierts.veynir.core.channel.ChannelFormat;
 import net.quepierts.veynir.core.channel.ChannelFormatElement;
@@ -15,9 +15,9 @@ import net.quepierts.veynir.core.channel.DefaultChannelFormats;
 import net.quepierts.veynir.backend.exception.UnboundSamplerException;
 import net.quepierts.veynir.backend.exception.UnboundUniformBufferException;
 import net.quepierts.veynir.core.pipeline.*;
-import net.quepierts.veynir.backend.execution.ExecutionState;
+import net.quepierts.veynir.core.execution.ExecutionState;
 import net.quepierts.veynir.backend.pass.AnimationPass;
-import net.quepierts.veynir.backend.pass.definition.AnimationPassDefinition;
+import net.quepierts.veynir.backend.pass.ComputePassCompiler;
 import net.quepierts.veynir.backend.sampler.AnimationSampler;
 import net.quepierts.veynir.backend.sampler.OriginSampler;
 import net.quepierts.veynir.backend.uniform.*;
@@ -72,7 +72,7 @@ public final class DefaultAnimationPipelineImpl implements AnimationPipeline {
             ChannelFormat       format,
             ChannelLayout       layout,
             AnimationPass[][]   passes,
-            UboDefinition uniform,
+            UboDefinition       uniform,
             Interpolator4f[]    interpolations,
             Reflection          reflection
     ) {
@@ -261,7 +261,7 @@ public final class DefaultAnimationPipelineImpl implements AnimationPipeline {
 
         private ChannelLayout                           layout;
         private ChannelFormat                           format      = DefaultChannelFormats.EMPTY;
-        private final List<AnimationPassDefinition>     passes      = new ArrayList<>();
+        private final List<ComputePassDefinition>       passes      = new ArrayList<>();
         private final Set<String>                       samplers    = new ObjectArraySet<>();
         private final Set<String>                       buffers     = new ObjectArraySet<>();
         private final UboDefinition.Builder             uniforms    = UboDefinition.builder();
@@ -287,7 +287,7 @@ public final class DefaultAnimationPipelineImpl implements AnimationPipeline {
             return this;
         }
 
-        public Compiler withPass(AnimationPassDefinition pass) {
+        public Compiler withPass(ComputePassDefinition pass) {
             this.passes.add(pass);
             return this;
         }
@@ -379,7 +379,7 @@ public final class DefaultAnimationPipelineImpl implements AnimationPipeline {
             ArrayUtils          .init(passes, () -> new ArrayList<AnimationPass>());
             for (final var definition : this.passes) {
                 context         .oidObject(definition.getName());
-                final var pass  = definition.compile(context);
+                final var pass  = ComputePassCompiler.compile(definition, context);
                 passes[definition.getType().ordinal()].add(pass);
             }
 

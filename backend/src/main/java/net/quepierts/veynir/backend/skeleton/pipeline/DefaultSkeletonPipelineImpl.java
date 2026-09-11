@@ -18,7 +18,8 @@ import net.quepierts.veynir.core.pipeline.AnimationResultView;
 import net.quepierts.veynir.core.SkeletonLayout;
 import net.quepierts.veynir.backend.skeleton.exception.UnboundProviderException;
 import net.quepierts.veynir.backend.skeleton.pass.SkeletonPass;
-import net.quepierts.veynir.backend.skeleton.pass.definition.SkeletonPassDefinition;
+import net.quepierts.veynir.backend.skeleton.pass.SkeletonPassCompiler;
+import net.quepierts.veynir.core.pipeline.SkeletonPassDefinition;
 import net.quepierts.veynir.core.uniform.UboDefinition;
 import net.quepierts.veynir.backend.uniform.UniformBuffer;
 import net.quepierts.veynir.core.uniform.UniformType;
@@ -266,7 +267,7 @@ public final class DefaultSkeletonPipelineImpl implements SkeletonPipeline {
 
             var passes          = new SkeletonPass[this.passes.size()];
             for (var i = 0; i < passes.length; i++) {
-                passes[i]       = this.passes.get(i).compile(context);
+                passes[i]       = SkeletonPassCompiler.compile(this.passes.get(i), context);
                 context         .oidObject(passes[i].getName());
             }
 

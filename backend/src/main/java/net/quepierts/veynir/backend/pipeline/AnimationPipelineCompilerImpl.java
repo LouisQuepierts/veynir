@@ -1,7 +1,7 @@
 package net.quepierts.veynir.backend.pipeline;
 
 import net.quepierts.veynir.backend.interpolator.Interpolator4f;
-import net.quepierts.veynir.backend.pass.definition.AnimationPassDefinition;
+import net.quepierts.veynir.core.pipeline.ComputePassDefinition;
 import net.quepierts.veynir.core.channel.ChannelFormat;
 import net.quepierts.veynir.core.channel.ChannelLayout;
 import net.quepierts.veynir.core.pipeline.AnimationPipeline;
@@ -33,8 +33,8 @@ public final class AnimationPipelineCompilerImpl implements AnimationPipelineCom
 
     @Override
     public @NonNull AnimationPipelineCompiler withPass(final @NonNull PassDefinition pass) {
-        if (!(pass instanceof AnimationPassDefinition definition)) {
-            throw new IllegalArgumentException("Not an animation pass definition: " + pass);
+        if (!(pass instanceof ComputePassDefinition definition)) {
+            throw new IllegalArgumentException("Not a compute pass definition: " + pass);
         }
         this.compiler.withPass(definition);
         return this;

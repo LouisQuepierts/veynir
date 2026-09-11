@@ -1,6 +1,6 @@
 package net.quepierts.veynir.backend.skeleton.pipeline;
 
-import net.quepierts.veynir.backend.skeleton.pass.definition.SkeletonPassDefinition;
+import net.quepierts.veynir.core.pipeline.SkeletonPassDefinition;
 import net.quepierts.veynir.core.SkeletonLayout;
 import net.quepierts.veynir.core.pipeline.PassDefinition;
 import net.quepierts.veynir.core.pipeline.SkeletonPipeline;

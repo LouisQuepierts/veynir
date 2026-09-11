@@ -1,6 +1,6 @@
 package net.quepierts.veynir.core.misc.collection;
 
-import net.quepierts.veynir.core.misc.Mth;
+import net.quepierts.veynir.core.util.Mth;
 
 public interface IFloatTreeMap<T> {
     int getLowerIndex(float pKey);

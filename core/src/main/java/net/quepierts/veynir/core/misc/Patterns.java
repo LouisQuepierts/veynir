@@ -1,4 +1,4 @@
-package net.quepierts.veynir.backend;
+package net.quepierts.veynir.core.misc;
 
 import lombok.experimental.UtilityClass;
 

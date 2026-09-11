@@ -4,7 +4,7 @@ import it.unimi.dsi.fastutil.floats.Float2ObjectMap;
 import lombok.Getter;
 import net.quepierts.veynir.core.misc.FloatKeyed;
 import net.quepierts.veynir.core.misc.Generic;
-import net.quepierts.veynir.core.misc.Mth;
+import net.quepierts.veynir.core.util.Mth;
 
 import java.util.Arrays;
 

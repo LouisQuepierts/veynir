@@ -1,7 +1,7 @@
 package net.quepierts.veynir.backend.pipeline;
 
 import lombok.RequiredArgsConstructor;
-import net.quepierts.veynir.backend.Patterns;
+import net.quepierts.veynir.core.misc.Patterns;
 import net.quepierts.veynir.core.pipeline.AnimationPipeline;
 import net.quepierts.veynir.core.util.LocationLookup;
 import org.jspecify.annotations.Nullable;

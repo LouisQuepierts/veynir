@@ -2,7 +2,7 @@ package net.quepierts.veynir.backend.skeleton.pipeline;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.quepierts.veynir.backend.Patterns;
+import net.quepierts.veynir.core.misc.Patterns;
 import net.quepierts.veynir.core.SkeletonLayout;
 import net.quepierts.veynir.core.pipeline.SkeletonPipeline;
 import net.quepierts.veynir.core.util.LocationLookup;

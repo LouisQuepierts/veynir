@@ -1,4 +1,4 @@
-package net.quepierts.veynir.backend.pass.definition;
+package net.quepierts.veynir.core.pipeline;
 
 public enum PassType {
     PARAMETER,
