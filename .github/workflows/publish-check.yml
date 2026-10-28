@@ -76,7 +76,10 @@ jobs:
         env:
           RELEASE_TAG: ${{ inputs.tag }}
           ORG_GRADLE_PROJECT_is_snapshot: 'false'
-        run: ./gradlew verifyReleaseVersion --no-configuration-cache --no-daemon
+        run: |
+          echo "=== SHELL DEBUG ==="
+          echo "RELEASE_TAG=$RELEASE_TAG"
+          ./gradlew verifyReleaseVersion --no-configuration-cache --no-daemon --console=plain --info
 
       - name: Build
         run: ./gradlew clean build --no-configuration-cache --no-daemon
