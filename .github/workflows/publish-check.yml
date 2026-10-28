@@ -6,7 +6,7 @@ on:
         description: 'Existing version tag, e.g. v1.2.3-rc.1'
         required: true
         type: string
-      is_snapshot:
+      snapshot:
         description: 'Is snapshot version'
         required: true
         type: boolean
@@ -50,5 +50,5 @@ jobs:
       - name: Verify release version
         env:
           GITHUB_REF_NAME: ${{ inputs.tag }}
-          ORG_GRADLE_PROJECT_is_snapshot: ${{ input.is_snapshot }}
+          ORG_GRADLE_PROJECT_is_snapshot: ${{ inputs.snapshot }}
         run: ./gradlew verifyReleaseVersion --no-configuration-cache --no-daemon
