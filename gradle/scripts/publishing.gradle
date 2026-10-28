@@ -8,7 +8,7 @@ mavenPublishing {
     publishToMavenCentral()
 
     // 本地免签名：默认 is_local=true 不启用签名，CI 发布时传 -Pis_local=false 并注入密钥
-    def isLocal = (findProperty('is_local') ?: 'true').toString().toBoolean();
+    def isLocal = (findProperty('is_local') ?: 'true').toString().toBoolean()
     if (!isLocal) {
         signAllPublications()
     }
