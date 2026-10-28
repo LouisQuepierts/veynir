@@ -87,11 +87,20 @@ tasks.register('verifyReleaseVersion') {
     description = 'Verifies that the current Git tag matches the release version.'
 
     doLast {
-        def tag = System.getenv('RELEASE_TAG') ?: System.getenv('GITHUB_REF_NAME')
+        def releaseTag = System.getenv('RELEASE_TAG')
+        def githubRefName = System.getenv('GITHUB_REF_NAME')
+        def tag = releaseTag ?: githubRefName
+
+        println "DEBUG RELEASE_TAG = [${releaseTag}]"
+        println "DEBUG GITHUB_REF_NAME = [${githubRefName}]"
+        println "DEBUG selected tag = [${tag}]"
+        println "DEBUG baseVersion = [${baseVersion}]"
+        println "DEBUG isSnapshot = [${isSnapshot}]"
+        println "DEBUG project.version = [${project.version}]"
 
         if (!tag) {
             throw new GradleException(
-                    'GITHUB_REF_NAME is required for release verification.'
+                    'RELEASE_TAG or GITHUB_REF_NAME is required.'
             )
         }
 
@@ -101,17 +110,17 @@ tasks.register('verifyReleaseVersion') {
             )
         }
 
+        if (!(baseVersion ==~ /^\d+\.\d+\.\d+(-rc\.\d+)?$/)) {
+            throw new GradleException(
+                    "Invalid release version: ${baseVersion}"
+            )
+        }
+
         def expectedTag = "v${baseVersion}"
 
         if (tag != expectedTag) {
             throw new GradleException(
                     "Tag ${tag} does not match computed version ${baseVersion}."
-            )
-        }
-
-        if (!(baseVersion ==~ /^\d+\.\d+\.\d+(-rc\.\d+)?$/)) {
-            throw new GradleException(
-                    "Invalid release version: ${baseVersion}"
             )
         }
 
