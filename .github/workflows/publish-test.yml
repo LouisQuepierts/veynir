@@ -72,7 +72,7 @@ jobs:
           ORG_GRADLE_PROJECT_signingInMemoryKey: ${{ secrets.GPG_PRIVATE_KEY }}
           ORG_GRADLE_PROJECT_signingInMemoryKeyPassword: ${{ secrets.GPG_PASSPHRASE }}
         run: |
-          ./gradlew publishToMavenCentral \ 
+          ./gradlew publishToMavenCentral \
             --no-configuration-cache \
             --no-daemon \
             --console=plain
