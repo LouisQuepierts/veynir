@@ -49,5 +49,5 @@ jobs:
 
       - name: Verify release version
         env:
-          GITHUB_REF_NAME: ${{ inputs.tag }}
+          RELEASE_TAG: ${{ inputs.tag }}
         run: ./gradlew verifyReleaseVersion --no-configuration-cache --no-daemon

@@ -87,7 +87,7 @@ tasks.register('verifyReleaseVersion') {
     description = 'Verifies that the current Git tag matches the release version.'
 
     doLast {
-        def tag = System.getenv('GITHUB_REF_NAME')
+        def tag = System.getenv('RELEASE_TAG') ?: System.getenv('GITHUB_REF_NAME')
 
         if (!tag) {
             throw new GradleException(
