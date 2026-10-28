@@ -60,13 +60,9 @@ jobs:
             --console=plain
 
       - name: Build
-        run: |
-          ./gradlew clean build \ 
-            --no-configuration-cache \
-            --no-daemon \
-            --console=plain
+        run: ./gradlew clean build --no-configuration-cache --no-daemon --console=plain
 
-      - name: Dry run Maven Central publication
+      - name: Publish to Maven Central
         env:
           ORG_GRADLE_PROJECT_is_snapshot: 'false'
           ORG_GRADLE_PROJECT_is_local: 'false'
