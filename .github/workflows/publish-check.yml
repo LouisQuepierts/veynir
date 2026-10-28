@@ -50,4 +50,14 @@ jobs:
       - name: Verify release version
         env:
           RELEASE_TAG: ${{ inputs.tag }}
+          ORG_GRADLE_PROJECT_is_snapshot: 'false'
         run: ./gradlew verifyReleaseVersion --no-configuration-cache --no-daemon
+
+      - name: Build
+        run: ./gradlew clean build --no-configuration-cache --no-daemon
+
+      - name: Dry run Maven Central publication
+        env:
+          ORG_GRADLE_PROJECT_is_snapshot: 'false'
+          ORG_GRADLE_PROJECT_is_local: 'false'
+        run: ./gradlew publishToMavenCentral --dry-run --no-configuration-cache --no-daemon
