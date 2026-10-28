@@ -79,7 +79,14 @@ jobs:
         run: |
           echo "=== SHELL DEBUG ==="
           echo "RELEASE_TAG=$RELEASE_TAG"
-          ./gradlew verifyReleaseVersion --no-configuration-cache --no-daemon --console=plain --info
+          ./gradlew --stop || true
+          ./gradlew verifyReleaseVersion \
+            --rerun-tasks \
+            --no-build-cache \
+            --no-configuration-cache \
+            --no-daemon \
+            --console=plain \
+            --info
 
       - name: Build
         run: ./gradlew clean build --no-configuration-cache --no-daemon
