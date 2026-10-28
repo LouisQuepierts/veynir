@@ -4,9 +4,14 @@ artifacts {
 
 mavenPublishing {
 
+    // 只上传到 Maven Central Portal，不自动 release：上传完成后需在 Portal 手动点 Publish
     publishToMavenCentral()
 
-    signAllPublications()
+    // 本地免签名：默认 is_local=true 不启用签名，CI 发布时传 -Pis_local=false 并注入密钥
+    def isLocal = (findProperty('is_local') ?: 'true').toString().toBoolean();
+    if (!isLocal) {
+        signAllPublications()
+    }
 
     def jarName = "${rootProject.name}-${project.name}"
 
@@ -18,6 +23,7 @@ mavenPublishing {
 
     pom {
         name = jarName
+        description = "Veynir - animation and skeleton pipeline framework for Java"
         url = "https://github.com/LouisQuepierts/veynir"
 
         licenses {

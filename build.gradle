@@ -2,20 +2,63 @@ plugins {
     id 'base'
 }
 
-def getGitCommitCount() {
-    def stdout = new ByteArrayOutputStream()
-    exec {
-        commandLine 'git', 'rev-list', '--count', 'HEAD'
-        standardOutput = stdout
+def git(List<String> args, boolean tolerateFailure = false) {
+    def output = providers.exec {
+        commandLine(['git'] + args)
+        ignoreExitValue = true
     }
-    return stdout.toString().trim().toInteger()
+
+    def stdout = output.standardOutput.asText.get()
+    def stderr = output.standardError.asText.get()
+    def result = output.result.get()
+
+    if (!tolerateFailure && result.exitValue != 0) {
+        throw new GradleException(
+                "git ${args.join(' ')} failed: ${stderr.trim()}"
+        )
+    }
+
+    return stdout.trim()
+}
+
+def getGitCommitCount() {
+    return git(['rev-list', '--count', 'HEAD']).toInteger()
 }
 
 def buildNumber = getGitCommitCount()
-def isSnapshot = is_snapshot == "true"
 
-group       = 'net.quepierts.veynir'
-version     = isSnapshot ? "${project_version}+build.${buildNumber}" : "${project_version}"
+// 版本以 tag 为准：HEAD 恰好落在 v* tag 上时用 tag（去掉 v 前缀），
+// 否则回落到 gradle.properties 的 project_version。
+def versionPattern =
+        ~/^\d+\.\d+\.\d+(?:-rc\.\d+)?$/
+
+def rawTagVersion = git(
+        ['describe', '--tags', '--exact-match', '--match', 'v[0-9]*', 'HEAD'],
+        true
+)
+
+def tagVersion = rawTagVersion
+        ? rawTagVersion.replaceFirst(/^v/, '')
+        : ''
+
+if (tagVersion && !(tagVersion ==~ versionPattern)) {
+    throw new GradleException(
+            "Invalid release tag version: ${rawTagVersion}"
+    )
+}
+
+def baseVersion = tagVersion ?: project_version
+
+// 默认 snapshot（1.2.1+build.N）供本地测试；
+// 发布时由 ORG_GRADLE_PROJECT_is_snapshot=false 关闭
+def isSnapshot  = (findProperty('is_snapshot') ?: 'true').toString().toBoolean()
+
+group   = 'net.quepierts.veynir'
+version = isSnapshot ? "${baseVersion}+build.${buildNumber}" : "${baseVersion}"
+
+// gradle/scripts/publishing.gradle 通过 apply from 在子项目中执行，看不到本脚本的局部变量，用 ext 传递
+ext.baseVersion = baseVersion
+ext.isSnapshot  = isSnapshot
 
 allprojects {
     repositories {
