@@ -98,24 +98,21 @@ tasks.register('verifyReleaseVersion') {
         println "DEBUG isSnapshot = [${isSnapshot}]"
         println "DEBUG project.version = [${project.version}]"
 
-        def env = "RELEASE_TAG = [${releaseTag}]" +
-                ", GITHUB_REF_NAME = [${githubRefName}]";
-
         if (!tag) {
             throw new GradleException(
-                    'RELEASE_TAG or GITHUB_REF_NAME is required.' + env
+                    'RELEASE_TAG or GITHUB_REF_NAME is required.'
             )
         }
 
         if (isSnapshot) {
             throw new GradleException(
-                    'Refusing to release a snapshot version.' + env
+                    'Refusing to release a snapshot version.'
             )
         }
 
         if (!(baseVersion ==~ /^\d+\.\d+\.\d+(-rc\.\d+)?$/)) {
             throw new GradleException(
-                    "Invalid release version: ${baseVersion}" + env
+                    "Invalid release version: ${baseVersion}"
             )
         }
 
@@ -123,7 +120,7 @@ tasks.register('verifyReleaseVersion') {
 
         if (tag != expectedTag) {
             throw new GradleException(
-                    "Tag ${tag} does not match computed version ${baseVersion}." + env
+                    "Tag ${tag} does not match computed version ${baseVersion}."
             )
         }
 
