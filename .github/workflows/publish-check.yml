@@ -36,6 +36,20 @@ jobs:
           ref: ${{ inputs.tag }}
           fetch-depth: 0
 
+      - name: Debug checked-out source
+        shell: bash
+        run: |
+          echo "=== Workflow source ==="
+          echo "Workflow ref: $GITHUB_WORKFLOW_REF"
+          echo "Workflow SHA: $GITHUB_SHA"
+
+          echo "=== Checked-out source ==="
+          git log -1 --format='%H %s'
+          git status --short
+
+          echo "=== Verification task definitions ==="
+          git grep -n -E 'verifyReleaseVersion|DEBUG RELEASE_TAG|Tag .*does not match computed version' || true
+
       - name: Debug release tag
         shell: bash
         env:
