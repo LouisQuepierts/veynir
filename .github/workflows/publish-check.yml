@@ -29,11 +29,6 @@ jobs:
             echo "::error::Invalid release tag: $RELEASE_TAG"
             exit 1
           fi
-      - name: Checkout tag
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.tag }}
-          fetch-depth: 0
 
       - name: Setup JDK 17
         uses: actions/setup-java@v4
@@ -52,6 +47,12 @@ jobs:
           RELEASE_TAG: ${{ inputs.tag }}
           ORG_GRADLE_PROJECT_is_snapshot: 'false'
         run: ./gradlew verifyReleaseVersion --no-configuration-cache --no-daemon
+
+      - name: Checkout tag
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag }}
+          fetch-depth: 0
 
       - name: Build
         run: ./gradlew clean build --no-configuration-cache --no-daemon
