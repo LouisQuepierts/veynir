@@ -81,3 +81,40 @@ subprojects {
         }
     }
 }
+
+tasks.register('verifyReleaseVersion') {
+    group = 'verification'
+    description = 'Verifies that the current Git tag matches the release version.'
+
+    doLast {
+        def tag = System.getenv('GITHUB_REF_NAME')
+
+        if (!tag) {
+            throw new GradleException(
+                    'GITHUB_REF_NAME is required for release verification.'
+            )
+        }
+
+        if (isSnapshot) {
+            throw new GradleException(
+                    'Refusing to release a snapshot version.'
+            )
+        }
+
+        def expectedTag = "v${baseVersion}"
+
+        if (tag != expectedTag) {
+            throw new GradleException(
+                    "Tag ${tag} does not match computed version ${baseVersion}."
+            )
+        }
+
+        if (!(baseVersion ==~ /^\d+\.\d+\.\d+(-rc\.\d+)?$/)) {
+            throw new GradleException(
+                    "Invalid release version: ${baseVersion}"
+            )
+        }
+
+        println "Verified release version: ${baseVersion}"
+    }
+}
